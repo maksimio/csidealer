@@ -1,14 +1,14 @@
 package tcpserver
 
 import (
-	"encoding/binary"
+	"csi_dealer/pkg/databuffer"
 	"fmt"
 	"net"
 	"os"
 )
 
 const (
-	BUF_LEN = 4
+	BUF_LEN = 2048
 )
 
 func StartServer(port int) {
@@ -23,11 +23,12 @@ func StartServer(port int) {
 	for {
 		fmt.Println("Сервер ожидает подключение на", port, "порту")
 		conn, _ := ln.Accept()
-		readLoop(conn)
+		trafficBuf := databuffer.NewTrafficBuffer()
+		readLoop(conn, trafficBuf)
 	}
 }
 
-func readLoop(conn net.Conn) {
+func readLoop(conn net.Conn, trafficBuf *databuffer.TrafficBuffer) {
 	fmt.Println("Новое подключение от:", conn.RemoteAddr())
 	buf := make([]byte, BUF_LEN)
 
@@ -37,10 +38,8 @@ func readLoop(conn net.Conn) {
 			fmt.Println("Ошибка чтения из сокета:", err, "Отключение сервера")
 			break
 		}
-		fmt.Println(readCount, buf)
-		// dec := make([]byte, 4)
-		// l, _ := base64.RawStdEncoding.Decode(dec, buf)
-		x := binary.LittleEndian.Uint32(buf)
-		fmt.Println(x)
+		// x := binary.LittleEndian.Uint32(buf)
+		trafficBuf.Push(buf[:readCount])
+		fmt.Println("Length:", trafficBuf.Length())
 	}
 }
