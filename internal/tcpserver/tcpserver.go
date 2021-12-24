@@ -39,7 +39,7 @@ func readLoop(conn net.Conn, trafficBuf *databuffer.TrafficBuffer) {
 			break
 		}
 		// x := binary.LittleEndian.Uint32(buf)
-		trafficBuf.Push(buf[:readCount])
+		go trafficBuf.Push(buf[:readCount])
 		fmt.Println("Length:", trafficBuf.Length())
 	}
 }
