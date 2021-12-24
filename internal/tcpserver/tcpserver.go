@@ -28,19 +28,16 @@ func StartServer(port int) {
 	}
 }
 
-func readLoop(conn net.Conn, trafficBuf *databuffer.BufferFlow) {
+func readLoop(conn net.Conn, buf *databuffer.BufferFlow) {
 	fmt.Println("Новое подключение от:", conn.RemoteAddr())
-	buf := make([]byte, BUF_LEN)
+	data := make([]byte, BUF_LEN)
 
 	for {
-		readCount, err := conn.Read(buf)
+		readCount, err := conn.Read(data)
 		if err != nil {
 			fmt.Println("Ошибка чтения из сокета:", err, "Отключение сервера")
 			break
 		}
-		// x := binary.LittleEndian.Uint32(buf)
-		go trafficBuf.Push(buf[:readCount])
-		fmt.Println("Length:", trafficBuf.Length())
-
+		buf.Push(data[:readCount])
 	}
 }

@@ -14,8 +14,8 @@ func (buf *PackageBuffer) Push(data []byte) {
 	buf.Data = append(buf.Data, data)
 }
 
-func (buf *PackageBuffer) Shift(n int) [][]byte {
-	dataPart := buf.Data[:1]
+func (buf *PackageBuffer) Shift() []byte {
+	dataPart := buf.Data[0]
 	buf.Data = buf.Data[1:]
 	return dataPart
 }
