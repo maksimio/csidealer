@@ -2,7 +2,7 @@ package databuffer
 
 import (
 	"encoding/binary"
-	"csi_dealer/pkg/csicore"
+	"csidealer/pkg/csicore"
 )
 
 type BufferFlow struct {

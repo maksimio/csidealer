@@ -1,7 +1,7 @@
 package main
 
 import "fmt"
-import "csi_dealer/internal/tcpserver"
+import "csidealer/internal/tcpserver"
 
 func main() {
 	fmt.Println("Hello, world!")

@@ -1,7 +1,7 @@
 package tcpserver
 
 import (
-	"csi_dealer/pkg/databuffer"
+	"csidealer/pkg/databuffer"
 	"fmt"
 	"net"
 	"os"

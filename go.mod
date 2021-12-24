@@ -1,3 +1,3 @@
-module csi_dealer
+module csidealer
 
 go 1.17

@@ -18,43 +18,42 @@ func bitConvert(data int) int {
 	return data
 }
 
-func DecodeCsi(local_h []byte, nr, nc, numTones uint8) [][]complex128 {
+func DecodeCsi(dataCsi []byte, nr, nc, numTones uint8) [][]complex128 {
 	csi := make([][]complex128, nr*nc)
 	for i := range csi {
 		csi[i] = make([]complex128, numTones)
 	}
 
-	bits_left := 16
-	h_data := uint32(local_h[0]) + (uint32(local_h[1]) << BITS_PER_BYTE)
-	current_data := h_data & 65535
+	bitsLeft := 16
+	hData := uint32(dataCsi[0]) + (uint32(dataCsi[1]) << BITS_PER_BYTE)
+	current_data := hData & 65535
 	idx := 2
 
-	var k, nc_idx, nr_idx uint8 = 0, 0, 0
+	var k, ncIdx, nrIdx uint8 = 0, 0, 0
 	for ; k < numTones; k++ {
-		for ; nc_idx < nc; nc_idx++ {
-			for ; nr_idx < nc; nr_idx++ {
-				if bits_left < BITS_PER_SYMBOL {
-					h_data = uint32(local_h[idx]) + (uint32(local_h[idx+1]) << BITS_PER_BYTE)
+		for ; ncIdx < nc; ncIdx++ {
+			for ; nrIdx < nc; nrIdx++ {
+				if bitsLeft < BITS_PER_SYMBOL {
+					hData = uint32(dataCsi[idx]) + (uint32(dataCsi[idx+1]) << BITS_PER_BYTE)
 					idx += 2
-					current_data += h_data << bits_left
-					bits_left += 16
+					current_data += hData << bitsLeft
+					bitsLeft += 16
 				}
 				imag := current_data & 1023
-				bits_left -= BITS_PER_SYMBOL
+				bitsLeft -= BITS_PER_SYMBOL
 				current_data = current_data >> BITS_PER_SYMBOL
 
-				if bits_left < BITS_PER_SYMBOL {
-					h_data = uint32(local_h[idx]) + (uint32(local_h[idx+1]) << BITS_PER_BYTE)
+				if bitsLeft < BITS_PER_SYMBOL {
+					hData = uint32(dataCsi[idx]) + (uint32(dataCsi[idx+1]) << BITS_PER_BYTE)
 					idx += 2
-					current_data += h_data << bits_left
-					bits_left += 16
+					current_data += hData << bitsLeft
+					bitsLeft += 16
 				}
-
 				real := current_data & 1023
-				bits_left -= BITS_PER_SYMBOL
+				bitsLeft -= BITS_PER_SYMBOL
 				current_data = current_data >> BITS_PER_SYMBOL
 
-				csi[nr_idx+nc_idx*2][k] = complex(float64(bitConvert(int(real))), float64(bitConvert(int(imag))))
+				csi[nrIdx+ncIdx*nr][k] = complex(float64(bitConvert(int(real))), float64(bitConvert(int(imag))))
 			}
 		}
 	}
@@ -96,6 +95,11 @@ func DecodePackageInfo(data []byte) PackageInfo {
 	info.Payloadlength = binary.BigEndian.Uint16(data[shift:])
 	shift += 2
 
+	fmt.Println("SHIFT:", shift)
+	fmt.Println("CSILEN:", info.CsiLength)
+	fmt.Println("PAYLOADLEN:", info.Payloadlength)
+	fmt.Println(info)
+
 	return info
 }
 
@@ -106,10 +110,9 @@ func DecodeCsiPackage(data []byte) CsiPackage {
 	rawCsi := data[SHIFT_CSI_INFO : SHIFT_CSI_INFO+pack.PackageInfo.CsiLength]
 	if pack.PackageInfo.CsiLength > 0 {
 		pack.Csi = DecodeCsi(rawCsi, pack.PackageInfo.Nr, pack.PackageInfo.Nc, pack.PackageInfo.NumTones)
-		fmt.Println("decode...")
+		fmt.Println("decoded CSI!")
 	}
 
 	fmt.Println(pack.Csi)
-
 	return pack
 }
