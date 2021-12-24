@@ -29,7 +29,7 @@ func DecodeCsi(dataCsi []byte, nr, nc, numTones uint8) [][]complex128 {
 	current_data := hData & 65535
 	idx := 2
 
-	var k, ncIdx, nrIdx uint8 = 0, 0, 0
+	var k, ncIdx, nrIdx uint8
 	for ; k < numTones; k++ {
 		for ; ncIdx < nc; ncIdx++ {
 			for ; nrIdx < nc; nrIdx++ {
