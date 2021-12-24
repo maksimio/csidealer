@@ -23,12 +23,12 @@ func StartServer(port int) {
 	for {
 		fmt.Println("Сервер ожидает подключение на", port, "порту")
 		conn, _ := ln.Accept()
-		trafficBuf := databuffer.NewTrafficBuffer()
-		readLoop(conn, trafficBuf)
+		buf := databuffer.NewBufferFlow()
+		readLoop(conn, buf)
 	}
 }
 
-func readLoop(conn net.Conn, trafficBuf *databuffer.TrafficBuffer) {
+func readLoop(conn net.Conn, trafficBuf *databuffer.BufferFlow) {
 	fmt.Println("Новое подключение от:", conn.RemoteAddr())
 	buf := make([]byte, BUF_LEN)
 
@@ -41,5 +41,6 @@ func readLoop(conn net.Conn, trafficBuf *databuffer.TrafficBuffer) {
 		// x := binary.LittleEndian.Uint32(buf)
 		go trafficBuf.Push(buf[:readCount])
 		fmt.Println("Length:", trafficBuf.Length())
+
 	}
 }
