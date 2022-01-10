@@ -31,8 +31,10 @@ func DecodeCsi(dataCsi []byte, nr, nc, numTones uint8) [][]complex128 {
 
 	var k, ncIdx, nrIdx uint8
 	for ; k < numTones; k++ {
+		ncIdx = 0
 		for ; ncIdx < nc; ncIdx++ {
-			for ; nrIdx < nc; nrIdx++ {
+			nrIdx = 0
+			for ; nrIdx < nr; nrIdx++ {
 				if bitsLeft < BITS_PER_SYMBOL {
 					hData = uint32(dataCsi[idx]) + (uint32(dataCsi[idx+1]) << BITS_PER_BYTE)
 					idx += 2
