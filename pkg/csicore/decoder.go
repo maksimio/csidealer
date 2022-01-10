@@ -108,6 +108,5 @@ func DecodeCsiPackage(data []byte) CsiPackage {
 		pack.Csi = DecodeCsi(rawCsi, pack.PackageInfo.Nr, pack.PackageInfo.Nc, pack.PackageInfo.NumTones)
 	}
 
-
 	return pack
 }

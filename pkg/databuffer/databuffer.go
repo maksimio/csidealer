@@ -1,8 +1,9 @@
 package databuffer
 
 import (
-	"encoding/binary"
 	"csidealer/pkg/csicore"
+	"encoding/binary"
+	"fmt"
 )
 
 type BufferFlow struct {
@@ -41,12 +42,18 @@ func (buf *BufferFlow) splitPacket() {
 	} else if buf.packageBuf.CurrentSize != 0 && buf.packageBuf.CurrentSize <= uint32(buf.trafficBuf.Length()) {
 		buf.packageBuf.Push(buf.trafficBuf.Shift(int(buf.packageBuf.CurrentSize)))
 		buf.packageBuf.CurrentSize = 0
-		
+
 		buf.parsePacket()
 	}
 }
 
 func (buf *BufferFlow) parsePacket() {
 	data := buf.packageBuf.Shift()
-	csicore.DecodeCsiPackage(data)
+	pack := csicore.DecodeCsiPackage(data)
+	pack.Abs = csicore.CsiToAbs(pack.Csi)
+	pack.Phase = csicore.CsiToPhase(pack.Csi)
+
+	if pack.PackageInfo.CsiLength > 0 {
+		fmt.Println(pack.Abs[0][20:30])
+	}
 }
