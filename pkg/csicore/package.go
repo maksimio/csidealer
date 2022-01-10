@@ -2,6 +2,7 @@ package csicore
 
 type CsiPackage struct {
 	PackageInfo PackageInfo
+	Payload     []uint8
 	Csi         [][]complex128
 	Abs         [][]float64
 	Phase       [][]float64
@@ -22,6 +23,5 @@ type PackageInfo struct {
 	Rssi1         uint8
 	Rssi2         uint8
 	Rssi3         uint8
-	Payloadlength uint16
-	Payload       []uint8
+	PayloadLength uint16
 }

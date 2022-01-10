@@ -2,13 +2,29 @@ package csicore
 
 import (
 	"encoding/binary"
-	"fmt"
 )
 
 const (
 	BITS_PER_BYTE   = 8
 	BITS_PER_SYMBOL = 10
-	SHIFT_CSI_INFO  = 25
+)
+
+const (
+	SHIFT_CsiLength     = 8
+	SHIFT_TxChannel     = 10
+	SHIFT_ErrInfo       = 12
+	SHIFT_NoiseFloor    = 13
+	SHIFT_Rate          = 14
+	SHIFT_BandWidth     = 15
+	SHIFT_NumTones      = 16
+	SHIFT_Nr            = 17
+	SHIFT_Nc            = 18
+	SHIFT_Rssi0         = 19
+	SHIFT_Rssi1         = 20
+	SHIFT_Rssi2         = 21
+	SHIFT_Rssi3         = 22
+	SHIFT_Payloadlength = 23
+	SHIFT_CSI_INFO      = 25
 )
 
 func bitConvert(data int) int {
@@ -64,44 +80,22 @@ func DecodeCsi(dataCsi []byte, nr, nc, numTones uint8) [][]complex128 {
 
 func DecodePackageInfo(data []byte) PackageInfo {
 	var info PackageInfo
-	var shift uint8
 
 	info.Timestamp = binary.BigEndian.Uint64(data)
-	shift += 8
-	info.CsiLength = binary.BigEndian.Uint16(data[shift:])
-	shift += 2
-	info.TxChannel = binary.BigEndian.Uint16(data[shift:])
-	shift += 2
-	info.ErrInfo = uint8(data[shift])
-	shift += 1
-	info.NoiseFloor = uint8(data[shift])
-	shift += 1
-	info.Rate = uint8(data[shift])
-	shift += 1
-	info.BandWidth = uint8(data[shift])
-	shift += 1
-	info.NumTones = uint8(data[shift])
-	shift += 1
-	info.Nr = uint8(data[shift])
-	shift += 1
-	info.Nc = uint8(data[shift])
-	shift += 1
-	info.Rssi0 = uint8(data[shift])
-	shift += 1
-	info.Rssi1 = uint8(data[shift])
-	shift += 1
-	info.Rssi2 = uint8(data[shift])
-	shift += 1
-	info.Rssi3 = uint8(data[shift])
-	shift += 1
-	info.Payloadlength = binary.BigEndian.Uint16(data[shift:])
-	shift += 2
-
-	fmt.Println("SHIFT:", shift)
-	fmt.Println("CSILEN:", info.CsiLength)
-	fmt.Println("PAYLOADLEN:", info.Payloadlength)
-	fmt.Println(info)
-
+	info.CsiLength = binary.BigEndian.Uint16(data[SHIFT_CsiLength:])
+	info.TxChannel = binary.BigEndian.Uint16(data[SHIFT_TxChannel:])
+	info.ErrInfo = uint8(data[SHIFT_ErrInfo])
+	info.NoiseFloor = uint8(data[SHIFT_NoiseFloor])
+	info.Rate = uint8(data[SHIFT_Rate])
+	info.BandWidth = uint8(data[SHIFT_BandWidth])
+	info.NumTones = uint8(data[SHIFT_NumTones])
+	info.Nr = uint8(data[SHIFT_Nr])
+	info.Nc = uint8(data[SHIFT_Nc])
+	info.Rssi0 = uint8(data[SHIFT_Rssi0])
+	info.Rssi1 = uint8(data[SHIFT_Rssi1])
+	info.Rssi2 = uint8(data[SHIFT_Rssi2])
+	info.Rssi3 = uint8(data[SHIFT_Rssi3])
+	info.PayloadLength = binary.BigEndian.Uint16(data[SHIFT_Payloadlength:])
 	return info
 }
 
@@ -109,12 +103,11 @@ func DecodeCsiPackage(data []byte) CsiPackage {
 	var pack CsiPackage
 	pack.PackageInfo = DecodePackageInfo(data)
 
-	rawCsi := data[SHIFT_CSI_INFO : SHIFT_CSI_INFO+pack.PackageInfo.CsiLength]
 	if pack.PackageInfo.CsiLength > 0 {
+		rawCsi := data[SHIFT_CSI_INFO : SHIFT_CSI_INFO+pack.PackageInfo.CsiLength]
 		pack.Csi = DecodeCsi(rawCsi, pack.PackageInfo.Nr, pack.PackageInfo.Nc, pack.PackageInfo.NumTones)
-		fmt.Println("decoded CSI!")
 	}
 
-	fmt.Println(pack.Csi)
+
 	return pack
 }
