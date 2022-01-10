@@ -41,8 +41,7 @@ func (buf *BufferFlow) splitPacket() {
 	} else if buf.packageBuf.CurrentSize != 0 && buf.packageBuf.CurrentSize <= uint32(buf.trafficBuf.Length()) {
 		buf.packageBuf.Push(buf.trafficBuf.Shift(int(buf.packageBuf.CurrentSize)))
 		buf.packageBuf.CurrentSize = 0
-
-		// !EF
+		
 		buf.parsePacket()
 	}
 }

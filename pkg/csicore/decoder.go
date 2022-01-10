@@ -17,7 +17,7 @@ func bitConvert(data int) int {
 	}
 	return data
 }
- 
+
 func DecodeCsi(dataCsi []byte, nr, nc, numTones uint8) [][]complex128 {
 	csi := make([][]complex128, nr*nc)
 	for i := range csi {

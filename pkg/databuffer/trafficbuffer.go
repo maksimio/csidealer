@@ -19,8 +19,8 @@ func (buf *TrafficBuffer) Push(data []byte) {
 }
 
 func (buf *TrafficBuffer) Shift(n int) []byte {
-	dataPart := buf.Data[:n]
 	buf.mutex.Lock()
+	dataPart := buf.Data[:n]
 	buf.Data = buf.Data[n:]
 	buf.mutex.Unlock()
 	return dataPart
