@@ -2,7 +2,7 @@ package databuffer
 
 type PackageBuffer struct {
 	Data [][]byte
-	CurrentSize uint32
+	CurrentSize int
 }
 
 func NewPackageBuffer() *PackageBuffer {

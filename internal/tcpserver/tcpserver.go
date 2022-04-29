@@ -7,9 +7,7 @@ import (
 	"os"
 )
 
-const (
-	BUF_LEN = 2048
-)
+const BUF_LEN = 2048
 
 func RunTcpServer(port int) {
 	ln, err := net.Listen("tcp", ":"+fmt.Sprint(port))
@@ -35,10 +33,9 @@ func readLoop(conn net.Conn, buf *databuffer.BufferFlow) {
 	for {
 		readCount, err := conn.Read(data)
 		if err != nil {
-			fmt.Println("Ошибка чтения из сокета:", err, "Отключение сервера")
+			fmt.Println("Ошибка чтения из сокета:", err)
 			break
 		}
-		fmt.Println("Принято:", readCount)
 		buf.Push(data[:readCount])
 	}
 }

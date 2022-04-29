@@ -31,18 +31,17 @@ func (buf *BufferFlow) Length() int {
 
 func (buf *BufferFlow) splitPacketAll() {
 	buf.splitPacket()
-	for buf.packageBuf.CurrentSize+4 < uint32(buf.trafficBuf.Length()) {
+	for buf.packageBuf.CurrentSize+4 < buf.trafficBuf.Length() {
 		buf.splitPacket()
 	}
 }
 
 func (buf *BufferFlow) splitPacket() {
 	if buf.packageBuf.CurrentSize == 0 && buf.trafficBuf.Length() >= 4 {
-		buf.packageBuf.CurrentSize = binary.LittleEndian.Uint32(buf.trafficBuf.Shift(4))
-	} else if buf.packageBuf.CurrentSize != 0 && buf.packageBuf.CurrentSize <= uint32(buf.trafficBuf.Length()) {
-		buf.packageBuf.Push(buf.trafficBuf.Shift(int(buf.packageBuf.CurrentSize)))
+		buf.packageBuf.CurrentSize = int(binary.LittleEndian.Uint32(buf.trafficBuf.Shift(4)))
+	} else if buf.packageBuf.CurrentSize != 0 && buf.packageBuf.CurrentSize <= buf.trafficBuf.Length() {
+		buf.packageBuf.Push(buf.trafficBuf.Shift(buf.packageBuf.CurrentSize))
 		buf.packageBuf.CurrentSize = 0
-
 		buf.parsePacket()
 	}
 }
