@@ -11,7 +11,7 @@ const (
 	BUF_LEN = 2048
 )
 
-func StartServer(port int) {
+func RunTcpServer(port int) {
 	ln, err := net.Listen("tcp", ":"+fmt.Sprint(port))
 	if err != nil {
 		fmt.Println("Ошибка прослушки на порту", port, ":", err)

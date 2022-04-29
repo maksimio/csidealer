@@ -3,5 +3,5 @@ package main
 import "csidealer/internal/tcpserver"
 
 func main() {
-	tcpserver.StartServer(8081)
+	tcpserver.RunTcpServer(8081)
 }
