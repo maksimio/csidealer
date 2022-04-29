@@ -38,6 +38,7 @@ func readLoop(conn net.Conn, buf *databuffer.BufferFlow) {
 			fmt.Println("Ошибка чтения из сокета:", err, "Отключение сервера")
 			break
 		}
+		fmt.Println("Принято:", readCount)
 		buf.Push(data[:readCount])
 	}
 }
