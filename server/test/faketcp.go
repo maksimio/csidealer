@@ -12,12 +12,7 @@ import (
 )
 
 func main() {
-	for {
-		RunTcpWriter(8081, "./test/data/1.dat")
-		time.Sleep(300 * time.Millisecond)
-		fmt.Println("Попытка переподключения...")
-	}
-
+	RunTcpWriter(8081, "./test/data/1.dat")
 }
 
 func RunTcpWriter(port int, filepath string) {
@@ -53,10 +48,8 @@ func RunTcpWriter(port int, filepath string) {
 			break
 		}
 
-		fmt.Println("Отправка...")
 		conn.Write(bufSize32)
 		conn.Write(buf)
-		fmt.Println("Отправлено!")
 		time.Sleep(300 * time.Millisecond)
 	}
 	fmt.Println("Файл подошел к концу")
