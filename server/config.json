@@ -1,7 +1,0 @@
-{
-  "csiTcpPort": 8081,
-  "rootCsiFilesFolder": "./",
-  "httpPort": 80,
-  "httpsPort": 443,
-  "readCommonPacketInfo": true
-}
