@@ -1,7 +1,11 @@
 package main
 
-import "csidealer/internal/tcpserver"
+import (
+	"csidealer/internal/apiserver"
+	"csidealer/internal/tcpserver"
+)
 
 func main() {
-	tcpserver.RunTcpServer(8081)
+	go tcpserver.RunTcpServer(8081)
+	apiserver.RunApiServer(80, "../client/build")
 }
