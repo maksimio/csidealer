@@ -7,11 +7,11 @@ import (
 
 type TrafficBuffer struct {
 	Data            []byte
-	c               chan<- csicore.CsiPackage
+	c               chan<- *csicore.CsiPackage
 	nextPackageSize int
 }
 
-func NewBufferFlow(c chan<- csicore.CsiPackage) *TrafficBuffer {
+func NewBufferFlow(c chan<- *csicore.CsiPackage) *TrafficBuffer {
 	p := new(TrafficBuffer)
 	p.c = c
 	return p
@@ -39,11 +39,11 @@ func (buf *TrafficBuffer) splitPackage() {
 	} else if buf.nextPackageSize != 0 && buf.nextPackageSize <= buf.Length() {
 		data := buf.shift(buf.nextPackageSize)
 		buf.nextPackageSize = 0
-		go buf.decode(data)
+		go buf.send(data)
 	}
 }
 
-func (buf *TrafficBuffer) decode(data []byte) {
+func (buf *TrafficBuffer) send(data []byte) {
 	pack := csicore.DecodeCsiPackage(data)
 	if pack.PackageInfo.CsiLength == 0 {
 		return
