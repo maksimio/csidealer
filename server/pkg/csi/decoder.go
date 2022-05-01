@@ -34,7 +34,7 @@ func bitConvert(data int) int {
 	return data
 }
 
-func DecodeCsi(dataCsi []byte, nr, nc, numTones uint8) [][]complex128 {
+func decodeCsi(dataCsi []byte, nr, nc, numTones uint8) [][]complex128 {
 	csi := make([][]complex128, nr*nc)
 	for i := range csi {
 		csi[i] = make([]complex128, numTones)
@@ -78,7 +78,7 @@ func DecodeCsi(dataCsi []byte, nr, nc, numTones uint8) [][]complex128 {
 	return csi
 }
 
-func DecodePackageInfo(data []byte) PackageInfo {
+func decodePackageInfo(data []byte) PackageInfo {
 	var info PackageInfo
 
 	info.Timestamp = binary.BigEndian.Uint64(data)
@@ -101,11 +101,11 @@ func DecodePackageInfo(data []byte) PackageInfo {
 
 func DecodeCsiPackage(data []byte) CsiPackage {
 	var pack CsiPackage
-	pack.PackageInfo = DecodePackageInfo(data)
+	pack.PackageInfo = decodePackageInfo(data)
 
 	if pack.PackageInfo.CsiLength > 0 {
 		rawCsi := data[SHIFT_CSI_INFO : SHIFT_CSI_INFO+pack.PackageInfo.CsiLength]
-		pack.Csi = DecodeCsi(rawCsi, pack.PackageInfo.Nr, pack.PackageInfo.Nc, pack.PackageInfo.NumTones)
+		pack.Csi = decodeCsi(rawCsi, pack.PackageInfo.Nr, pack.PackageInfo.Nc, pack.PackageInfo.NumTones)
 	}
 
 	return pack
