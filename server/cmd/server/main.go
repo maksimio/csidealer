@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	c := make(chan csicore.CsiPackage)
+	c := make(chan *csicore.CsiPackage)
 	go tcpserver.RunTcpServer(8081, c)
 	apiserver.RunApiServer(80, c, "../client/build")
 }

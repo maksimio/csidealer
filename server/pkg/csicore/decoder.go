@@ -99,8 +99,8 @@ func DecodePackageInfo(data []byte) PackageInfo {
 	return info
 }
 
-func DecodeCsiPackage(data []byte) CsiPackage {
-	var pack CsiPackage
+func DecodeCsiPackage(data []byte) *CsiPackage {
+	pack := NewCsiPackage(1)
 	pack.PackageInfo = DecodePackageInfo(data)
 
 	if pack.PackageInfo.CsiLength > 0 {

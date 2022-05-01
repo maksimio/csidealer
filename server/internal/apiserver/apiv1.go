@@ -34,8 +34,8 @@ func NewApiV1(routGr *gin.RouterGroup, buf *databuffer.PackageBuffer) *ApiV1 {
 
 func (api *ApiV1) csiLastN(c *gin.Context) {
 	// Тип может быть complex, abs, phase, re, im
-	data := api.buf.LastN(2)
-	c.JSON(200, data[0].CsiPack.PackageInfo)
+	// data := api.buf.LastN(2)
+	c.JSON(200, 1)
 }
 
 func (api *ApiV1) subcarrierLastN(c *gin.Context) {

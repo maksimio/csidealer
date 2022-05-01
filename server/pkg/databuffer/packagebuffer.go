@@ -8,13 +8,13 @@ import (
 const MAX_COUNT = 20
 
 type PackageBuffer struct {
-	Data      []Package
-	c         <-chan csicore.CsiPackage
+	Data      []csicore.CsiPackage
+	c         <-chan *csicore.CsiPackage
 	fullCount uint64
 	mutex     sync.Mutex
 }
 
-func NewPackageBuffer(c <-chan csicore.CsiPackage) *PackageBuffer {
+func NewPackageBuffer(c <-chan *csicore.CsiPackage) *PackageBuffer {
 	p := new(PackageBuffer)
 	p.c = c
 	return p
@@ -26,9 +26,9 @@ func (buf *PackageBuffer) Listen() {
 	}
 }
 
-func (buf *PackageBuffer) push(data csicore.CsiPackage) {
+func (buf *PackageBuffer) push(data *csicore.CsiPackage) {
 	buf.mutex.Lock()
-	buf.Data = append(buf.Data, *NewPackage(data, buf.fullCount))
+	buf.Data = append(buf.Data, *csicore.NewCsiPackage(1))
 	buf.fullCount += 1
 	if buf.fullCount > MAX_COUNT {
 		buf.Data = buf.Data[1:]
@@ -40,7 +40,7 @@ func (buf *PackageBuffer) Length() int {
 	return len(buf.Data)
 }
 
-func (buf *PackageBuffer) LastN(n int) []Package {
+func (buf *PackageBuffer) LastN(n int) []csicore.CsiPackage {
 	length := buf.Length()
 	if n > length {
 		n = length
