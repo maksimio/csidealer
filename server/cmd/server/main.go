@@ -3,9 +3,11 @@ package main
 import (
 	"csidealer/internal/apiserver"
 	"csidealer/internal/tcpserver"
+	"csidealer/pkg/csicore"
 )
 
 func main() {
-	go tcpserver.RunTcpServer(8081)
-	apiserver.RunApiServer(80, "../client/build")
+	c := make(chan csicore.CsiPackage)
+	go tcpserver.RunTcpServer(8081, c)
+	apiserver.RunApiServer(80, c, "../client/build")
 }

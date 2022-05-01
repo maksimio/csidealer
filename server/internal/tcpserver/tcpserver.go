@@ -1,6 +1,7 @@
 package tcpserver
 
 import (
+	"csidealer/pkg/csicore"
 	"csidealer/pkg/databuffer"
 	"fmt"
 	"net"
@@ -9,7 +10,7 @@ import (
 
 const BUF_LEN = 2048
 
-func RunTcpServer(port int) {
+func RunTcpServer(port int, c chan<- csicore.CsiPackage) {
 	ln, err := net.Listen("tcp", ":"+fmt.Sprint(port))
 	if err != nil {
 		fmt.Println("Ошибка прослушки на порту", port, ":", err)
@@ -21,12 +22,12 @@ func RunTcpServer(port int) {
 	for {
 		fmt.Println("Сервер ожидает подключение на", port, "порту")
 		conn, _ := ln.Accept()
-		buf := databuffer.NewBufferFlow()
+		buf := databuffer.NewBufferFlow(c)
 		readLoop(conn, buf)
 	}
 }
 
-func readLoop(conn net.Conn, buf *databuffer.BufferFlow) {
+func readLoop(conn net.Conn, buf *databuffer.TrafficBuffer) {
 	fmt.Println("Новое подключение от:", conn.RemoteAddr())
 	data := make([]byte, BUF_LEN)
 

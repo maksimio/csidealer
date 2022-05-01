@@ -1,12 +1,18 @@
 package apiserver
 
 import (
+	"csidealer/pkg/csicore"
+	"csidealer/pkg/databuffer"
 	"fmt"
-	"github.com/gin-gonic/gin"
+
 	"github.com/gin-gonic/contrib/static"
+	"github.com/gin-gonic/gin"
 )
 
-func RunApiServer(port int, buildDir string) {
+func RunApiServer(port int, c <-chan csicore.CsiPackage, buildDir string) {
+	buf := databuffer.NewPackageBuffer(c)
+	go buf.Listen()
+
 	router := gin.Default()
 	router.Use(static.Serve("/", static.LocalFile(buildDir, true)))
 	api := router.Group("/api")
