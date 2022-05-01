@@ -40,3 +40,12 @@ func (buf *PackageBuffer) push(data csicore.CsiPackage) {
 func (buf *PackageBuffer) Length() int {
 	return len(buf.Data)
 }
+
+func (buf *PackageBuffer) LastN(n int) []Package {
+	length := buf.Length()
+	if n > length {
+		n = length
+	}
+
+	return buf.Data[length - n:]
+}

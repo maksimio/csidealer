@@ -6,17 +6,17 @@ import (
 	"github.com/google/uuid"
 )
 type Package struct {
-	timestamp int64
-	uuid      string
-	number    uint64
-	Data      csicore.CsiPackage
+	Timestamp int64
+	Uuid      string
+	Number    uint64
+	CsiPack      csicore.CsiPackage
 }
 
 func NewPackage(data csicore.CsiPackage, number uint64) *Package {
 	p := new(Package)
-	p.Data = data
-	p.number = number
-	p.uuid = uuid.New().String()
-	p.timestamp = time.Now().UnixMilli()
+	p.CsiPack = data
+	p.Number = number
+	p.Uuid = uuid.New().String()
+	p.Timestamp = time.Now().UnixMilli()
 	return p
 }
