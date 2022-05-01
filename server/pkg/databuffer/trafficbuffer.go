@@ -7,11 +7,11 @@ import (
 
 type TrafficBuffer struct {
 	Data            []byte
-	c               chan<- *csicore.CsiPackage
+	c               chan<- csicore.CsiPackage
 	nextPackageSize int
 }
 
-func NewBufferFlow(c chan<- *csicore.CsiPackage) *TrafficBuffer {
+func NewBufferFlow(c chan<- csicore.CsiPackage) *TrafficBuffer {
 	p := new(TrafficBuffer)
 	p.c = c
 	return p

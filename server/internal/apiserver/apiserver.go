@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func RunApiServer(port int, c <-chan *csicore.CsiPackage, buildDir string) {
+func RunApiServer(port int, c <-chan csicore.CsiPackage, buildDir string) {
 	buf := databuffer.NewPackageBuffer(c)
 	go buf.Listen()
 
