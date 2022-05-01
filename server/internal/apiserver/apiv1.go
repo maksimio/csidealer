@@ -2,6 +2,7 @@ package apiserver
 
 import (
 	"csidealer/pkg/databuffer"
+	"strconv"
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,7 +24,7 @@ func NewApiV1(routGr *gin.RouterGroup, buf *databuffer.PackageBuffer) *ApiV1 {
 	p.routGr = routGr
 	p.buf = buf
 
-	p.routGr.GET("/csiLastN", p.csiLastN)
+	p.routGr.GET("/csiLastN/:type", p.csiLastN)
 	p.routGr.GET("/subcarrierLastN", p.subcarrierLastN)
 	p.routGr.GET("/deviceInfo", p.deviceInfo)
 	p.routGr.GET("/startLog", p.startLog)
@@ -33,8 +34,10 @@ func NewApiV1(routGr *gin.RouterGroup, buf *databuffer.PackageBuffer) *ApiV1 {
 }
 
 func (api *ApiV1) csiLastN(c *gin.Context) {
-	// Тип может быть complex, abs, phase, re, im
-	data := api.buf.LastN(2)
+	// csiType, _ := strconv.Atoi(c.Param("type"))
+	n, _ := strconv.Atoi(c.Query("n"))
+	
+	data := api.buf.LastN(n)
 	c.JSON(200, data[0].CsiPack.PackageInfo)
 }
 

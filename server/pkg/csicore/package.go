@@ -5,6 +5,8 @@ type CsiPackage struct {
 	Csi         [][]complex128
 	Abs         [][]float64
 	Phase       [][]float64
+	Re          [][]float64
+	Im          [][]float64
 }
 
 type PackageInfo struct {

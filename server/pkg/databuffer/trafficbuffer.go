@@ -3,7 +3,6 @@ package databuffer
 import (
 	"csidealer/pkg/csicore"
 	"encoding/binary"
-	"math/cmplx"
 )
 
 type TrafficBuffer struct {
@@ -50,8 +49,6 @@ func (buf *TrafficBuffer) decode(data []byte) {
 		return
 	}
 
-	pack.Abs = csicore.CsiMap(pack.Csi, cmplx.Abs)
-	pack.Phase = csicore.CsiMap(pack.Csi, cmplx.Phase)
 	buf.c <- pack
 }
 

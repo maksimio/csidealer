@@ -2,6 +2,7 @@ package databuffer
 
 import (
 	"csidealer/pkg/csicore"
+	"math/cmplx"
 	"sync"
 )
 
@@ -27,6 +28,11 @@ func (buf *PackageBuffer) Listen() {
 }
 
 func (buf *PackageBuffer) push(data csicore.CsiPackage) {
+	data.Abs = csicore.CsiMap(data.Csi, cmplx.Abs)
+	data.Phase = csicore.CsiMap(data.Csi, cmplx.Phase)
+	data.Re = csicore.CsiMap(data.Csi, realWrapper)
+	data.Im = csicore.CsiMap(data.Csi, imagWrapper)
+
 	buf.mutex.Lock()
 	buf.Data = append(buf.Data, *NewPackage(data, buf.fullCount))
 	buf.fullCount += 1
@@ -47,4 +53,12 @@ func (buf *PackageBuffer) LastN(n int) []Package {
 	}
 
 	return buf.Data[length-n:]
+}
+
+func realWrapper(c complex128) float64 {
+	return real(c)
+}
+
+func imagWrapper(c complex128) float64 {
+	return imag(c)
 }
