@@ -2,7 +2,6 @@ package databuffer
 
 import (
 	"csidealer/pkg/csicore"
-	"fmt"
 	"sync"
 )
 
@@ -35,7 +34,7 @@ func (buf *PackageBuffer) push(data csicore.CsiPackage) {
 		buf.Data = buf.Data[1:]
 	}
 	buf.mutex.Unlock()
-	fmt.Println("CC:", buf.Length(), buf.fullCount)
+	// fmt.Println("CC:", buf.Length(), buf.fullCount)
 }
 
 func (buf *PackageBuffer) Length() int {

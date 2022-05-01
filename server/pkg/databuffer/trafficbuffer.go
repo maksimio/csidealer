@@ -3,7 +3,6 @@ package databuffer
 import (
 	"csidealer/pkg/csicore"
 	"encoding/binary"
-	"fmt"
 	"math/cmplx"
 )
 
@@ -53,10 +52,7 @@ func (buf *TrafficBuffer) decode(data []byte) {
 
 	pack.Abs = csicore.CsiMap(pack.Csi, cmplx.Abs)
 	pack.Phase = csicore.CsiMap(pack.Csi, cmplx.Phase)
-	fmt.Println("Перед отправкой пакета")
 	buf.c <- pack
-	fmt.Println("Отправили пакет")
-
 }
 
 func (buf *TrafficBuffer) shift(n int) []byte {

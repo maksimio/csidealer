@@ -1,6 +1,11 @@
 package apiserver
 
-import "github.com/gin-gonic/gin"
+import (
+	"csidealer/pkg/databuffer"
+	"fmt"
+
+	"github.com/gin-gonic/gin"
+)
 
 const (
 	complex = iota
@@ -10,32 +15,51 @@ const (
 	im
 )
 
-func csiLastN(c *gin.Context) {
+type ApiV1 struct {
+	routGr *gin.RouterGroup
+	buf    *databuffer.PackageBuffer
+}
+
+func NewApiV1(routGr *gin.RouterGroup, buf *databuffer.PackageBuffer) *ApiV1 {
+	p := new(ApiV1)
+	p.routGr = routGr
+
+	p.routGr.GET("/csiLastN", p.csiLastN)
+	p.routGr.GET("/subcarrierLastN", p.subcarrierLastN)
+	p.routGr.GET("/deviceInfo", p.deviceInfo)
+	p.routGr.GET("/startLog", p.startLog)
+	p.routGr.GET("/stopLog", p.stopLog)
+
+	return p
+}
+
+func (api *ApiV1) csiLastN(c *gin.Context) {
 	// Тип может быть complex, abs, phase, re, im
+	fmt.Println(api.buf.Data)
 	c.JSON(200, gin.H{
-		"message": "[][]амплитудные или фазовые значения - n последних пакетов",
+		"message": 1,
 	})
 }
 
-func subcarrierLastN(c *gin.Context) {
+func (api *ApiV1) subcarrierLastN(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"message": "амплитудное или фазовое значение - n последних пакетов для конкретной поднесущей",
 	})
 }
 
-func deviceInfo(c *gin.Context) {
+func (api *ApiV1) deviceInfo(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"message": "Информация о подключенном устройстве: статус подключения, IP, время подключения, число переданных пакетов",
 	})
 }
 
-func startLog(c *gin.Context) {
+func (api *ApiV1) startLog(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"message": "входной параметр - путь к логфайлу",
 	})
 }
 
-func stopLog(c *gin.Context) {
+func (api *ApiV1) stopLog(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"message": "остановить запись всех логов",
 	})
