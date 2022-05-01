@@ -2,7 +2,6 @@ package csicore
 
 type CsiPackage struct {
 	PackageInfo PackageInfo
-	Payload     []uint8
 	Csi         [][]complex128
 	Abs         [][]float64
 	Phase       [][]float64

@@ -34,7 +34,6 @@ func (buf *PackageBuffer) push(data csicore.CsiPackage) {
 		buf.Data = buf.Data[1:]
 	}
 	buf.mutex.Unlock()
-	// fmt.Println("CC:", buf.Length(), buf.fullCount)
 }
 
 func (buf *PackageBuffer) Length() int {
@@ -47,5 +46,5 @@ func (buf *PackageBuffer) LastN(n int) []Package {
 		n = length
 	}
 
-	return buf.Data[length - n:]
+	return buf.Data[length-n:]
 }
