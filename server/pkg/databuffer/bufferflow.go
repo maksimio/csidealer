@@ -4,6 +4,7 @@ import (
 	"csidealer/pkg/csicore"
 	"encoding/binary"
 	"fmt"
+	"math/cmplx"
 )
 
 type BufferFlow struct {
@@ -47,8 +48,8 @@ func (buf *BufferFlow) splitPackage() {
 
 func (buf *BufferFlow)decode(data []byte) {
 	pack := csicore.DecodeCsiPackage(data)
-	pack.Abs = csicore.CsiToAbs(pack.Csi)
-	pack.Phase = csicore.CsiToPhase(pack.Csi)
+	pack.Abs = csicore.CsiMap(pack.Csi, cmplx.Abs)
+	pack.Phase = csicore.CsiMap(pack.Csi, cmplx.Phase)
 
 	buf.packageBuf.Push(pack)
 
