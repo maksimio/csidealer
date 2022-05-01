@@ -6,13 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const (
-	complex = iota
-	abs
-	phase
-	re
-	im
-)
+
 
 type ApiV1 struct {
 	routGr *gin.RouterGroup
@@ -25,8 +19,8 @@ func NewApiV1(routGr *gin.RouterGroup, buf *databuffer.PackageBuffer) *ApiV1 {
 	p.buf = buf
 
 	p.routGr.GET("/csiLastN/:type", p.csiLastN)
-	p.routGr.GET("/subcarrierLastN", p.subcarrierLastN)
-	p.routGr.GET("/deviceInfo", p.deviceInfo)
+	p.routGr.GET("/subcarrierLastN/:type", p.subcarrierLastN)
+	p.routGr.GET("/status", p.status)
 	p.routGr.GET("/startLog", p.startLog)
 	p.routGr.GET("/stopLog", p.stopLog)
 
@@ -34,11 +28,10 @@ func NewApiV1(routGr *gin.RouterGroup, buf *databuffer.PackageBuffer) *ApiV1 {
 }
 
 func (api *ApiV1) csiLastN(c *gin.Context) {
-	csiType, _ := strconv.Atoi(c.Param("type"))
+	csiType := c.Param("type")
 	n, _ := strconv.Atoi(c.Query("n"))
-	
-	data := api.buf.LastN(n)
-	c.JSON(200, data[0].CsiPack.PackageInfo)
+	data := api.buf.LastN(n, csiType)
+	c.JSON(200, data)
 }
 
 func (api *ApiV1) subcarrierLastN(c *gin.Context) {
@@ -47,7 +40,7 @@ func (api *ApiV1) subcarrierLastN(c *gin.Context) {
 	})
 }
 
-func (api *ApiV1) deviceInfo(c *gin.Context) {
+func (api *ApiV1) status(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"message": "Информация о подключенном устройстве: статус подключения, IP, время подключения, число переданных пакетов",
 	})

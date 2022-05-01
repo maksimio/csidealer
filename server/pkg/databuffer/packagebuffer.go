@@ -2,14 +2,14 @@ package databuffer
 
 import (
 	"csidealer/pkg/csi"
-	"math/cmplx"
 	"sync"
+	"csidealer/pkg/datatype"
 )
 
 const MAX_COUNT = 20
 
 type PackageBuffer struct {
-	Data      []*Package
+	Data      []*PackageUnion
 	c         <-chan csi.CsiPackage
 	fullCount uint64
 	mutex     sync.Mutex
@@ -28,13 +28,8 @@ func (buf *PackageBuffer) Listen() {
 }
 
 func (buf *PackageBuffer) push(data csi.CsiPackage) {
-	data.Abs = csi.CsiMap(data.Csi, cmplx.Abs)
-	data.Phase = csi.CsiMap(data.Csi, cmplx.Phase)
-	data.Re = csi.CsiMap(data.Csi, realWrapper)
-	data.Im = csi.CsiMap(data.Csi, imagWrapper)
-
 	buf.mutex.Lock()
-	buf.Data = append(buf.Data, NewPackage(data, buf.fullCount))
+	buf.Data = append(buf.Data, NewPackageUnion(data, buf.fullCount))
 	buf.fullCount += 1
 	if buf.fullCount > MAX_COUNT {
 		buf.Data = buf.Data[1:]
@@ -46,19 +41,30 @@ func (buf *PackageBuffer) Length() int {
 	return len(buf.Data)
 }
 
-func (buf *PackageBuffer) LastN(n int) {
+func (buf *PackageBuffer) LastN(n int, csiType string) []Package {
 	length := buf.Length()
 	if n > length {
 		n = length
 	}
 
-	// return buf.Data[length-n:]
-}
+	var packages []Package
 
-func realWrapper(c complex128) float64 {
-	return real(c)
-}
+	for i := length - n; i < length; i++ {
+		var data Package
 
-func imagWrapper(c complex128) float64 {
-	return imag(c)
+		switch csiType {
+		case dataType.CsiDataType.Abs:
+			data = buf.Data[i].Abs
+		case dataType.CsiDataType.Phase:
+			data = buf.Data[i].Phase
+		case dataType.CsiDataType.Re:
+			data = buf.Data[i].Re
+		case dataType.CsiDataType.Im:
+			data = buf.Data[i].Im
+		}
+
+		packages = append(packages, data)
+	}
+
+	return packages
 }
