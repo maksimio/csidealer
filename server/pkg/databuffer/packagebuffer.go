@@ -2,8 +2,8 @@ package databuffer
 
 import (
 	"csidealer/pkg/csi"
-	"sync"
 	"csidealer/pkg/datatype"
+	"sync"
 )
 
 const MAX_COUNT = 20
@@ -41,7 +41,7 @@ func (buf *PackageBuffer) Length() int {
 	return len(buf.Data)
 }
 
-func (buf *PackageBuffer) LastN(n int, csiType string) []Package {
+func (buf *PackageBuffer) CsiLastN(n int, csiType string) []Package {
 	length := buf.Length()
 	if n > length {
 		n = length
@@ -67,4 +67,32 @@ func (buf *PackageBuffer) LastN(n int, csiType string) []Package {
 	}
 
 	return packages
+}
+
+func (buf *PackageBuffer) SubcarrierLastN(h, index, n int, csiType string) []float64 {
+	length := buf.Length()
+	if n > length {
+		n = length
+	}
+
+	var data []float64
+
+	for i := length - n; i < length; i++ {
+		var value float64
+
+		switch csiType {
+		case dataType.CsiDataType.Abs:
+			value = buf.Data[i].Abs.Data[h][index]
+		case dataType.CsiDataType.Phase:
+			value = buf.Data[i].Phase.Data[h][index]
+		case dataType.CsiDataType.Re:
+			value = buf.Data[i].Re.Data[h][index]
+		case dataType.CsiDataType.Im:
+			value = buf.Data[i].Im.Data[h][index]
+		}
+
+		data = append(data, value)
+	}
+
+	return data
 }
