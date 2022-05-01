@@ -2,8 +2,10 @@ package apiserver
 
 import (
 	"csidealer/pkg/databuffer"
-	"github.com/gin-gonic/gin"
+	"fmt"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
 type ApiV1 struct {
@@ -45,15 +47,14 @@ func (api *ApiV1) subcarrierLastN(c *gin.Context) {
 }
 
 func (api *ApiV1) startLog(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"в разработке": "входной параметр - путь к логфайлу",
-	})
+	filepath := c.Query("filepath")
+	fmt.Println(filepath)
+	c.AbortWithStatus(200)
 }
 
 func (api *ApiV1) stopLog(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"в разработке": "остановить запись всех логов",
-	})
+	fmt.Println("Стоп логирование")
+	c.AbortWithStatus(200)
 }
 
 func (api *ApiV1) status(c *gin.Context) {
