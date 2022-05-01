@@ -1,7 +1,7 @@
 package tcpserver
 
 import (
-	"csidealer/pkg/csicore"
+	"csidealer/pkg/csi"
 	"csidealer/pkg/databuffer"
 	"fmt"
 	"net"
@@ -10,7 +10,7 @@ import (
 
 const BUF_LEN = 2048
 
-func RunTcpServer(port int, c chan<- csicore.CsiPackage) {
+func RunTcpServer(port int, c chan<- csi.CsiPackage) {
 	ln, err := net.Listen("tcp", ":"+fmt.Sprint(port))
 	if err != nil {
 		fmt.Println("Ошибка прослушки на порту", port, ":", err)

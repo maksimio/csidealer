@@ -1,17 +1,17 @@
 package databuffer
 
 import (
-	"csidealer/pkg/csicore"
+	"csidealer/pkg/csi"
 	"encoding/binary"
 )
 
 type TrafficBuffer struct {
 	Data            []byte
-	c               chan<- csicore.CsiPackage
+	c               chan<- csi.CsiPackage
 	nextPackageSize int
 }
 
-func NewBufferFlow(c chan<- csicore.CsiPackage) *TrafficBuffer {
+func NewBufferFlow(c chan<- csi.CsiPackage) *TrafficBuffer {
 	p := new(TrafficBuffer)
 	p.c = c
 	return p
@@ -44,7 +44,7 @@ func (buf *TrafficBuffer) splitPackage() {
 }
 
 func (buf *TrafficBuffer) send(data []byte) {
-	pack := csicore.DecodeCsiPackage(data)
+	pack := csi.DecodeCsiPackage(data)
 	if pack.PackageInfo.CsiLength == 0 {
 		return
 	}

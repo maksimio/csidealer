@@ -2,7 +2,7 @@ package apiserver
 
 import (
 	"csidealer/pkg/databuffer"
-	// "strconv"
+	"strconv"
 	"github.com/gin-gonic/gin"
 )
 
@@ -34,11 +34,11 @@ func NewApiV1(routGr *gin.RouterGroup, buf *databuffer.PackageBuffer) *ApiV1 {
 }
 
 func (api *ApiV1) csiLastN(c *gin.Context) {
-	// csiType, _ := strconv.Atoi(c.Param("type"))
-	// n, _ := strconv.Atoi(c.Query("n"))
+	csiType, _ := strconv.Atoi(c.Param("type"))
+	n, _ := strconv.Atoi(c.Query("n"))
 	
-	// data := api.buf.LastN(n)
-	// c.JSON(200, data[0].CsiPack.PackageInfo)
+	data := api.buf.LastN(n)
+	c.JSON(200, data[0].CsiPack.PackageInfo)
 }
 
 func (api *ApiV1) subcarrierLastN(c *gin.Context) {

@@ -1,4 +1,4 @@
-package csicore
+package csi
 
 import (
 	"encoding/binary"

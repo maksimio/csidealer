@@ -1,19 +1,20 @@
 package databuffer
 
 import (
-	"csidealer/pkg/csicore"
-	"github.com/google/uuid"
+	"csidealer/pkg/csi"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type Package struct {
 	Timestamp int64
 	Uuid      string
 	Number    uint64
-	CsiPack   csicore.CsiPackage
+	CsiPack   csi.CsiPackage
 }
 
-func NewPackage(data csicore.CsiPackage, number uint64) *Package {
+func NewPackage(data csi.CsiPackage, number uint64) *Package {
 	p := new(Package)
 	p.CsiPack = data
 	p.Number = number
@@ -21,4 +22,3 @@ func NewPackage(data csicore.CsiPackage, number uint64) *Package {
 	p.Timestamp = time.Now().UnixMilli()
 	return p
 }
-

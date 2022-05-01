@@ -1,7 +1,7 @@
 package apiserver
 
 import (
-	"csidealer/pkg/csicore"
+	"csidealer/pkg/csi"
 	"csidealer/pkg/databuffer"
 	"fmt"
 
@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func RunApiServer(port int, c <-chan csicore.CsiPackage, buildDir string) {
+func RunApiServer(port int, c <-chan csi.CsiPackage, buildDir string) {
 	buf := databuffer.NewPackageBuffer(c)
 	go buf.Listen()
 

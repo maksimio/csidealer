@@ -1,4 +1,4 @@
-package csicore
+package csi
 
 type CsiPackage struct {
 	PackageInfo PackageInfo
