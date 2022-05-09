@@ -34,3 +34,7 @@ func (c *CsiLocalRepo) GetLastN(n int) []*entity.Package {
 
 	return c.data[length-n:]
 }
+
+func (c *CsiLocalRepo) GetFullCount() uint64 {
+	return c.fullCount
+}

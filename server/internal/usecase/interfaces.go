@@ -12,6 +12,7 @@ type (
 	PackageRepo interface {
 		Push(csiPackage *entity.Package)
 		GetLastN(n int) []*entity.Package
+		GetFullCount() uint64
 	}
 
 	RawTrafficRepo interface {
@@ -20,8 +21,9 @@ type (
 	}
 
 	FileWriter interface {
-		Start() error
-		Stop() error
+		Start(filename string) error
+		Stop()
 		Write(data []byte) error
+		IsOpen() bool
 	}
 )
