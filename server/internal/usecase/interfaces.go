@@ -3,6 +3,12 @@ package usecase
 import "csidealer/internal/entity"
 
 type (
+	Csi interface {
+		HandleRawTraffic(data []byte)
+		StartLog(filepath string)
+		StopLog()
+	}
+
 	PackageRepo interface {
 		Push(csiPackage *entity.Package)
 		GetLastN(n int) []*entity.Package

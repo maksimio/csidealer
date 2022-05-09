@@ -5,6 +5,6 @@ type Package struct {
 	Uuid      string
 	Number    uint64
 
-	Info PackageInfo
+	Info *PackageInfo
 	Data Csi
 }
