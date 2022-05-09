@@ -15,7 +15,6 @@ func TestRepoMaxLength(t *testing.T) {
 	if len(repo.data) != 3 {
 		t.Errorf("Ожидается длина 3, а она равна %d", len(repo.data))
 	}
-
 }
 
 func TestRepoGet(t *testing.T) {

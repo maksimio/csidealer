@@ -6,6 +6,7 @@ import (
 	"csidealer/internal/usecase/buffer"
 	"csidealer/internal/usecase/file_writer"
 	"csidealer/internal/usecase/repo"
+	"csidealer/internal/controller/http"
 )
 
 func Run() {
@@ -16,6 +17,9 @@ func Run() {
 	)
 
 	tcpServer := tcp.NewTcpServer(csiUseCase, 8081)
+	httpServer := http.NewHttpServer(csiUseCase, 80, "./build")
 
-	tcpServer.Run()
+	go tcpServer.Run()
+	httpServer.Run()
+
 }

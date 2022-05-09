@@ -31,7 +31,7 @@ func (s *TcpServer) Run() {
 	defer ln.Close()
 
 	for {
-		fmt.Println("Сервер ожидает подключение на", s.port, "порту")
+		fmt.Println("TCP-сервер ожидает подключение на", s.port, "порту")
 		conn, _ := ln.Accept()
 		s.listenConnection(conn)
 	}
