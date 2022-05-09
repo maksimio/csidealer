@@ -1,40 +1,42 @@
-package raw_data_storage
+package buffer
 
 import (
 	"encoding/binary"
 )
 
-type CsiRawRepo struct {
+const _sizeByteLen = 4
+
+type CsiRawBuffer struct {
 	rawData         []byte
 	nextPackageSize int
 	splittedData    [][]byte
 }
 
-func NewCsiRawRepo() *CsiRawRepo {
-	return &CsiRawRepo{}
+func NewCsiRawRepo() *CsiRawBuffer {
+	return &CsiRawBuffer{}
 }
 
-func (c *CsiRawRepo) Push(data []byte) {
+func (c *CsiRawBuffer) Push(data []byte) {
 	c.rawData = append(c.rawData, data...)
 	c.splitPackageAll()
 }
 
-func (c *CsiRawRepo) GetAllSplitted() [][]byte {
+func (c *CsiRawBuffer) GetAllSplitted() [][]byte {
 	temp := c.splittedData
 	c.splittedData = [][]byte{}
 	return temp
 }
 
-func (c *CsiRawRepo) splitPackageAll() {
+func (c *CsiRawBuffer) splitPackageAll() {
 	c.splitPackage()
-	for c.nextPackageSize+4 < len(c.rawData) {
+	for c.nextPackageSize+_sizeByteLen < len(c.rawData) {
 		c.splitPackage()
 	}
 }
 
-func (c *CsiRawRepo) splitPackage() {
-	if c.nextPackageSize == 0 && len(c.rawData) >= 4 {
-		c.nextPackageSize = int(binary.LittleEndian.Uint32(c.shift(4)))
+func (c *CsiRawBuffer) splitPackage() {
+	if c.nextPackageSize == 0 && len(c.rawData) >= _sizeByteLen {
+		c.nextPackageSize = int(binary.LittleEndian.Uint32(c.shift(_sizeByteLen)))
 	} else if c.nextPackageSize != 0 && c.nextPackageSize <= len(c.rawData) {
 		data := c.shift(c.nextPackageSize)
 		c.nextPackageSize = 0
@@ -43,7 +45,7 @@ func (c *CsiRawRepo) splitPackage() {
 	}
 }
 
-func (c *CsiRawRepo) shift(n int) []byte {
+func (c *CsiRawBuffer) shift(n int) []byte {
 	dataPart := c.rawData[:n]
 	c.rawData = c.rawData[n:]
 	return dataPart

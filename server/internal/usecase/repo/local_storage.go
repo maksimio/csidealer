@@ -5,7 +5,7 @@ import (
 )
 
 type CsiLocalRepo struct {
-	Data      []*entity.Package
+	data      []*entity.Package
 	fullCount uint64
 	maxCount  uint64
 }
@@ -13,24 +13,24 @@ type CsiLocalRepo struct {
 func NewCsiLocalRepo(maxCount uint64) *CsiLocalRepo {
 	p := &CsiLocalRepo{
 		maxCount: maxCount,
-		Data:     make([]*entity.Package, maxCount),
+		data:     make([]*entity.Package, 0, maxCount),
 	}
 	return p
 }
 
 func (c *CsiLocalRepo) Push(csiPackage *entity.Package) {
-	c.Data = append(c.Data, csiPackage)
+	c.data = append(c.data, csiPackage)
 	c.fullCount += 1
 	if c.fullCount > c.maxCount {
-		c.Data = c.Data[1:]
+		c.data = c.data[1:]
 	}
 }
 
 func (c *CsiLocalRepo) GetLastN(n int) []*entity.Package {
-	length := len(c.Data)
+	length := len(c.data)
 	if n > length {
 		n = length
 	}
 
-	return c.Data[length-n:]
+	return c.data[length-n:]
 }
