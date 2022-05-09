@@ -10,12 +10,16 @@ type CsiRawRepo struct {
 	splittedData    [][]byte
 }
 
+func NewCsiRawRepo() *CsiRawRepo {
+	return &CsiRawRepo{}
+}
+
 func (c *CsiRawRepo) Push(data []byte) {
 	c.rawData = append(c.rawData, data...)
 	c.splitPackageAll()
 }
 
-func (c *CsiRawRepo) GetAll() [][]byte {
+func (c *CsiRawRepo) GetAllSplitted() [][]byte {
 	temp := c.splittedData
 	c.splittedData = [][]byte{}
 	return temp
