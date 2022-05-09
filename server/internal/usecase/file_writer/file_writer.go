@@ -4,32 +4,32 @@ import "os"
 
 type RawLogWriter struct {
 	filename string
+	file     *os.File
 }
 
-func NewFileWriter(filename string) (*RawLogWriter, error) {
-	fw := &RawLogWriter{
+func NewFileWriter(filename string) *RawLogWriter {
+	return &RawLogWriter{
 		filename: filename,
 	}
-
-	file, err := os.Create(filename)
-	if err != nil {
-		return fw, err
-	}
-	defer file.Close()
-
-	return fw, nil
 }
 
-func (fw *RawLogWriter) Write(data []byte) error {
+func (fw *RawLogWriter) Start() error {
 	file, err := os.OpenFile(fw.filename, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
 	if err != nil {
 		return err
 	}
-	defer file.Close()
 
-	if _, err = file.Write(data); err != nil {
-		panic(err)
+	fw.file = file
+	return nil
+}
+
+func (fw *RawLogWriter) Stop() {
+	defer fw.file.Close()
+}
+
+func (fw *RawLogWriter) Write(data []byte) error {
+	if _, err := fw.file.Write(data); err != nil {
+		return err
 	}
-
 	return nil
 }

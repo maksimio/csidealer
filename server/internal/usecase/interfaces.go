@@ -14,6 +14,8 @@ type (
 	}
 
 	FileWriter interface {
+		Start() error
+		Stop() error
 		Write(data []byte) error
 	}
 )
