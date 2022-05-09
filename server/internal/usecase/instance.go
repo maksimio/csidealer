@@ -3,9 +3,8 @@ package usecase
 import (
 	"csidealer/internal/usecase/decoder"
 	"fmt"
-	"time"
-
 	"github.com/google/uuid"
+	"time"
 )
 
 type CsiUseCase struct {
@@ -24,9 +23,9 @@ func NewCsiUseCase(r PackageRepo, rR RawTrafficRepo, fw FileWriter) *CsiUseCase 
 }
 
 func (uc *CsiUseCase) HandleRawTraffic(data []byte) {
-	fmt.Println("Данные пришли сырые")
 	uc.rawRepo.Push(data)
 	splittedData := uc.rawRepo.GetAllSplitted()
+
 	for _, d := range splittedData {
 		pack := decoder.DecodeCsiPackage(d)
 
@@ -35,8 +34,9 @@ func (uc *CsiUseCase) HandleRawTraffic(data []byte) {
 		pack.Number = uc.csiPackageNumber
 		uc.csiPackageNumber += 1
 
-		uc.repo.Push(pack)
-		fmt.Println("Данные запушены")
+		if pack.Info.CsiLength > 0 {
+			uc.repo.Push(pack)
+		}
 	}
 
 	packets := uc.repo.GetLastN(1)
@@ -52,4 +52,9 @@ func (uc *CsiUseCase) StartLog(filepath string) {
 
 func (uc *CsiUseCase) StopLog() {
 
+}
+
+func  (uc *CsiUseCase) FlushBuffer() {
+	fmt.Println("Буфер очищен!")
+	uc.rawRepo.Flush()
 }

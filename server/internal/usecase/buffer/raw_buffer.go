@@ -27,6 +27,12 @@ func (c *CsiRawBuffer) GetAllSplitted() [][]byte {
 	return temp
 }
 
+func (c *CsiRawBuffer) Flush() {
+	c.rawData = []byte{}
+	c.nextPackageSize = 0
+	c.splittedData = [][]byte{}
+}
+
 func (c *CsiRawBuffer) splitPackageAll() {
 	c.splitPackage()
 	for c.nextPackageSize+_sizeByteLen < len(c.rawData) {

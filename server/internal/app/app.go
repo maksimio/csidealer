@@ -10,7 +10,7 @@ import (
 
 func Run() {
 	csiUseCase := usecase.NewCsiUseCase(
-		&repo.CsiLocalRepo{},
+		repo.NewCsiLocalRepo(20),
 		buffer.NewCsiRawRepo(),
 		file_writer.NewFileWriter(),
 	)

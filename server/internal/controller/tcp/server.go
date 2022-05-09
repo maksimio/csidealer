@@ -38,6 +38,7 @@ func (s *TcpServer) Run() {
 }
 
 func (s *TcpServer) listenConnection(conn net.Conn) {
+	s.csiUc.FlushBuffer()
 	fmt.Println("Новое подключение от:", conn.RemoteAddr())
 	data := make([]byte, _buf_len)
 

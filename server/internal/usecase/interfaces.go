@@ -5,6 +5,7 @@ import "csidealer/internal/entity"
 type (
 	Csi interface {
 		HandleRawTraffic(data []byte)
+		FlushBuffer()
 		StartLog(filepath string)
 		StopLog()
 	}
@@ -18,6 +19,7 @@ type (
 	RawTrafficRepo interface {
 		Push(data []byte)
 		GetAllSplitted() [][]byte
+		Flush()
 	}
 
 	FileWriter interface {
