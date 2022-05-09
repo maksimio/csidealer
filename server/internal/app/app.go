@@ -1,11 +1,11 @@
 package app
 
 import (
+	"csidealer/internal/controller/tcp"
 	"csidealer/internal/usecase"
 	"csidealer/internal/usecase/buffer"
 	"csidealer/internal/usecase/file_writer"
 	"csidealer/internal/usecase/repo"
-	"fmt"
 )
 
 func Run() {
@@ -15,5 +15,7 @@ func Run() {
 		file_writer.NewFileWriter(),
 	)
 
-	fmt.Println(csiUseCase)
+	tcpServer := tcp.NewTcpServer(csiUseCase, 8081)
+
+	tcpServer.Run()
 }

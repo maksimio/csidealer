@@ -41,5 +41,4 @@ func decodePackageInfo(data []byte) *entity.PackageInfo {
 		Rssi3:         uint8(data[SHIFT_Rssi3]),
 		PayloadLength: binary.BigEndian.Uint16(data[SHIFT_Payloadlength:]),
 	}
-
 }

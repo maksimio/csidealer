@@ -2,9 +2,10 @@ package decoder
 
 import "csidealer/internal/entity"
 
-func DecodeCsiPackage(data []byte) entity.Package {
-	var pack entity.Package
-	pack.Info = decodePackageInfo(data)
+func DecodeCsiPackage(data []byte) *entity.Package {
+	pack := &entity.Package{
+		Info: decodePackageInfo(data),
+	}
 
 	if pack.Info.CsiLength > 0 {
 		rawCsi := data[SHIFT_CSI_INFO : SHIFT_CSI_INFO+pack.Info.CsiLength]
