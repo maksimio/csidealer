@@ -1,12 +1,12 @@
 package app
 
 import (
+	"csidealer/internal/controller/http"
 	"csidealer/internal/controller/tcp"
 	"csidealer/internal/usecase"
 	"csidealer/internal/usecase/buffer"
 	"csidealer/internal/usecase/file_writer"
 	"csidealer/internal/usecase/repo"
-	"csidealer/internal/controller/http"
 )
 
 func Run() {
@@ -21,5 +21,4 @@ func Run() {
 
 	go tcpServer.Run()
 	httpServer.Run()
-
 }
