@@ -3,8 +3,9 @@ package usecase
 import (
 	"csidealer/internal/usecase/decoder"
 	"fmt"
-	"github.com/google/uuid"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type CsiUseCase struct {
@@ -27,16 +28,8 @@ func (uc *CsiUseCase) HandleRawTraffic(data []byte) {
 	splittedData := uc.rawRepo.GetAllSplitted()
 
 	for _, d := range splittedData {
-		pack := decoder.DecodeCsiPackage(d)
-
-		pack.Uuid = uuid.New().String() // TODO: не совсем правильно держать это в usecase
-		pack.Timestamp = time.Now().UnixMilli()
-		pack.Number = uc.csiPackageNumber
-		uc.csiPackageNumber += 1
-
-		if pack.Info.CsiLength > 0 {
-			uc.repo.Push(pack)
-		}
+		uc.push(d)
+		uc.log(d)
 	}
 
 	packets := uc.repo.GetLastN(1)
@@ -46,15 +39,41 @@ func (uc *CsiUseCase) HandleRawTraffic(data []byte) {
 	}
 }
 
-func (uc *CsiUseCase) StartLog(filepath string) {
-
+func (uc *CsiUseCase) StartLog(filepath string) error {
+	err := uc.fw.Start(filepath)
+	return err
 }
 
 func (uc *CsiUseCase) StopLog() {
-
+	uc.fw.Stop()
 }
 
 func (uc *CsiUseCase) FlushBuffer() {
 	fmt.Println("Буфер очищен!")
 	uc.rawRepo.Flush()
+}
+
+func (uc *CsiUseCase) push(d []byte) {
+	pack := decoder.DecodeCsiPackage(d)
+
+	if pack.Info.CsiLength == 0 {
+		return
+	}
+
+	pack.Uuid = uuid.New().String() // TODO: ? не совсем правильно держать это в usecase
+	pack.Timestamp = time.Now().UnixMilli()
+	pack.Number = uc.csiPackageNumber
+	uc.csiPackageNumber += 1
+
+	uc.repo.Push(pack)
+}
+
+func (uc *CsiUseCase) log(d []byte) {
+	if !uc.fw.IsOpen() {
+		return
+	}
+
+	
+
+	uc.fw.Write(d)
 }

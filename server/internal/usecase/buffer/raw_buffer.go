@@ -2,6 +2,7 @@ package buffer
 
 import (
 	"encoding/binary"
+	"fmt"
 )
 
 const _sizeByteLen = 4
@@ -44,6 +45,7 @@ func (c *CsiRawBuffer) splitPackage() {
 	if c.nextPackageSize == 0 && len(c.rawData) >= _sizeByteLen {
 		c.nextPackageSize = int(binary.LittleEndian.Uint32(c.shift(_sizeByteLen)))
 	} else if c.nextPackageSize != 0 && c.nextPackageSize <= len(c.rawData) {
+		fmt.Println(c.nextPackageSize )
 		data := c.shift(c.nextPackageSize)
 		c.nextPackageSize = 0
 

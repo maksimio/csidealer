@@ -2,7 +2,7 @@ package http
 
 import (
 	"csidealer/internal/usecase"
-	"fmt"
+	// "fmt"
 	"github.com/gin-gonic/gin"
 )
 
@@ -45,12 +45,16 @@ func (a *ApiV1) subcarrierLastN(c *gin.Context) {
 
 func (a *ApiV1) startLog(c *gin.Context) {
 	filepath := c.Query("filepath")
-	fmt.Println(filepath)
-	c.AbortWithStatus(200)
+	err := a.csiUc.StartLog(filepath)
+	if err != nil {
+		c.JSON(500, gin.H{"success": false, "message": err.Error()})
+	} else {
+		c.JSON(200, gin.H{"success": true})
+	}
 }
 
 func (a *ApiV1) stopLog(c *gin.Context) {
-	fmt.Println("Стоп логирование")
+	a.csiUc.StopLog()
 	c.AbortWithStatus(200)
 }
 
