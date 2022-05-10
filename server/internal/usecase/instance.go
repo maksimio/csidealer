@@ -54,7 +54,7 @@ func (uc *CsiUseCase) StopLog() {
 
 }
 
-func  (uc *CsiUseCase) FlushBuffer() {
+func (uc *CsiUseCase) FlushBuffer() {
 	fmt.Println("Буфер очищен!")
 	uc.rawRepo.Flush()
 }
