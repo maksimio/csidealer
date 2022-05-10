@@ -6,7 +6,7 @@ type (
 	Csi interface {
 		HandleRawTraffic(data []byte)
 		FlushBuffer()
-		StartLog(filepath string)
+		StartLog(filepath string) error
 		StopLog()
 	}
 

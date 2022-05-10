@@ -1,6 +1,10 @@
 package file_writer
 
-import "os"
+import (
+	"fmt"
+	"os"
+	"errors"
+)
 
 type RawLogger struct {
 	Filename   string
@@ -13,6 +17,10 @@ func NewFileWriter() *RawLogger {
 }
 
 func (r *RawLogger) Start(filename string) error {
+	if r.openStatus {
+		return errors.New("предыдущий файл не закрыт")
+	}
+
 	r.Filename = filename
 	file, err := os.OpenFile(r.Filename, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
 	if err != nil {
@@ -21,12 +29,15 @@ func (r *RawLogger) Start(filename string) error {
 
 	r.file = file
 	r.openStatus = true
+
+	fmt.Println("Начата запись в файл", r.Filename)
 	return nil
 }
 
 func (r *RawLogger) Stop() {
 	defer r.file.Close()
 	r.openStatus = false
+	fmt.Println("Остановлена запись в файл", r.Filename)
 }
 
 func (r *RawLogger) Write(data []byte) error {
