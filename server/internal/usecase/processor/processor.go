@@ -2,8 +2,8 @@ package processor
 
 import (
 	"csidealer/internal/entity"
+	"errors"
 	"math"
-	"math/cmplx"
 )
 
 type Processor struct {
@@ -29,7 +29,7 @@ func (p *Processor) csiMap(csi entity.Csi, f func(complex128) float64) [][]float
 	return data
 }
 
-func (p *Processor) Abs(data []*entity.Package) []entity.ApiPackage {
+func (p *Processor) PackageMap(data []*entity.Package, handler func(complex128) float64) []entity.ApiPackage {
 	packs := make([]entity.ApiPackage, 0, len(data))
 
 	for _, value := range data {
@@ -38,61 +38,27 @@ func (p *Processor) Abs(data []*entity.Package) []entity.ApiPackage {
 			Id:        value.Uuid,
 			Info:      value.Info,
 			Number:    value.Number,
-			Data:      p.csiMap(value.Data, cmplx.Abs),
+			Data:      p.csiMap(value.Data, handler),
 		})
 	}
 
 	return packs
 }
 
-func (p *Processor) Phase(data []*entity.Package) []entity.ApiPackage {
-	packs := make([]entity.ApiPackage, 0, len(data))
+func (p *Processor) SubcarrierMap(data []*entity.Package, handler func(complex128) float64, h, i int) ([]float64, error) {
+	subcarrierData := make([]float64, 0, len(data))
 
-	for _, value := range data {
-		packs = append(packs, entity.ApiPackage{
-			Timestamp: value.Timestamp,
-			Id:        value.Uuid,
-			Info:      value.Info,
-			Number:    value.Number,
-			Data:      p.csiMap(value.Data, cmplx.Phase),
-		})
+	for _, pack := range data {
+		if h >= len(pack.Data) {
+			return []float64{}, errors.New("h: выход за границы массива")
+		}
+		hData := pack.Data[h]
+		if i >= len(hData) {
+			return []float64{}, errors.New("i: выход за границы массива")
+		}
+		value := hData[i]
+		subcarrierData = append(subcarrierData, handler(value))
 	}
 
-	return packs
-}
-
-func (p *Processor) Re(data []*entity.Package) []entity.ApiPackage {
-	packs := make([]entity.ApiPackage, 0, len(data))
-
-	for _, value := range data {
-		packs = append(packs, entity.ApiPackage{
-			Timestamp: value.Timestamp,
-			Id:        value.Uuid,
-			Info:      value.Info,
-			Number:    value.Number,
-			Data:      p.csiMap(value.Data, reWrapper),
-		})
-	}
-
-	return packs
-}
-
-func (p *Processor) Im(data []*entity.Package) []entity.ApiPackage {
-	packs := make([]entity.ApiPackage, 0, len(data))
-
-	for _, value := range data {
-		packs = append(packs, entity.ApiPackage{
-			Timestamp: value.Timestamp,
-			Id:        value.Uuid,
-			Info:      value.Info,
-			Number:    value.Number,
-			Data:      p.csiMap(value.Data, imWrapper),
-		})
-	}
-
-	return packs
-}
-
-func (p *Processor) PhaseWithoutJumps(data []*entity.Package) []entity.ApiPackage {
-	return []entity.ApiPackage{}
+	return subcarrierData, nil
 }

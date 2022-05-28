@@ -2,10 +2,8 @@ package http
 
 import (
 	"csidealer/internal/usecase"
-	"strconv"
-
-	// "fmt"
 	"github.com/gin-gonic/gin"
+	"strconv"
 )
 
 type ApiV1 struct {
@@ -58,13 +56,13 @@ func (a *ApiV1) status(c *gin.Context) {
 			// "tcpConnStartTime"
 			// "isFileConn": false, // TODO: будет добавлено
 			"csiPackageCount": a.csiUc.GetCsiPackageCount(),
-			// "repoMaxCount"
+			// "csiPackageMaxCount"
 		},
 	})
 }
 
 func (a *ApiV1) csiLastN(c *gin.Context) {
-	csi, err := strconv.ParseUint(c.Param("type"), 10, 8)
+	csiType, err := strconv.ParseUint(c.Param("type"), 10, 8)
 	if err != nil {
 		c.JSON(500, gin.H{"success": false, "message": err.Error()})
 		return
@@ -76,7 +74,7 @@ func (a *ApiV1) csiLastN(c *gin.Context) {
 		return
 	}
 
-	data, err := a.csiUc.GetCsi(uint8(csi), n)
+	data, err := a.csiUc.GetCsi(uint8(csiType), n)
 	if err != nil {
 		c.JSON(500, gin.H{"success": false, "message": err.Error()})
 		return
@@ -91,9 +89,38 @@ func (a *ApiV1) csiLastN(c *gin.Context) {
 // ---------------------------------- НЕ ГОТОВО:
 
 func (a *ApiV1) subcarrierLastN(c *gin.Context) {
-	// csiType := c.Param("type")
-	// h, _ := strconv.Atoi(c.Query("h"))
-	// index, _ := strconv.Atoi(c.Query("index"))
-	// n, _ := strconv.Atoi(c.Query("n"))
-	c.JSON(200, 1)
+	csiType, err := strconv.ParseUint(c.Param("type"), 10, 8)
+	if err != nil {
+		c.JSON(500, gin.H{"success": false, "message": err.Error()})
+		return
+	}
+
+	n, err := strconv.Atoi(c.Query("n"))
+	if err != nil {
+		c.JSON(500, gin.H{"success": false, "message": err.Error()})
+		return
+	}
+
+	h, err := strconv.Atoi(c.Query("h"))
+	if err != nil {
+		c.JSON(500, gin.H{"success": false, "message": err.Error()})
+		return
+	}
+
+	i, err := strconv.Atoi(c.Query("i"))
+	if err != nil {
+		c.JSON(500, gin.H{"success": false, "message": err.Error()})
+		return
+	}
+
+	data, err := a.csiUc.GetSubcarrier(uint8(csiType), n, h, i)
+	if err != nil {
+		c.JSON(500, gin.H{"success": false, "message": err.Error()})
+		return
+	} else {
+		c.JSON(200, gin.H{
+			"success": true,
+			"result":  data,
+		})
+	}
 }

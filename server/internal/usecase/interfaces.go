@@ -12,6 +12,7 @@ type (
 		GetTcpRemoteAddr() string
 		SetTcpRemoteAddr(addr string)
 		GetCsi(csiType uint8, count int) ([]entity.ApiPackage, error)
+		GetSubcarrier(csiType uint8, count, h, i int) ([]float64, error)
 		GetCsiPackageCount() uint64
 	}
 
@@ -35,10 +36,7 @@ type (
 	}
 
 	Processor interface {
-		Abs(data []*entity.Package) []entity.ApiPackage
-		Phase(data []*entity.Package) []entity.ApiPackage
-		Re(data []*entity.Package) []entity.ApiPackage
-		Im(data []*entity.Package) []entity.ApiPackage
-		PhaseWithoutJumps(data []*entity.Package) []entity.ApiPackage
+		PackageMap(data []*entity.Package, handler func(complex128) float64) []entity.ApiPackage
+		SubcarrierMap(data []*entity.Package, handler func(complex128) float64, h, i int) ([]float64, error)
 	}
 )
