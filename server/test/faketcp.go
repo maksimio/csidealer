@@ -36,6 +36,7 @@ func RunTcpWriter(port int, filepath string) {
 
 	for {
 		reader.Read(bufSize)
+		// fmt.Println(bufSize)
 		bufSize32[1], bufSize32[0] = bufSize[0], bufSize[1]
 		bufSize32[2], bufSize32[3] = 0, 0
 		buf := make([]byte, binary.BigEndian.Uint16(bufSize))

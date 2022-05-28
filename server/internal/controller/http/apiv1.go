@@ -29,20 +29,6 @@ func (a *ApiV1) Register() {
 	a.routGr.POST("/config", a.config)
 }
 
-func (a *ApiV1) csiLastN(c *gin.Context) {
-	// csiType := c.Param("type")
-	// n, _ := strconv.Atoi(c.Query("n"))
-	c.JSON(200, 1)
-}
-
-func (a *ApiV1) subcarrierLastN(c *gin.Context) {
-	// csiType := c.Param("type")
-	// h, _ := strconv.Atoi(c.Query("h"))
-	// index, _ := strconv.Atoi(c.Query("index"))
-	// n, _ := strconv.Atoi(c.Query("n"))
-	c.JSON(200, 1)
-}
-
 func (a *ApiV1) startLog(c *gin.Context) {
 	filepath := c.Query("filepath")
 	err := a.csiUc.StartLog(filepath)
@@ -60,6 +46,22 @@ func (a *ApiV1) stopLog(c *gin.Context) {
 	} else {
 		c.JSON(200, gin.H{"success": true})
 	}
+}
+
+// ---------------------------------- НЕ ГОТОВО:
+
+func (a *ApiV1) csiLastN(c *gin.Context) {
+	// csiType := c.Param("type")
+	// n, _ := strconv.Atoi(c.Query("n"))
+	c.JSON(200, 1)
+}
+
+func (a *ApiV1) subcarrierLastN(c *gin.Context) {
+	// csiType := c.Param("type")
+	// h, _ := strconv.Atoi(c.Query("h"))
+	// index, _ := strconv.Atoi(c.Query("index"))
+	// n, _ := strconv.Atoi(c.Query("n"))
+	c.JSON(200, 1)
 }
 
 func (a *ApiV1) status(c *gin.Context) {

@@ -3,6 +3,7 @@ package usecase
 import (
 	"csidealer/internal/entity"
 	"csidealer/internal/usecase/decoder"
+	"encoding/binary"
 	"errors"
 	"fmt"
 	"github.com/google/uuid"
@@ -60,10 +61,14 @@ func (uc *CsiUseCase) push(d []byte) {
 	uc.repo.Push(pack)
 }
 
-func (uc *CsiUseCase) log(d entity.RawPackage) {
+func (uc *CsiUseCase) log(pack entity.RawPackage) {
 	if !uc.fl.IsOpen() {
 		return
 	}
 
-	uc.fl.Write(d.Data)
+	bufSize16 := make([]byte, 2)
+	binary.BigEndian.PutUint16(bufSize16, pack.Size)
+	uc.fl.Write(bufSize16)
+	fmt.Println(bufSize16)
+	uc.fl.Write(pack.Data)
 }
