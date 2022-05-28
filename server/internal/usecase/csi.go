@@ -73,7 +73,5 @@ func (uc *CsiUseCase) log(d []byte) {
 		return
 	}
 
-	
-
 	uc.fw.Write(d)
 }

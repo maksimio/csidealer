@@ -1,4 +1,4 @@
-package file_writer
+package fs_logger
 
 import (
 	"fmt"
