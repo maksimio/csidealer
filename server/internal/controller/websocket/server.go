@@ -3,18 +3,19 @@ package websocket
 import (
 	"csidealer/internal/usecase"
 	"fmt"
-	ws "github.com/gorilla/websocket"
 	"net/http"
+
+	ws "github.com/gorilla/websocket"
 )
 
 type WebsocketServer struct {
-	csiUc       usecase.Csi
+	csiUc       usecase.CsiUC
 	port        string
 	upgrader    ws.Upgrader
 	connections []Connection
 }
 
-func NewWebsocketServer(uc usecase.Csi, port int) *WebsocketServer {
+func NewWebsocketServer(uc usecase.CsiUC, port int) *WebsocketServer {
 	return &WebsocketServer{
 		csiUc: uc,
 		port:  "localhost:" + fmt.Sprint(port),

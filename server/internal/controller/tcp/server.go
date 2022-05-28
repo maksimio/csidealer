@@ -10,11 +10,11 @@ import (
 const _buf_len = 2048
 
 type TcpServer struct {
-	csiUc usecase.Csi
+	csiUc usecase.CsiUC
 	port  string
 }
 
-func NewTcpServer(uc usecase.Csi, port int) *TcpServer {
+func NewTcpServer(uc usecase.CsiUC, port int) *TcpServer {
 	return &TcpServer{
 		csiUc: uc,
 		port:  "localhost:" + fmt.Sprint(port),

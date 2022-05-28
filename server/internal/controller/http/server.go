@@ -3,6 +3,7 @@ package http
 import (
 	"csidealer/internal/usecase"
 	"fmt"
+
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
 )
@@ -14,7 +15,7 @@ type HttpServer struct {
 	api    Api
 }
 
-func NewHttpServer(uc usecase.Csi, port int, uiPath string) *HttpServer {
+func NewHttpServer(uc usecase.CsiUC, port int, uiPath string) *HttpServer {
 	router := gin.Default()
 	routGr := router.Group("/api/v1")
 
