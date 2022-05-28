@@ -6,6 +6,17 @@ import (
 	"errors"
 )
 
+func (uc *CsiUseCase) GetPackageFilterLimits() (isActive bool, payloadLenMin, payloadLenMax uint16, nr, nc, nTones uint8) {
+	payloadLenMin, payloadLenMax, nr, nc, nTones = uc.filter.GetLimits()
+	isActive = uc.isFilterActive
+	return
+}
+
+func (uc *CsiUseCase) SetPackageFilterLimits(isActive bool, payloadLenMin, payloadLenMax uint16, nr, nc, nTones uint8) {
+	uc.isFilterActive = isActive
+	uc.filter.SetLimits(payloadLenMin, payloadLenMax, nr, nc, nTones)
+}
+
 func (uc *CsiUseCase) GetCsiPackageCount() uint64 {
 	return uc.repo.GetFullCount()
 }

@@ -10,11 +10,11 @@ import (
 	"time"
 )
 
-func(uc *CsiUseCase) GetTcpRemoteAddr() string {
+func (uc *CsiUseCase) GetTcpRemoteAddr() string {
 	return uc.TcpRemoteAddr
 }
 
-func(uc *CsiUseCase) SetTcpRemoteAddr(addr string) {
+func (uc *CsiUseCase) SetTcpRemoteAddr(addr string) {
 	uc.TcpRemoteAddr = addr
 }
 
@@ -61,6 +61,10 @@ func (uc *CsiUseCase) push(d []byte) {
 	pack := decoder.DecodeCsiPackage(d)
 
 	if pack.Info.CsiLength == 0 {
+		return
+	}
+
+	if uc.isFilterActive && !uc.filter.Check(pack.Info) {
 		return
 	}
 
