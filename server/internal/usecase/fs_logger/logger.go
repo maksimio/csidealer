@@ -13,9 +13,9 @@ type RawLogger struct {
 	LogPath    string
 }
 
-func NewFileLogger() *RawLogger {
+func NewFileLogger(logpath string) *RawLogger {
 	return &RawLogger{
-		LogPath: "./logs/",
+		LogPath: logpath,
 	}
 }
 

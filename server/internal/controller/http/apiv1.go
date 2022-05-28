@@ -55,12 +55,13 @@ func (a *ApiV1) status(c *gin.Context) {
 		"result": gin.H{
 			"islogging":     a.csiUc.IsLog(),
 			"tcpClientAddr": a.csiUc.GetTcpRemoteAddr(),
+			// "tcpConnStartTime"
 			// "isFileConn": false, // TODO: будет добавлено
+			"csiPackageCount": a.csiUc.GetCsiPackageCount(),
+			// "repoMaxCount"
 		},
 	})
 }
-
-// ---------------------------------- НЕ ГОТОВО:
 
 func (a *ApiV1) csiLastN(c *gin.Context) {
 	csi, err := strconv.ParseUint(c.Param("type"), 10, 8)
@@ -86,6 +87,8 @@ func (a *ApiV1) csiLastN(c *gin.Context) {
 		})
 	}
 }
+
+// ---------------------------------- НЕ ГОТОВО:
 
 func (a *ApiV1) subcarrierLastN(c *gin.Context) {
 	// csiType := c.Param("type")

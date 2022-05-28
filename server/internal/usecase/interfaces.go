@@ -12,6 +12,7 @@ type (
 		GetTcpRemoteAddr() string
 		SetTcpRemoteAddr(addr string)
 		GetCsi(csiType uint8, count int) ([]entity.ApiPackage, error)
+		GetCsiPackageCount() uint64
 	}
 
 	PackageRepo interface {

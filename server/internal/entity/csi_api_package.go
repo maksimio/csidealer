@@ -23,5 +23,5 @@ type ApiPackage struct {
 	Id        string       `json:"id"`
 	Number    uint64       `json:"n"`
 	Info      *PackageInfo `json:"info"`
-	Data      [][]byte     `json:"data"`
+	Data      [][]float64     `json:"data"`
 }

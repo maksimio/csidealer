@@ -15,8 +15,8 @@ func Run() {
 	csiUseCase := usecase.NewCsiUseCase(
 		repo.NewCsiLocalRepo(20),
 		buffer.NewCsiRawRepo(),
-		fs_logger.NewFileLogger(),
-		processor.NewProcessor(),
+		fs_logger.NewFileLogger("./logs/"),
+		processor.NewProcessor(3),
 	)
 
 	tcpServer := tcp.NewTcpServer(csiUseCase, 8081)
