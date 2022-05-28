@@ -4,7 +4,7 @@ import "csidealer/internal/entity"
 
 type (
 	Csi interface {
-		HandleRawTraffic(data []byte)
+		MoveRawTraffic(data []byte)
 		FlushBuffer()
 		StartLog(filepath string) error
 		StopLog()

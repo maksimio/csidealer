@@ -3,27 +3,26 @@ package usecase
 import (
 	"csidealer/internal/usecase/decoder"
 	"fmt"
-	"time"
-
 	"github.com/google/uuid"
+	"time"
 )
 
 type CsiUseCase struct {
 	repo             PackageRepo
 	rawRepo          RawTrafficRepo
-	fw               FileLogger
+	fl               FileLogger
 	csiPackageNumber uint64
 }
 
-func NewCsiUseCase(r PackageRepo, rR RawTrafficRepo, fw FileLogger) *CsiUseCase {
+func NewCsiUseCase(repo PackageRepo, rawRepo RawTrafficRepo, fl FileLogger) *CsiUseCase {
 	return &CsiUseCase{
-		repo:    r,
-		rawRepo: rR,
-		fw:      fw,
+		repo:    repo,
+		rawRepo: rawRepo,
+		fl:      fl,
 	}
 }
 
-func (uc *CsiUseCase) HandleRawTraffic(data []byte) {
+func (uc *CsiUseCase) MoveRawTraffic(data []byte) {
 	uc.rawRepo.Push(data)
 	splittedData := uc.rawRepo.GetAllSplitted()
 
@@ -32,6 +31,7 @@ func (uc *CsiUseCase) HandleRawTraffic(data []byte) {
 		uc.log(d.Data)
 	}
 
+	// Просто тест вывода
 	packets := uc.repo.GetLastN(1)
 	if len(packets) > 0 {
 		info := packets[0].Info
@@ -40,12 +40,12 @@ func (uc *CsiUseCase) HandleRawTraffic(data []byte) {
 }
 
 func (uc *CsiUseCase) StartLog(filepath string) error {
-	err := uc.fw.Start(filepath)
+	err := uc.fl.Start(filepath)
 	return err
 }
 
 func (uc *CsiUseCase) StopLog() {
-	uc.fw.Stop()
+	uc.fl.Stop()
 }
 
 func (uc *CsiUseCase) FlushBuffer() {
@@ -69,9 +69,9 @@ func (uc *CsiUseCase) push(d []byte) {
 }
 
 func (uc *CsiUseCase) log(d []byte) {
-	if !uc.fw.IsOpen() {
+	if !uc.fl.IsOpen() {
 		return
 	}
 
-	uc.fw.Write(d)
+	uc.fl.Write(d)
 }

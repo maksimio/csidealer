@@ -49,6 +49,6 @@ func (s *TcpServer) listenConnection(conn net.Conn) {
 			break
 		}
 
-		s.csiUc.HandleRawTraffic(data[:readCount])
+		s.csiUc.MoveRawTraffic(data[:readCount])
 	}
 }
