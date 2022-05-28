@@ -40,12 +40,14 @@ func (s *TcpServer) Run() {
 func (s *TcpServer) listenConnection(conn net.Conn) {
 	s.csiUc.FlushBuffer()
 	fmt.Println("Новое подключение от:", conn.RemoteAddr())
+	s.csiUc.SetTcpRemoteAddr(conn.RemoteAddr().String())
 	data := make([]byte, _buf_len)
 
 	for {
 		readCount, err := conn.Read(data)
 		if err != nil {
 			fmt.Println("Ошибка чтения из сокета:", err)
+			s.csiUc.SetTcpRemoteAddr("")
 			break
 		}
 

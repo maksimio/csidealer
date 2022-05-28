@@ -48,6 +48,17 @@ func (a *ApiV1) stopLog(c *gin.Context) {
 	}
 }
 
+func (a *ApiV1) status(c *gin.Context) {
+	c.JSON(200, gin.H{
+		"success": true,
+		"result": gin.H{
+			"islogging": a.csiUc.IsLog(),
+			"isFileConn": false, // TODO: будет добавлено
+			"tcpClientAddr": a.csiUc.GetTcpRemoteAddr(),
+		},
+	})
+}
+
 // ---------------------------------- НЕ ГОТОВО:
 
 func (a *ApiV1) csiLastN(c *gin.Context) {
@@ -62,12 +73,6 @@ func (a *ApiV1) subcarrierLastN(c *gin.Context) {
 	// index, _ := strconv.Atoi(c.Query("index"))
 	// n, _ := strconv.Atoi(c.Query("n"))
 	c.JSON(200, 1)
-}
-
-func (a *ApiV1) status(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"в разработке": "Информация о подключенном устройстве: статус подключения, IP, время подключения, число переданных пакетов",
-	})
 }
 
 func (a *ApiV1) config(c *gin.Context) {

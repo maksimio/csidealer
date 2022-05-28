@@ -8,6 +8,9 @@ type (
 		FlushBuffer()
 		StartLog(filepath string) error
 		StopLog() error
+		IsLog() bool
+		GetTcpRemoteAddr() string
+		SetTcpRemoteAddr(addr string)
 	}
 
 	PackageRepo interface {

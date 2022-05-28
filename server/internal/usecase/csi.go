@@ -5,6 +5,7 @@ type CsiUseCase struct {
 	rawRepo          RawTrafficRepo
 	fl               FileLogger
 	csiPackageNumber uint64
+	TcpRemoteAddr    string
 }
 
 func NewCsiUseCase(repo PackageRepo, rawRepo RawTrafficRepo, fl FileLogger) *CsiUseCase {

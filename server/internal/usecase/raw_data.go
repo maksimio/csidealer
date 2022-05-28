@@ -5,10 +5,18 @@ import (
 	"csidealer/internal/usecase/decoder"
 	"encoding/binary"
 	"errors"
-	"fmt"
+	// "fmt"
 	"github.com/google/uuid"
 	"time"
 )
+
+func(uc *CsiUseCase) GetTcpRemoteAddr() string {
+	return uc.TcpRemoteAddr
+}
+
+func(uc *CsiUseCase) SetTcpRemoteAddr(addr string) {
+	uc.TcpRemoteAddr = addr
+}
 
 func (uc *CsiUseCase) StartLog(filepath string) error {
 	err := uc.fl.Start(filepath)
@@ -24,6 +32,10 @@ func (uc *CsiUseCase) StopLog() error {
 	return nil
 }
 
+func (uc *CsiUseCase) IsLog() bool {
+	return uc.fl.IsOpen()
+}
+
 func (uc *CsiUseCase) MoveRawTraffic(data []byte) {
 	uc.rawRepo.Push(data)
 	splittedData := uc.rawRepo.GetAllSplitted()
@@ -33,16 +45,15 @@ func (uc *CsiUseCase) MoveRawTraffic(data []byte) {
 		uc.log(d)
 	}
 
-	// Просто вывод для теста
-	packets := uc.repo.GetLastN(1)
-	if len(packets) > 0 {
-		info := packets[0].Info
-		fmt.Println(info)
-	}
+	// // Просто вывод для теста
+	// packets := uc.repo.GetLastN(1)
+	// if len(packets) > 0 {
+	// 	info := packets[0].Info
+	// 	fmt.Println(info)
+	// }
 }
 
 func (uc *CsiUseCase) FlushBuffer() {
-	fmt.Println("Буфер очищен!")
 	uc.rawRepo.Flush()
 }
 
@@ -69,6 +80,5 @@ func (uc *CsiUseCase) log(pack entity.RawPackage) {
 	bufSize16 := make([]byte, 2)
 	binary.BigEndian.PutUint16(bufSize16, pack.Size)
 	uc.fl.Write(bufSize16)
-	fmt.Println(bufSize16)
 	uc.fl.Write(pack.Data)
 }
