@@ -1,9 +1,4 @@
-package csi
-
-type CsiPackage struct {
-	PackageInfo PackageInfo
-	Csi         [][]complex128
-}
+package entity
 
 type PackageInfo struct {
 	Timestamp     uint64 `json:"ts"`
