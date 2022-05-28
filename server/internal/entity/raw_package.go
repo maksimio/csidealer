@@ -1,6 +1,6 @@
 package entity
 
 type RawPackage struct {
-	size uint16
-	data []byte
+	Size uint16
+	Data []byte
 }

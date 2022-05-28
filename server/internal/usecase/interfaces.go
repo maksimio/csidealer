@@ -18,11 +18,11 @@ type (
 
 	RawTrafficRepo interface {
 		Push(data []byte)
-		GetAllSplitted() [][]byte
+		GetAllSplitted() []entity.RawPackage
 		Flush()
 	}
 
-	FileWriter interface {
+	FileLogger interface {
 		Start(filename string) error
 		Stop()
 		Write(data []byte) error

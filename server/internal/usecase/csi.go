@@ -11,11 +11,11 @@ import (
 type CsiUseCase struct {
 	repo             PackageRepo
 	rawRepo          RawTrafficRepo
-	fw               FileWriter
+	fw               FileLogger
 	csiPackageNumber uint64
 }
 
-func NewCsiUseCase(r PackageRepo, rR RawTrafficRepo, fw FileWriter) *CsiUseCase {
+func NewCsiUseCase(r PackageRepo, rR RawTrafficRepo, fw FileLogger) *CsiUseCase {
 	return &CsiUseCase{
 		repo:    r,
 		rawRepo: rR,
@@ -28,8 +28,8 @@ func (uc *CsiUseCase) HandleRawTraffic(data []byte) {
 	splittedData := uc.rawRepo.GetAllSplitted()
 
 	for _, d := range splittedData {
-		uc.push(d)
-		uc.log(d)
+		uc.push(d.Data)
+		uc.log(d.Data)
 	}
 
 	packets := uc.repo.GetLastN(1)

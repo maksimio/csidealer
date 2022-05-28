@@ -6,7 +6,7 @@ import (
 	"csidealer/internal/controller/websocket"
 	"csidealer/internal/usecase"
 	"csidealer/internal/usecase/buffer"
-	"csidealer/internal/usecase/file_writer"
+	"csidealer/internal/usecase/fs_logger"
 	"csidealer/internal/usecase/repo"
 )
 
@@ -14,7 +14,7 @@ func Run() {
 	csiUseCase := usecase.NewCsiUseCase(
 		repo.NewCsiLocalRepo(20),
 		buffer.NewCsiRawRepo(),
-		file_writer.NewFileWriter(),
+		fs_logger.NewFileLogger(),
 	)
 
 	tcpServer := tcp.NewTcpServer(csiUseCase, 8081)

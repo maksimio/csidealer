@@ -17,7 +17,7 @@ type TcpServer struct {
 func NewTcpServer(uc usecase.Csi, port int) *TcpServer {
 	return &TcpServer{
 		csiUc: uc,
-		port:  ":" + fmt.Sprint(port),
+		port:  "localhost:" + fmt.Sprint(port),
 	}
 }
 

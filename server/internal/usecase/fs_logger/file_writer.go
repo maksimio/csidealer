@@ -1,9 +1,9 @@
 package fs_logger
 
 import (
+	"errors"
 	"fmt"
 	"os"
-	"errors"
 )
 
 type RawLogger struct {
@@ -12,7 +12,7 @@ type RawLogger struct {
 	openStatus bool
 }
 
-func NewFileWriter() *RawLogger {
+func NewFileLogger() *RawLogger {
 	return &RawLogger{}
 }
 

@@ -17,7 +17,7 @@ type WebsocketServer struct {
 func NewWebsocketServer(uc usecase.Csi, port int) *WebsocketServer {
 	return &WebsocketServer{
 		csiUc: uc,
-		port:  ":" + fmt.Sprint(port),
+		port:  "localhost:" + fmt.Sprint(port),
 		upgrader: ws.Upgrader{
 			CheckOrigin: func(r *http.Request) bool {
 				return true // Пропускаем любой запрос

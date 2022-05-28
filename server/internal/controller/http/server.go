@@ -19,7 +19,7 @@ func NewHttpServer(uc usecase.Csi, port int, uiPath string) *HttpServer {
 	routGr := router.Group("/api/v1")
 
 	return &HttpServer{
-		port:   ":" + fmt.Sprint(port),
+		port:   "localhost:" + fmt.Sprint(port),
 		uiPath: uiPath,
 		api:    NewApiV1(routGr, uc),
 		router: router,
