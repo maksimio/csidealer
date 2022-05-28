@@ -54,8 +54,12 @@ func (a *ApiV1) startLog(c *gin.Context) {
 }
 
 func (a *ApiV1) stopLog(c *gin.Context) {
-	a.csiUc.StopLog()
-	c.AbortWithStatus(200)
+	err := a.csiUc.StopLog()
+	if err != nil {
+		c.JSON(500, gin.H{"success": false, "message": err.Error()})
+	} else {
+		c.JSON(200, gin.H{"success": true})
+	}
 }
 
 func (a *ApiV1) status(c *gin.Context) {

@@ -7,7 +7,7 @@ type (
 		MoveRawTraffic(data []byte)
 		FlushBuffer()
 		StartLog(filepath string) error
-		StopLog()
+		StopLog() error
 	}
 
 	PackageRepo interface {

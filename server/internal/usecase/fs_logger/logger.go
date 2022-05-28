@@ -10,10 +10,13 @@ type RawLogger struct {
 	Filename   string
 	file       *os.File
 	openStatus bool
+	LogPath    string
 }
 
 func NewFileLogger() *RawLogger {
-	return &RawLogger{}
+	return &RawLogger{
+		LogPath: "./logs/",
+	}
 }
 
 func (r *RawLogger) Start(filename string) error {
@@ -22,7 +25,7 @@ func (r *RawLogger) Start(filename string) error {
 	}
 
 	r.Filename = filename
-	file, err := os.OpenFile(r.Filename, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
+	file, err := os.OpenFile(r.LogPath + r.Filename, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
 	if err != nil {
 		return err
 	}
@@ -41,6 +44,7 @@ func (r *RawLogger) Stop() {
 }
 
 func (r *RawLogger) Write(data []byte) error {
+	fmt.Println("write data")
 	if _, err := r.file.Write(data); err != nil {
 		return err
 	}
