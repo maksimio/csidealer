@@ -14,12 +14,14 @@ type (
 		GetCsi(csiType uint8, count int) ([]entity.ApiPackage, error)
 		GetSubcarrier(csiType uint8, count, h, i int) ([]float64, error)
 		GetCsiPackageCount() uint64
+		GetCsiPackageMaxCount() uint64
 	}
 
 	PackageRepo interface {
 		Push(csiPackage *entity.Package)
 		GetLastN(n int) []*entity.Package
 		GetFullCount() uint64
+		GetMaxCount() uint64
 	}
 
 	RawTrafficRepo interface {

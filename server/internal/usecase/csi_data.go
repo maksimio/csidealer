@@ -10,6 +10,10 @@ func (uc *CsiUseCase) GetCsiPackageCount() uint64 {
 	return uc.repo.GetFullCount()
 }
 
+func (uc *CsiUseCase) GetCsiPackageMaxCount() uint64 {
+	return uc.repo.GetMaxCount()
+}
+
 func (uc *CsiUseCase) GetCsi(csiType uint8, count int) ([]entity.ApiPackage, error) {
 	packets := uc.repo.GetLastN(count)
 

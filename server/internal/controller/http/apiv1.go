@@ -56,7 +56,14 @@ func (a *ApiV1) status(c *gin.Context) {
 			// "tcpConnStartTime"
 			// "isFileConn": false, // TODO: будет добавлено
 			"csiPackageCount": a.csiUc.GetCsiPackageCount(),
-			// "csiPackageMaxCount"
+			"csiPackageMaxCount": a.csiUc.GetCsiPackageMaxCount(),
+			"csiFilter": gin.H{
+				"payloadLenMin": 4,
+				"payloadLenMax": 4,
+				"nr": 4,
+				"nc": 4,
+				"nTones": 4,
+			},
 		},
 	})
 }
@@ -85,8 +92,6 @@ func (a *ApiV1) csiLastN(c *gin.Context) {
 		})
 	}
 }
-
-// ---------------------------------- НЕ ГОТОВО:
 
 func (a *ApiV1) subcarrierLastN(c *gin.Context) {
 	csiType, err := strconv.ParseUint(c.Param("type"), 10, 8)
@@ -124,3 +129,5 @@ func (a *ApiV1) subcarrierLastN(c *gin.Context) {
 		})
 	}
 }
+
+// ---------------------------------- НЕ ГОТОВО:
