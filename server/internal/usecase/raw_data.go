@@ -2,10 +2,8 @@ package usecase
 
 import (
 	"csidealer/internal/entity"
-	"csidealer/internal/usecase/decoder"
 	"encoding/binary"
 	"errors"
-	// "fmt"
 	"github.com/google/uuid"
 	"time"
 )
@@ -58,7 +56,7 @@ func (uc *CsiUseCase) FlushBuffer() {
 }
 
 func (uc *CsiUseCase) push(d []byte) {
-	pack := decoder.DecodeCsiPackage(d)
+	pack := uc.decoder.DecodeCsiPackage(d)
 
 	if pack.Info.CsiLength == 0 {
 		return

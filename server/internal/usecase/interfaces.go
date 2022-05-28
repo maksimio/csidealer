@@ -19,20 +19,20 @@ type (
 		SetPackageFilterLimits(isActive bool, payloadLenMin, payloadLenMax uint16, nr, nc, nTones uint8)
 	}
 
-	PackageRepo interface {
+	Repo interface {
 		Push(csiPackage *entity.Package)
 		GetLastN(n int) []*entity.Package
 		GetFullCount() uint64
 		GetMaxCount() uint64
 	}
 
-	RawTrafficRepo interface {
+	Buffer interface {
 		Push(data []byte)
 		GetAllSplitted() []entity.RawPackage
 		Flush()
 	}
 
-	FileLogger interface {
+	FSLogger interface {
 		Start(filename string) error
 		Stop()
 		Write(data []byte) error
@@ -48,5 +48,9 @@ type (
 		Check(info *entity.PackageInfo) bool
 		GetLimits() (payloadLenMin, payloadLenMax uint16, nr, nc, nTones uint8)
 		SetLimits(payloadLenMin, payloadLenMax uint16, nr, nc, nTones uint8)
+	}
+
+	Decoder interface {
+		DecodeCsiPackage([]byte) *entity.Package
 	}
 )

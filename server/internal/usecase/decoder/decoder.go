@@ -2,7 +2,13 @@ package decoder
 
 import "csidealer/internal/entity"
 
-func DecodeCsiPackage(data []byte) *entity.Package {
+type CsiDecoder struct{}
+
+func NewCsiDecoder() *CsiDecoder {
+	return &CsiDecoder{}
+}
+
+func (*CsiDecoder) DecodeCsiPackage(data []byte) *entity.Package {
 	pack := &entity.Package{
 		Info: decodePackageInfo(data),
 	}
