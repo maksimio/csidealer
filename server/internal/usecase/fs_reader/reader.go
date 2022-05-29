@@ -69,14 +69,22 @@ func (f *FSReader) Start(filename string) error {
 }
 
 func (f *FSReader) GetDataPackage() []byte {
+	if !f.openStatus {
+		return []byte{}
+	}
+
 	f.reader.Read(f.bufSize16)
 	f.bufSize32[1], f.bufSize32[0] = f.bufSize16[0], f.bufSize16[1]
 	bufSize := binary.BigEndian.Uint16(f.bufSize16)
 	buf := make([]byte, bufSize)
-	io.ReadFull(f.reader, buf)
+
+	_, err := io.ReadFull(f.reader, buf)
+	if err != nil {
+		f.Stop()
+		return []byte{}
+	}
 
 	f.readsize += int64(bufSize)
-
 	return append(f.bufSize32, buf...)
 }
 

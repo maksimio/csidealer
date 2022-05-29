@@ -3,9 +3,8 @@ package websocket
 import (
 	"csidealer/internal/usecase"
 	"fmt"
-	"net/http"
-
 	ws "github.com/gorilla/websocket"
+	"net/http"
 )
 
 type WebsocketServer struct {

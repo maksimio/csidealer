@@ -15,7 +15,7 @@ import (
 
 func Run() {
 	csiUseCase := usecase.NewCsiUseCase(
-		repo.NewCsiLocalRepo(20),
+		repo.NewCsiLocalRepo(1000),
 		buffer.NewCsiRawRepo(),
 		fs_logger.NewFileLogger("./logs/"),
 		processor.NewProcessor(3),

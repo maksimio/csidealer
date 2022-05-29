@@ -3,7 +3,6 @@ package buffer
 import (
 	"csidealer/internal/entity"
 	"encoding/binary"
-	"fmt"
 )
 
 const _sizeByteLen = 4
@@ -46,7 +45,6 @@ func (c *CsiRawBuffer) splitPackage() {
 	if c.currentPackageSize == 0 && len(c.rawData) >= _sizeByteLen {
 		c.currentPackageSize = int(binary.LittleEndian.Uint32(c.shift(_sizeByteLen)))
 	} else if c.currentPackageSize != 0 && c.currentPackageSize <= len(c.rawData) {
-		fmt.Println(c.currentPackageSize)
 		data := c.shift(c.currentPackageSize)
 
 		c.splittedData = append(c.splittedData, entity.RawPackage{

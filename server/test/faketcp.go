@@ -33,6 +33,7 @@ func RunTcpWriter(port int, filepath string) {
 	bufSize := make([]byte, 2)
 	bufSize32 := make([]byte, 4)
 	reader := bufio.NewReader(f)
+	i := 0
 
 	for {
 		reader.Read(bufSize)
@@ -40,9 +41,10 @@ func RunTcpWriter(port int, filepath string) {
 		bufSize32[1], bufSize32[0] = bufSize[0], bufSize[1]
 		bufSize32[2], bufSize32[3] = 0, 0
 		buf := make([]byte, binary.BigEndian.Uint16(bufSize))
-		io.ReadFull(reader, buf)
+		_, err := io.ReadFull(reader, buf)
 
 		if err != nil {
+			fmt.Println("Ошибка")
 			if err != io.EOF {
 				log.Fatal(err)
 			}
@@ -51,7 +53,9 @@ func RunTcpWriter(port int, filepath string) {
 
 		conn.Write(bufSize32)
 		conn.Write(buf)
-		time.Sleep(300 * time.Millisecond)
+		time.Sleep(1000 * time.Millisecond)
+		fmt.Println(i)
+		i += 1
 	}
 	fmt.Println("Файл подошел к концу")
 }
