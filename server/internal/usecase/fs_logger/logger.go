@@ -7,15 +7,15 @@ import (
 )
 
 type RawLogger struct {
-	Filename   string
+	filename   string
 	file       *os.File
 	openStatus bool
-	LogPath    string
+	logPath    string
 }
 
-func NewFileLogger(logpath string) *RawLogger {
+func NewFileLogger(logPath string) *RawLogger {
 	return &RawLogger{
-		LogPath: logpath,
+		logPath: logPath,
 	}
 }
 
@@ -24,8 +24,8 @@ func (r *RawLogger) Start(filename string) error {
 		return errors.New("предыдущий файл не закрыт")
 	}
 
-	r.Filename = filename
-	file, err := os.OpenFile(r.LogPath + r.Filename, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
+	r.filename = filename
+	file, err := os.OpenFile(r.logPath + r.filename, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
 	if err != nil {
 		return err
 	}
@@ -33,14 +33,14 @@ func (r *RawLogger) Start(filename string) error {
 	r.file = file
 	r.openStatus = true
 
-	fmt.Println("Начата запись в файл", r.Filename)
+	fmt.Println("Начата запись в файл", r.filename)
 	return nil
 }
 
 func (r *RawLogger) Stop() {
 	defer r.file.Close()
 	r.openStatus = false
-	fmt.Println("Остановлена запись в файл", r.Filename)
+	fmt.Println("Остановлена запись в файл", r.filename)
 }
 
 func (r *RawLogger) Write(data []byte) error {

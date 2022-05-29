@@ -19,38 +19,47 @@ type (
 		SetPackageFilterLimits(isActive bool, payloadLenMin, payloadLenMax uint16, nr, nc, nTones uint8)
 	}
 
-	Repo interface {
+	IRepo interface {
 		Push(csiPackage *entity.Package)
 		GetLastN(n int) []*entity.Package
 		GetFullCount() uint64
 		GetMaxCount() uint64
 	}
 
-	Buffer interface {
+	IBuffer interface {
 		Push(data []byte)
 		GetAllSplitted() []entity.RawPackage
 		Flush()
 	}
 
-	FSLogger interface {
+	IFSLogger interface {
 		Start(filename string) error
 		Stop()
 		Write(data []byte) error
 		IsOpen() bool
 	}
 
-	Processor interface {
+	IProcessor interface {
 		PackageMap(data []*entity.Package, handler func(complex128) float64) []entity.ApiPackage
 		SubcarrierMap(data []*entity.Package, handler func(complex128) float64, h, i int) ([]float64, error)
 	}
 
-	Filter interface {
+	IFilter interface {
 		Check(info *entity.PackageInfo) bool
 		GetLimits() (payloadLenMin, payloadLenMax uint16, nr, nc, nTones uint8)
 		SetLimits(payloadLenMin, payloadLenMax uint16, nr, nc, nTones uint8)
 	}
 
-	Decoder interface {
+	IDecoder interface {
 		DecodeCsiPackage([]byte) *entity.Package
+	}
+
+	FSReader interface {
+		List() ([]string, error)
+		Start(filename string) error
+		Stop() error
+		GetDataPackage() []byte
+		GetReadPercent() float64
+		IsOpen() bool
 	}
 )

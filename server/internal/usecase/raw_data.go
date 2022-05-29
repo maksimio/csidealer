@@ -42,13 +42,6 @@ func (uc *CsiUseCase) MoveRawTraffic(data []byte) {
 		uc.push(d.Data)
 		uc.log(d)
 	}
-
-	// // Просто вывод для теста
-	// packets := uc.repo.GetLastN(1)
-	// if len(packets) > 0 {
-	// 	info := packets[0].Info
-	// 	fmt.Println(info)
-	// }
 }
 
 func (uc *CsiUseCase) FlushBuffer() {
