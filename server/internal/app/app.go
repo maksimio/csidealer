@@ -17,6 +17,7 @@ import (
 func Run() {
 	clients := []*ssh.AtherosClient{
 		ssh.NewAtherosClient("root"),
+		ssh.NewAtherosClient("root"),
 	}
 
 	routers := make([]*usecase.IAtherosClient, len(clients))
@@ -41,27 +42,5 @@ func Run() {
 
 	go tcpServer.Run()
 	go websocketServer.Run()
-
-	// cl1 := ssh.NewAtherosClient("root")
-	// if err := cl1.Connect("192.168.1.100"); err != nil {
-	// 	fmt.Println(err)
-	// }
-
-	// cl2 := ssh.NewAtherosClient("root")
-	// if err := cl2.Connect("192.168.1.1"); err != nil {
-	// 	fmt.Println(err)
-	// }
-
-	// time.Sleep(5 * time.Second)
-	// cl2.ClientMainStop()
-	// cl1.SendDataStop()
-	// time.Sleep(1 * time.Second)
-	// go cl2.ClientMainStart("192.168.1.231", "8081")
-	// go cl1.SendDataRun("wlan0", "00:7F:5D:3E:4A", 100, 50, 1000)
-	// time.Sleep(7 * time.Second)
-	// if err := cl1.SendDataStop(); err != nil {
-	// 	fmt.Println(err)
-	// }
-
 	httpServer.Run()
 }
