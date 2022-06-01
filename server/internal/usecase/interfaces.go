@@ -63,14 +63,18 @@ type (
 		IsOpen() bool
 	}
 
-	ISshBridge interface {
+	IAtherosClient interface {
 		Connect(addr string) error
-		Disconnect() error
 		GetIsConnected() bool
+		Disconnect() error
 		GetAddr() string
+
 		ClientMainStart(serverIP string, serverPort string) error
+		GetIsClientMainActive() bool
 		ClientMainStop() error
-		GetClientMainIsActive() bool
-		SendData() error
+
+		SendDataRun(ifName, DstMacAddr string, NumOfPacketToSend, pktIntervalUs, pktLen uint16) error
+		GetIsSendData() bool
+		SendDataStop() error
 	}
 )
