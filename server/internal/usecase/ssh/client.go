@@ -2,11 +2,9 @@ package ssh
 
 import (
 	"errors"
-	"fmt"
-	"strconv"
-
 	"github.com/google/uuid"
 	"golang.org/x/crypto/ssh"
+	"strconv"
 )
 
 type AtherosClient struct {
@@ -34,8 +32,6 @@ func (c *AtherosClient) command(text string) error {
 	if err != nil {
 		return err
 	}
-
-	fmt.Println(text)
 
 	if err := session.Run(text); err != nil {
 		return err
@@ -147,7 +143,7 @@ func (c *AtherosClient) SendDataRun(ifName, dstMacAddr string, numOfPacketToSend
 	return nil
 }
 
-func (c *AtherosClient) GetIsSendData() bool {
+func (c *AtherosClient) GetIsSendDataActive() bool {
 	return c.isSendData
 }
 

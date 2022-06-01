@@ -19,9 +19,7 @@ type (
 		GetCsiPackageMaxCount() uint64
 
 		GetPackageFilterLimits() (isActive bool, payloadLenMin, payloadLenMax uint16, nr, nc, nTones uint8)
-		SetPackageFilterLimits(isActive bool, payloadLenMin, payloadLenMax uint16, nr, nc, nTones uint8)
-
-		
+		SetPackageFilterLimits(isActive bool, payloadLenMin, payloadLenMax uint16, nr, nc, nTones uint8)		
 	}
 
 	IRepo interface {
@@ -80,7 +78,7 @@ type (
 		ClientMainStop() error
 
 		SendDataRun(ifName, DstMacAddr string, NumOfPacketToSend, pktIntervalUs, pktLen uint16) error
-		GetIsSendData() bool
+		GetIsSendDataActive() bool
 		SendDataStop() error
 	}
 )

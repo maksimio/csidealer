@@ -12,7 +12,6 @@ import (
 	"csidealer/internal/usecase/processor"
 	"csidealer/internal/usecase/repo"
 	"csidealer/internal/usecase/ssh"
-	"fmt"
 )
 
 func Run() {
@@ -43,15 +42,15 @@ func Run() {
 	go tcpServer.Run()
 	go websocketServer.Run()
 
-	cl1 := ssh.NewAtherosClient("root")
-	if err := cl1.Connect("192.168.1.100"); err != nil {
-		fmt.Println(err)
-	}
+	// cl1 := ssh.NewAtherosClient("root")
+	// if err := cl1.Connect("192.168.1.100"); err != nil {
+	// 	fmt.Println(err)
+	// }
 
-	cl2 := ssh.NewAtherosClient("root")
-	if err := cl2.Connect("192.168.1.1"); err != nil {
-		fmt.Println(err)
-	}
+	// cl2 := ssh.NewAtherosClient("root")
+	// if err := cl2.Connect("192.168.1.1"); err != nil {
+	// 	fmt.Println(err)
+	// }
 
 	// time.Sleep(5 * time.Second)
 	// cl2.ClientMainStop()
