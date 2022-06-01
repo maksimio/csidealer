@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/google/uuid"
 	"golang.org/x/crypto/ssh"
 )
 
@@ -14,12 +15,18 @@ type AtherosClient struct {
 	addr               string
 	username           string
 	conn               *ssh.Client
+	uuid               string
 }
 
 func NewAtherosClient(username string) *AtherosClient {
 	return &AtherosClient{
 		username: username,
+		uuid:     uuid.New().String(),
 	}
+}
+
+func (c *AtherosClient) GetId() string {
+	return c.uuid
 }
 
 func (c *AtherosClient) command(text string) error {
@@ -50,6 +57,9 @@ func (c *AtherosClient) Connect(addr string) error {
 	c.conn = conn
 	c.addr = addr
 
+	c.ClientMainStop()
+	c.SendDataStop()
+
 	return nil
 }
 
@@ -61,13 +71,16 @@ func (c *AtherosClient) Disconnect() error {
 	if !c.GetIsConnected() {
 		return errors.New("нет соединения. Нечего отключать")
 	}
+
+	c.ClientMainStop()
+	c.SendDataStop()
+
 	err := c.conn.Close()
 	if err != nil {
 		return err
 	}
 
 	c.conn = nil
-	c.isClientMainActive = false //TODO что будет, если оставить активным и отключиться
 	return nil
 }
 
@@ -75,11 +88,22 @@ func (c *AtherosClient) GetAddr() string {
 	return c.addr
 }
 
-func (c *AtherosClient) ClientMainStart(serverIP string, serverPort string) error {
+func (c AtherosClient) ClientMainRun(serverIP string, serverPort string) error {
+	if c.isClientMainActive {
+		return errors.New("client_main уже запущен")
+	}
+	if !c.GetIsConnected() {
+		return errors.New("нет подключения, операция ClientMainRun невозможна")
+	}
+	if c.isSendData {
+		return errors.New("нельзя принимать данные, когда отправляются данные")
+	}
+
+	c.isClientMainActive = true
 	if err := c.command("client_main " + serverIP + " " + serverPort); err != nil {
 		return err
 	}
-	c.isClientMainActive = true
+
 	return nil
 }
 
@@ -108,7 +132,6 @@ func (c *AtherosClient) SendDataRun(ifName, dstMacAddr string, numOfPacketToSend
 	c.isSendData = true
 
 	for c.isSendData {
-		fmt.Println("SEND COMMAND !!!")
 		err := c.command("sendData " +
 			ifName + " " +
 			dstMacAddr + " " +

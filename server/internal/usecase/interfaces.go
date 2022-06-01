@@ -6,17 +6,22 @@ type (
 	CsiUC interface {
 		MoveRawTraffic(data []byte)
 		FlushBuffer()
+		GetTcpRemoteAddr() string
+		SetTcpRemoteAddr(addr string)
+
 		StartLog(filepath string) error
 		StopLog() error
 		IsLog() bool
-		GetTcpRemoteAddr() string
-		SetTcpRemoteAddr(addr string)
+
 		GetCsi(csiType uint8, count int) ([]entity.ApiPackage, error)
 		GetSubcarrier(csiType uint8, count, h, i int) ([]float64, error)
 		GetCsiPackageCount() uint64
 		GetCsiPackageMaxCount() uint64
+
 		GetPackageFilterLimits() (isActive bool, payloadLenMin, payloadLenMax uint16, nr, nc, nTones uint8)
 		SetPackageFilterLimits(isActive bool, payloadLenMin, payloadLenMax uint16, nr, nc, nTones uint8)
+
+		
 	}
 
 	IRepo interface {
@@ -64,12 +69,13 @@ type (
 	}
 
 	IAtherosClient interface {
+		GetId() string
+		GetAddr() string
 		Connect(addr string) error
 		GetIsConnected() bool
 		Disconnect() error
-		GetAddr() string
 
-		ClientMainStart(serverIP string, serverPort string) error
+		ClientMainRun(serverIP string, serverPort string) error
 		GetIsClientMainActive() bool
 		ClientMainStop() error
 

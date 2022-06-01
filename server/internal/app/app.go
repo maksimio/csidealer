@@ -13,10 +13,19 @@ import (
 	"csidealer/internal/usecase/repo"
 	"csidealer/internal/usecase/ssh"
 	"fmt"
-	// "time"
 )
 
 func Run() {
+	clients := []*ssh.AtherosClient{
+		ssh.NewAtherosClient("root"),
+	}
+
+	routers := make([]*usecase.IAtherosClient, len(clients))
+	for i, v := range clients {
+		iRouter := usecase.IAtherosClient(v)
+		routers[i] = &iRouter // TODO: Разобраться, как лучше работать с указателями
+	}
+
 	csiUseCase := usecase.NewCsiUseCase(
 		repo.NewCsiLocalRepo(1000),
 		buffer.NewCsiRawRepo(),
@@ -24,6 +33,7 @@ func Run() {
 		processor.NewProcessor(3),
 		filter.NewFilter(500, 1800, 2, 2, 56),
 		decoder.NewCsiDecoder(),
+		routers,
 	)
 
 	tcpServer := tcp.NewTcpServer(csiUseCase, 8081)

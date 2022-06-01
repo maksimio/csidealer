@@ -7,13 +7,22 @@ type CsiUseCase struct {
 	proc    IProcessor
 	filter  IFilter
 	decoder IDecoder
+	routers []*IAtherosClient
 
 	csiPackageNumber uint64
 	TcpRemoteAddr    string
 	isFilterActive   bool
 }
 
-func NewCsiUseCase(repo IRepo, rawRepo IBuffer, fl IFSLogger, proc IProcessor, filter IFilter, decoder IDecoder) *CsiUseCase {
+func NewCsiUseCase(
+	repo IRepo,
+	rawRepo IBuffer,
+	fl IFSLogger,
+	proc IProcessor,
+	filter IFilter,
+	decoder IDecoder,
+	routers []*IAtherosClient,
+) *CsiUseCase {
 	return &CsiUseCase{
 		repo:    repo,
 		rawRepo: rawRepo,
@@ -21,5 +30,6 @@ func NewCsiUseCase(repo IRepo, rawRepo IBuffer, fl IFSLogger, proc IProcessor, f
 		proc:    proc,
 		filter:  filter,
 		decoder: decoder,
+		routers: routers,
 	}
 }
