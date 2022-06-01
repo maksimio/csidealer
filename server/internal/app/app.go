@@ -23,6 +23,9 @@ func Run() {
 		decoder.NewCsiDecoder(),
 	)
 
+	return
+
+
 	tcpServer := tcp.NewTcpServer(csiUseCase, 8081)
 	websocketServer := websocket.NewWebsocketServer(csiUseCase, 7000)
 	httpServer := http.NewHttpServer(csiUseCase, 80, "./build")

@@ -54,12 +54,23 @@ type (
 		DecodeCsiPackage([]byte) *entity.Package
 	}
 
-	FSReader interface {
+	IFSReader interface {
 		List() ([]string, error)
 		Start(filename string) error
 		Stop() error
 		GetDataPackage() []byte
 		GetReadPercent() float64
 		IsOpen() bool
+	}
+
+	ISshBridge interface {
+		Connect(addr string) error
+		Disconnect() error
+		GetIsConnected() bool
+		GetAddr() string
+		ClientMainStart(serverIP string, serverPort string) error
+		ClientMainStop() error
+		GetClientMainIsActive() bool
+		SendData() error
 	}
 )
