@@ -37,7 +37,7 @@ type (
 
 	IFSLogger interface {
 		Start(filename string) error
-		Stop()
+		Stop()  
 		Write(data []byte) error
 		IsOpen() bool
 	}
