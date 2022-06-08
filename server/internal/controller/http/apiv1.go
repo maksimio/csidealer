@@ -20,19 +20,29 @@ func NewApiV1(rg *gin.RouterGroup, uc usecase.CsiUC) *ApiV1 {
 func (a *ApiV1) Register() {
 	a.routGr.GET("/status", a.status)
 
-	data := a.routGr.Group("/csi")
-	data.GET("/last_n/:type", a.csiLastN)
-	data.GET("/subcarrier_last_n/:type", a.subcarrierLastN)
+	csi := a.routGr.Group("/csi")
+	csi.GET("/last_n/:type", a.csiLastN)
+	csi.GET("/subcarrier_last_n/:type", a.subcarrierLastN)
 
 	log := a.routGr.Group("/log")
-	log.PUT("/start", a.startLog)
-	log.PUT("/stop", a.stopLog)
+	log.PATCH("/start", a.startLog)
+	log.PATCH("/stop", a.stopLog)
+	log.GET("/state") // TODO
 
 	filter := a.routGr.Group("/filter")
-	filter.GET("/state")
-	filter.PATCH("/state", a.setFilterState)
-	filter.GET("/limits")
-	filter.PATCH("/limits", a.setFilterLimits)
+	filter.GET("/state") // TODO
+	filter.PUT("/state", a.setFilterState)
+	filter.GET("/limits") // TODO
+	filter.PUT("/limits", a.setFilterLimits)
+
+	devices := a.routGr.Group("/devices")
+	devices.GET("/list_info")          // TODO
+	devices.PATCH("/connect/:id")      // TODO
+	devices.PATCH("/disconnect/:id")   // TODO
+	devices.PATCH("/send/start/:id")   // TODO
+	devices.PATCH("/send/stop/:id")    // TODO
+	devices.PATCH("/client/start/:id") // TODO
+	devices.PATCH("/client/stop/:id")  // TODO
 }
 
 func (a *ApiV1) status(c *gin.Context) {

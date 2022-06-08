@@ -1,9 +1,8 @@
 package http
 
 import (
-	"strconv"
-
 	"github.com/gin-gonic/gin"
+	"strconv"
 )
 
 func (a *ApiV1) setFilterLimits(c *gin.Context) {
