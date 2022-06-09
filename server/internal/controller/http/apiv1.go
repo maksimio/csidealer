@@ -23,6 +23,7 @@ func (a *ApiV1) Register() {
 	csi := a.routGr.Group("/csi")
 	csi.GET("/last_n/:type", a.csiLastN)
 	csi.GET("/subcarrier_last_n/:type", a.subcarrierLastN)
+	csi.GET("/state") // TODO число пакетов, размер хранилища и т.д.
 
 	log := a.routGr.Group("/log")
 	log.PATCH("/start", a.startLog)
@@ -30,10 +31,11 @@ func (a *ApiV1) Register() {
 	log.GET("/state", a.stateLog)
 
 	filter := a.routGr.Group("/filter")
-	filter.GET("/state") // TODO
-	filter.PUT("/state", a.setFilterState)
-	filter.GET("/limits") // TODO
-	filter.PUT("/limits", a.setFilterLimits)
+	filter.PATCH("/start") //TODO
+	filter.PATCH("/stop")  //  TODO
+	filter.GET("/state")   // TODO
+	filter.PUT("/state", a.setFilterState) // UPDATE
+	filter.PUT("/limits", a.setFilterLimits) // UPDATE
 
 	devices := a.routGr.Group("/devices")
 	devices.GET("/list_info")          // TODO

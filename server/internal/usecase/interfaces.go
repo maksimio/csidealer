@@ -21,6 +21,14 @@ type (
 		GetCsiPackageCount() uint64
 		GetCsiPackageMaxCount() uint64
 
+		RoutersInfo() []entity.ApiRouterInfo
+		RouterConnect(id, addr string) error
+		RouterDisconnect(id string) error
+		RouterSendDataRun(id, DstMacAddr string, NumOfPacketToSend, pktIntervalUs, pktLen uint16)
+		RouterSendDataStop(id string) error
+		RouterClientMainRun(id, ip, port string)
+		RouterClientMainStop(id string) error
+
 		GetPackageFilterLimits() (isActive bool, payloadLenMin, payloadLenMax uint16, nr, nc, nTones uint8)
 		SetPackageFilterLimits(isActive bool, payloadLenMin, payloadLenMax uint16, nr, nc, nTones uint8)
 	}
