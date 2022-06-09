@@ -19,6 +19,9 @@ func (uc *CsiUseCase) SetTcpRemoteAddr(addr string) {
 
 func (uc *CsiUseCase) StartLog(filepath string) error {
 	err := uc.fl.Start(filepath)
+	if err != nil {
+		uc.logPackageCount = 0
+	}
 	return err
 }
 
@@ -33,6 +36,18 @@ func (uc *CsiUseCase) StopLog() error {
 
 func (uc *CsiUseCase) IsLog() bool {
 	return uc.fl.IsOpen()
+}
+
+func (uc *CsiUseCase) GetLogWriteByteCount() uint64 {
+	return uc.fl.GetWriteByteCount()
+}
+
+func (uc *CsiUseCase) GetLogStartTime() int64 {
+	return uc.fl.GetStartTime()
+}
+
+func (uc *CsiUseCase) GetLogPackageCount() uint64 {
+	return uc.logPackageCount
 }
 
 func (uc *CsiUseCase) MoveRawTraffic(data []byte) {
@@ -78,4 +93,5 @@ func (uc *CsiUseCase) log(pack entity.RawPackage) {
 	binary.BigEndian.PutUint16(bufSize16, pack.Size)
 	uc.fl.Write(bufSize16)
 	uc.fl.Write(pack.Data)
+	uc.logPackageCount += 1
 }

@@ -20,3 +20,15 @@ func (a *ApiV1) stopLog(c *gin.Context) {
 		c.JSON(200, gin.H{"success": true})
 	}
 }
+
+func (a *ApiV1) stateLog(c *gin.Context) {
+	c.JSON(200, gin.H{
+		"success": true,
+		"result": gin.H{
+			"start_ts":         a.csiUc.GetLogStartTime(),
+			"is_open":          a.csiUc.IsLog(),
+			"write_byte_count": a.csiUc.GetLogWriteByteCount(),
+			"package_count":    a.csiUc.GetLogPackageCount(),
+		},
+	})
+}

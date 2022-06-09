@@ -11,7 +11,10 @@ type (
 
 		StartLog(filepath string) error
 		StopLog() error
+		GetLogWriteByteCount() uint64
+		GetLogStartTime() int64
 		IsLog() bool
+		GetLogPackageCount() uint64
 
 		GetCsi(csiType uint8, count int) ([]entity.ApiPackage, error)
 		GetSubcarrier(csiType uint8, count, h, i int) ([]float64, error)
@@ -19,7 +22,7 @@ type (
 		GetCsiPackageMaxCount() uint64
 
 		GetPackageFilterLimits() (isActive bool, payloadLenMin, payloadLenMax uint16, nr, nc, nTones uint8)
-		SetPackageFilterLimits(isActive bool, payloadLenMin, payloadLenMax uint16, nr, nc, nTones uint8)		
+		SetPackageFilterLimits(isActive bool, payloadLenMin, payloadLenMax uint16, nr, nc, nTones uint8)
 	}
 
 	IRepo interface {
@@ -37,9 +40,11 @@ type (
 
 	IFSLogger interface {
 		Start(filename string) error
-		Stop()  
+		Stop()
 		Write(data []byte) error
 		IsOpen() bool
+		GetStartTime() int64
+		GetWriteByteCount() uint64
 	}
 
 	IProcessor interface {

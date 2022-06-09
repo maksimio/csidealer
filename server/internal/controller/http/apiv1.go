@@ -27,7 +27,7 @@ func (a *ApiV1) Register() {
 	log := a.routGr.Group("/log")
 	log.PATCH("/start", a.startLog)
 	log.PATCH("/stop", a.stopLog)
-	log.GET("/state") // TODO
+	log.GET("/state", a.stateLog)
 
 	filter := a.routGr.Group("/filter")
 	filter.GET("/state") // TODO

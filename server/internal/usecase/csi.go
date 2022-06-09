@@ -12,6 +12,7 @@ type CsiUseCase struct {
 	csiPackageNumber uint64
 	TcpRemoteAddr    string
 	isFilterActive   bool
+	logPackageCount  uint64
 }
 
 func NewCsiUseCase(
