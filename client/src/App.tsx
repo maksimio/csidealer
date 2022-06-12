@@ -1,19 +1,34 @@
-import { Container } from '@chakra-ui/react'
-import { Route, Routes } from 'react-router-dom'
-import Devices from './pages/Devices'
-import Log from './pages/Log'
-import NotFound from './pages/NotFound'
-import SimpleSidebar from './pages/Sidebar'
+import { useApplication } from 'hooks/ApplicationContext'
+import { useEffect } from 'react'
+import { Route, Routes, useLocation, Navigate } from 'react-router-dom'
+import {
+  Dashboard,
+  Devices,
+  FileLog,
+  NotFound,
+  Settings,
+  Sidebar,
+} from 'pages'
 
 const App = () => {
+  const location = useLocation()
+  const { layoutController } = useApplication()
+
+  useEffect(() => {
+    layoutController.setLocation(location)
+  }, [layoutController, location])
+
   return (
-    <SimpleSidebar>
+    <Sidebar>
       <Routes>
+        <Route path='/' element={<Navigate to='dashboard' />} />
         <Route path='*' element={<NotFound />} />
-        <Route path='log' element={<Log />} />
+        <Route path='log' element={<FileLog />} />
         <Route path='devices' element={<Devices />} />
+        <Route path='settings' element={<Settings />} />
+        <Route path='dashboard' element={<Dashboard />} />
       </Routes>
-    </SimpleSidebar>
+    </Sidebar>
   )
 }
 

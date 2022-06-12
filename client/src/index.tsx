@@ -5,6 +5,7 @@ import reportWebVitals from './reportWebVitals'
 
 import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 import { BrowserRouter } from 'react-router-dom'
+import { ApplicationProvider } from 'hooks'
 
 const colors = {
   brand: {
@@ -20,11 +21,13 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 )
 root.render(
-  <BrowserRouter>
-    <ChakraProvider>
-      <App />
-    </ChakraProvider>
-  </BrowserRouter>
+  <ApplicationProvider>
+    <BrowserRouter>
+      <ChakraProvider>
+        <App />
+      </ChakraProvider>
+    </BrowserRouter>
+  </ApplicationProvider>
 )
 
 // If you want to start measuring performance in your app, pass a function
