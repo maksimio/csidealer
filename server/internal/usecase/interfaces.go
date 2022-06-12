@@ -84,6 +84,7 @@ type (
 		GetAddr() string
 		Connect(addr string) error
 		GetIsConnected() bool
+		GetIsAvailable() bool
 		Disconnect() error
 
 		ClientMainRun(serverIP string, serverPort string) error

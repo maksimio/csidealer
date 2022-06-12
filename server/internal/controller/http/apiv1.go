@@ -31,20 +31,22 @@ func (a *ApiV1) Register() {
 	log.GET("/state", a.stateLog)
 
 	filter := a.routGr.Group("/filter")
-	filter.PATCH("/start") //TODO
-	filter.PATCH("/stop")  //  TODO
-	filter.GET("/state")   // TODO
-	filter.PUT("/state", a.setFilterState) // UPDATE
+	filter.PATCH("/start")                   // TODO
+	filter.PATCH("/stop")                    // TODO
+	filter.GET("/state")                     // TODO
+	filter.PUT("/state", a.setFilterState)   // UPDATE
 	filter.PUT("/limits", a.setFilterLimits) // UPDATE
 
 	devices := a.routGr.Group("/devices")
-	devices.GET("/list_info")          // TODO
-	devices.PATCH("/connect/:id")      // TODO
-	devices.PATCH("/disconnect/:id")   // TODO
-	devices.PATCH("/send/start/:id")   // TODO
-	devices.PATCH("/send/stop/:id")    // TODO
-	devices.PATCH("/client/start/:id") // TODO
-	devices.PATCH("/client/stop/:id")  // TODO
+	devices.GET("/list_info", a.deviceListInfo) // TODO
+	devices.POST("/:id")                        // TODO
+	devices.DELETE("/:id")                      // TODO
+	devices.PATCH("/connect/:id")               // TODO
+	devices.PATCH("/disconnect/:id")            // TODO
+	devices.PATCH("/send/start/:id")            // TODO
+	devices.PATCH("/send/stop/:id")             // TODO
+	devices.PATCH("/client/start/:id")          // TODO
+	devices.PATCH("/client/stop/:id")           // TODO
 }
 
 func (a *ApiV1) status(c *gin.Context) {

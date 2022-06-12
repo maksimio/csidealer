@@ -25,6 +25,7 @@ func (uc *CsiUseCase) RoutersInfo() []entity.ApiRouterInfo {
 			IsConnected:        router.GetIsConnected(),
 			IsClientMainActive: router.GetIsClientMainActive(),
 			IsSendDataActive:   router.GetIsSendDataActive(),
+			IsAvailable:        router.GetIsAvailable(),
 		})
 	}
 

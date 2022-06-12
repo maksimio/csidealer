@@ -2,18 +2,22 @@ package ssh
 
 import (
 	"errors"
+	"os/exec"
+	"strconv"
+	"strings"
+
 	"github.com/google/uuid"
 	"golang.org/x/crypto/ssh"
-	"strconv"
 )
 
 type AtherosClient struct {
 	isClientMainActive bool
 	isSendData         bool
+	isAvailable        bool
+	uuid               string
 	addr               string
 	username           string
 	conn               *ssh.Client
-	uuid               string
 }
 
 func NewAtherosClient(username string) *AtherosClient {
@@ -153,4 +157,13 @@ func (c *AtherosClient) SendDataStop() error {
 	}
 	c.isSendData = false
 	return nil
+}
+
+func (c *AtherosClient) checkAvailable() {
+	out, _ := exec.Command("ping", c.addr, "-c 5", "-i 3", "-w 10").Output()
+	c.isAvailable = !strings.Contains(string(out), "Destination Host Unreachable")
+}
+
+func (c *AtherosClient) GetIsAvailable() bool {
+	return false
 }
