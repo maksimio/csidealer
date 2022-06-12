@@ -1,11 +1,14 @@
-import ReactDOM from 'react-dom/client'
 import './styles/index.css'
+import 'react-toastify/dist/ReactToastify.css'
+
+import ReactDOM from 'react-dom/client'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 
 import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 import { BrowserRouter } from 'react-router-dom'
 import { ApplicationProvider } from 'hooks'
+import { ToastContainer } from 'react-toastify'
 
 const colors = {
   brand: {
@@ -25,6 +28,17 @@ root.render(
     <BrowserRouter>
       <ChakraProvider>
         <App />
+        <ToastContainer
+          position='bottom-center'
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </ChakraProvider>
     </BrowserRouter>
   </ApplicationProvider>
