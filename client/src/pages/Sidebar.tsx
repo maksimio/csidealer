@@ -14,11 +14,10 @@ import {
   BoxProps,
   FlexProps,
 } from '@chakra-ui/react'
-import { VscMenu } from 'react-icons/vsc'
-import { IconType } from 'react-icons'
 import { Link as RouterLink } from 'react-router-dom'
 import { useApplication } from 'hooks'
 import { observer } from 'mobx-react-lite'
+import { IconBinary, TablerIcon } from '@tabler/icons'
 
 const SimpleSidebar: FC<{ children: ReactNode }> = ({ children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -84,7 +83,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 }
 
 interface NavItemProps extends FlexProps {
-  icon: IconType
+  icon: TablerIcon
   path: string
   children: string | number
 }
@@ -134,7 +133,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         variant='outline'
         onClick={onOpen}
         aria-label='open menu'
-        icon={<VscMenu />}
+        icon={<IconBinary />}
       />
 
       <Text fontSize='2xl' ml='8' fontFamily='monospace' fontWeight='bold'>

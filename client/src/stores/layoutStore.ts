@@ -1,23 +1,22 @@
 import { makeAutoObservable } from 'mobx'
-import { IconType } from 'react-icons'
+import { TablerIcon, IconBinary } from '@tabler/icons'
 import { Location } from 'react-router-dom'
-import { VscSettings, VscFolderLibrary, VscRadioTower, VscDashboard, VscPulse, VscSymbolEnum } from 'react-icons/vsc'
 
 interface LinkItem {
   name: string
-  icon: IconType
+  icon: TablerIcon
   path: string
 }
 
 export class LayoutStore {
   private location: Location | undefined
   linkItems: LinkItem[] = [
-    { name: 'Главная', icon: VscDashboard, path: '/dashboard' },
-    { name: 'Пакеты', icon: VscSymbolEnum, path: '/package' },
-    { name: 'Поднесущие', icon: VscPulse, path: '/subcarrier' },
-    { name: 'Устройства', icon: VscRadioTower, path: '/devices' },
-    { name: 'Логирование', icon: VscFolderLibrary, path: '/log' },
-    { name: 'Параметры', icon: VscSettings, path: '/settings' },
+    { name: 'Главная', icon: IconBinary, path: '/dashboard' },
+    { name: 'Пакеты', icon: IconBinary, path: '/package' },
+    { name: 'Поднесущие', icon: IconBinary, path: '/subcarrier' },
+    { name: 'Устройства', icon: IconBinary, path: '/devices' },
+    { name: 'Логирование', icon: IconBinary, path: '/log' },
+    { name: 'Параметры', icon: IconBinary, path: '/settings' },
   ]
 
   constructor() {
