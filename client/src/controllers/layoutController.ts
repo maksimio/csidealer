@@ -1,12 +1,12 @@
 import { Location } from 'react-router-dom'
-import { LayoutStore } from 'stores/layoutStore'
+import { WindowStore } from 'stores'
 
 export class LayoutController {
   constructor(
-    private LayoutStore: LayoutStore
+    private windowStore: WindowStore
   ) { }
 
   public setLocation = (location: Location) => {
-    this.LayoutStore.setLocation(location)
+    this.windowStore.setLocation(location)
   }
 }

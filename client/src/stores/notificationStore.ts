@@ -1,3 +1,3 @@
-export class NotificationStore {
+export default class NotificationStore {
   
 }

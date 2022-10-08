@@ -1,5 +1,5 @@
 import { IApiService } from 'services'
-import { DeviceStore } from 'stores/deviceStore'
+import { DeviceStore } from 'stores'
 
 export class DeviceController {
   constructor(
