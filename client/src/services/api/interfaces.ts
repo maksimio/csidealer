@@ -1,4 +1,4 @@
-export interface IApi {
+export interface IApiService {
   logStart: (filename: string) => Promise<StatusResponse>
   logStop: () => Promise<StatusResponse>
   getLogState: () => Promise<LogState>

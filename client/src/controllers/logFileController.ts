@@ -1,9 +1,8 @@
-import { IApi } from 'api/interfaces'
-import { AlertService } from 'services/alertService'
+import { IApiService, AlertService } from 'services'
 
 export class LogFileController {
   constructor(
-    private api: IApi,
+    private api: IApiService,
     private alertService: AlertService
   ) { }
 

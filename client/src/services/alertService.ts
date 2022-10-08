@@ -1,6 +1,6 @@
 import { toast, ToastOptions } from 'react-toastify'
 
-export class AlertService {
+export default class AlertService {
   private config: ToastOptions = {
     position: 'bottom-center',
     autoClose: 5000,

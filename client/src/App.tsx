@@ -8,7 +8,7 @@ import {
   NotFound,
   Settings,
   Sidebar,
-} from 'pages'
+} from 'components/pages'
 
 const App = () => {
   const location = useLocation()

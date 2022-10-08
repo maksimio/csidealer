@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios'
-import { IApi, LogState, StatusResponse } from './interfaces'
+import { IApiService, LogState, StatusResponse } from './interfaces'
 
-export class RestApiService implements IApi {
+export default class ApiService implements IApiService {
   private readonly baseUrl: string
   private axiosInstance: AxiosInstance
 
@@ -11,8 +11,9 @@ export class RestApiService implements IApi {
   }
 
   async logStart<T = StatusResponse>(filename: string): Promise<T> {
-    const response = await this.axiosInstance.get<T>('/log/start',
-      { params: { filepath: filename } })
+    const response = await this.axiosInstance.get<T>('/log/start', {
+      params: { filepath: filename },
+    })
     return response.data
   }
 
