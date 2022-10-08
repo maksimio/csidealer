@@ -16,7 +16,7 @@ func NewProcessor(rounder int) *Processor {
 	}
 }
 
-func (p *Processor) csiMap(csi entity.Csi, f func(complex128) float64) [][]float64 {
+func (p *Processor) CsiMap(csi entity.Csi, f func(complex128) float64) [][]float64 {
 	data := make([][]float64, len(csi))
 	for i := range csi {
 		data[i] = make([]float64, len(csi[i]))
@@ -38,7 +38,7 @@ func (p *Processor) PackageMap(data []*entity.Package, handler func(complex128) 
 			Id:        value.Uuid,
 			Info:      value.Info,
 			Number:    value.Number,
-			Data:      p.csiMap(value.Data, handler),
+			Data:      p.CsiMap(value.Data, handler),
 		})
 	}
 

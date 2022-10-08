@@ -2,11 +2,13 @@ package usecase
 
 import (
 	"csidealer/internal/entity"
+	"csidealer/internal/usecase/processor"
 	"encoding/binary"
 	"errors"
 	"fmt"
-	"github.com/google/uuid"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 func (uc *CsiUseCase) GetTcpRemoteAddr() string {
@@ -81,6 +83,16 @@ func (uc *CsiUseCase) push(d []byte) {
 	pack.Number = uc.csiPackageNumber
 	uc.csiPackageNumber += 1
 
+	apiPack := entity.ApiPackage{
+		Timestamp: pack.Timestamp,
+		Id:        pack.Uuid,
+		Info:      pack.Info,
+		Number:    pack.Number,
+		Data:      uc.proc.CsiMap(pack.Data, processor.AbsHandler),
+	}
+
+	uc.cbPushPacket(apiPack)
+
 	uc.repo.Push(pack)
 }
 
@@ -94,4 +106,8 @@ func (uc *CsiUseCase) log(pack entity.RawPackage) {
 	uc.fl.Write(bufSize16)
 	uc.fl.Write(pack.Data)
 	uc.logPackageCount += 1
+}
+
+func (uc *CsiUseCase) OnPushPacket(cb func(entity.ApiPackage)) {
+	uc.cbPushPacket = cb
 }

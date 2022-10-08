@@ -1,5 +1,7 @@
 package usecase
 
+import "csidealer/internal/entity"
+
 type CsiUseCase struct {
 	repo    IRepo
 	rawRepo IBuffer
@@ -13,6 +15,8 @@ type CsiUseCase struct {
 	TcpRemoteAddr    string
 	isFilterActive   bool
 	logPackageCount  uint64
+
+	cbPushPacket func(entity.ApiPackage)
 }
 
 func NewCsiUseCase(

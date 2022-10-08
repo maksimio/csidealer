@@ -1,10 +1,12 @@
 package websocket
 
 import (
+	"csidealer/internal/entity"
 	"csidealer/internal/usecase"
 	"fmt"
-	ws "github.com/gorilla/websocket"
 	"net/http"
+
+	ws "github.com/gorilla/websocket"
 )
 
 type WebsocketServer struct {
@@ -12,6 +14,12 @@ type WebsocketServer struct {
 	port        string
 	upgrader    ws.Upgrader
 	connections []Connection
+}
+
+func (s *WebsocketServer) send(pack entity.ApiPackage) {
+	for _, v := range s.connections {
+		v.Write(pack)
+	}
 }
 
 func NewWebsocketServer(uc usecase.CsiUC, port int) *WebsocketServer {
@@ -27,9 +35,12 @@ func NewWebsocketServer(uc usecase.CsiUC, port int) *WebsocketServer {
 }
 
 func (s *WebsocketServer) Run() {
+	s.csiUc.OnPushPacket(s.send)
+
 	http.HandleFunc("/", s.startConn)
 	fmt.Println("WebSocket-сервер ожидает подключение на", s.port, "порту")
 	http.ListenAndServe(s.port, nil)
+
 }
 
 func (s *WebsocketServer) startConn(w http.ResponseWriter, r *http.Request) {

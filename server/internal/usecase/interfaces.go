@@ -31,6 +31,8 @@ type (
 
 		GetPackageFilterLimits() (isActive bool, payloadLenMin, payloadLenMax uint16, nr, nc, nTones uint8)
 		SetPackageFilterLimits(isActive bool, payloadLenMin, payloadLenMax uint16, nr, nc, nTones uint8)
+
+		OnPushPacket(cb func(entity.ApiPackage))
 	}
 
 	IRepo interface {
@@ -56,6 +58,7 @@ type (
 	}
 
 	IProcessor interface {
+		CsiMap(csi entity.Csi, f func(complex128) float64) [][]float64
 		PackageMap(data []*entity.Package, handler func(complex128) float64) []entity.ApiPackage
 		SubcarrierMap(data []*entity.Package, handler func(complex128) float64, h, i int) ([]float64, error)
 	}
