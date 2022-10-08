@@ -6,7 +6,7 @@ import {
   NotFound,
   Settings,
 } from 'components/pages'
-import { Grid, GridItem } from '@chakra-ui/react'
+import { Container, Grid, GridItem } from '@chakra-ui/react'
 import { Statusbar, LocationProvider, Sidebar } from 'components'
 
 const App = () => {
@@ -14,20 +14,22 @@ const App = () => {
     <>
       <LocationProvider />
       <Grid templateRows={'1fr 20px'} templateColumns={'50px 1fr'} h="100vh">
-        <GridItem background={'red'}>
+        <GridItem>
           <Sidebar />
         </GridItem>
-        <GridItem background={'green'}>
-          <Routes>
-            <Route path="/" element={<Navigate to="dashboard" />} />
-            <Route path="*" element={<NotFound />} />
-            <Route path="log" element={<FileLog />} />
-            <Route path="devices" element={<Devices />} />
-            <Route path="settings" element={<Settings />} />
-            <Route path="dashboard" element={<Dashboard />} />
-          </Routes>
+        <GridItem>
+          <Container maxW="full">
+            <Routes>
+              <Route path="/" element={<Navigate to="dashboard" />} />
+              <Route path="*" element={<NotFound />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="devices" element={<Devices />} />
+              <Route path="log" element={<FileLog />} />
+              <Route path="settings" element={<Settings />} />
+            </Routes>
+          </Container>
         </GridItem>
-        <GridItem background={'blue'} colSpan={2}>
+        <GridItem background={'cyan'} colSpan={2}>
           <Statusbar />
         </GridItem>
       </Grid>

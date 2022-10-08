@@ -1,6 +1,8 @@
-import { DeviceController } from 'controllers/deviceController'
-import { LayoutController } from 'controllers/layoutController'
-import { LogFileController } from 'controllers/logFileController'
+import {
+  DeviceController,
+  LayoutController,
+  LogFileController,
+} from 'controllers'
 import { AlertService, ApiService } from 'services'
 import { DeviceStore, WindowStore, NotificationStore } from 'stores'
 

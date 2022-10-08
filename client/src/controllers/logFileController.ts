@@ -1,10 +1,7 @@
 import { IApiService, AlertService } from 'services'
 
-export class LogFileController {
-  constructor(
-    private api: IApiService,
-    private alertService: AlertService
-  ) { }
+export default class LogFileController {
+  constructor(private api: IApiService, private alertService: AlertService) {}
 
   async getList() {
     const list = await this.api.getLogState()
