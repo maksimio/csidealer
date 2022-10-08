@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom'
 
 const LocationProvider: FC = () => {
   const location = useLocation()
-  const { layoutController } = useApplication()
+  const { windowController: layoutController } = useApplication()
 
   useEffect(() => {
     layoutController.setLocation(location)

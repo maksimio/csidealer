@@ -3,27 +3,33 @@ import { IApiService, LogState, StatusResponse } from './interfaces'
 
 export default class ApiService implements IApiService {
   private readonly baseUrl: string
-  private axiosInstance: AxiosInstance
+  private instance: AxiosInstance
+  private ws: WebSocket
 
-  constructor(domen: string, port: number, address: string) {
+  constructor(domen: string, port: number, address: string, wsPort: number) {
     this.baseUrl = `http://${domen}:${port}/${address}`
-    this.axiosInstance = axios.create({ baseURL: this.baseUrl })
+    this.instance = axios.create({ baseURL: this.baseUrl })
+
+    this.ws = new WebSocket(`ws://${domen}:${wsPort}`)
+    this.ws.onmessage = function (event) {
+      console.log('Данные получены:', JSON.parse(event.data))
+    }
   }
 
   async logStart<T = StatusResponse>(filename: string): Promise<T> {
-    const response = await this.axiosInstance.get<T>('/log/start', {
+    const response = await this.instance.get<T>('/log/start', {
       params: { filepath: filename },
     })
     return response.data
   }
 
   async logStop<T = StatusResponse>(): Promise<T> {
-    const response = await this.axiosInstance.get<T>('/log/stop')
+    const response = await this.instance.get<T>('/log/stop')
     return response.data
   }
 
   async getLogState<T = LogState>(): Promise<T> {
-    const response = await this.axiosInstance.get<T>('/log/state')
+    const response = await this.instance.get<T>('/log/state')
     return response.data
   }
 }

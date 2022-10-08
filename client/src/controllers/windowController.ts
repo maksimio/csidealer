@@ -1,7 +1,7 @@
 import { Location } from 'react-router-dom'
 import { WindowStore } from 'stores'
 
-export default class LayoutController {
+export default class WindowController {
   constructor(
     private windowStore: WindowStore
   ) { }
