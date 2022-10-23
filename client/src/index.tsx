@@ -1,5 +1,5 @@
 import 'react-toastify/dist/ReactToastify.css'
-
+import '../node_modules/uplot/dist/uPlot.min.css'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import reportWebVitals from './reportWebVitals'

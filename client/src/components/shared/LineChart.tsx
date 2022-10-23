@@ -4,6 +4,8 @@ import uPlot from 'uplot'
 type OptionsUpdateState = 'keep' | 'update' | 'create'
 
 const stringify = (obj: Record<string, unknown>) =>
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   JSON.stringify(obj, (key, value) =>
     typeof value === 'function' ? value.toString() : value
   )
@@ -22,6 +24,7 @@ export const optionsUpdateState = (
   if (Object.keys(lhs).length !== Object.keys(rhs).length) {
     return 'create'
   }
+  // eslint-disable-next-line no-restricted-syntax
   for (const k of Object.keys(lhs)) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -58,6 +61,7 @@ const LineChart: FC<UplotReactProps> = ({
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   function create() {
+    // eslint-disable-next-line new-cap
     const newChart = new uPlot(
       options,
       data,

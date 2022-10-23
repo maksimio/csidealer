@@ -1,4 +1,5 @@
 export interface IApiService {
+  onWsData: (cl: (data: CsiPackage) => void) => void
   logStart: (filename: string) => Promise<StatusResponse>
   logStop: () => Promise<StatusResponse>
   getLogState: () => Promise<LogState>

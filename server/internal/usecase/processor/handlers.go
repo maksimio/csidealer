@@ -11,9 +11,9 @@ func ImHandler(value complex128) float64 {
 }
 
 func PhaseHandler(value complex128) float64 {
-	return cmplx.Abs(value)
+	return cmplx.Phase(value)
 }
 
 func AbsHandler(value complex128) float64 {
-	return cmplx.Phase(value)
+	return cmplx.Abs(value)
 }

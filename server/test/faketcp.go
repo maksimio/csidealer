@@ -24,38 +24,39 @@ func RunTcpWriter(port int, filepath string) {
 	defer conn.Close()
 	fmt.Println("Успешное подключение к серверу на порту", port)
 
-	f, err := os.Open(filepath)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer f.Close()
-
 	bufSize := make([]byte, 2)
 	bufSize32 := make([]byte, 4)
-	reader := bufio.NewReader(f)
-	i := 0
 
 	for {
-		reader.Read(bufSize)
-		// fmt.Println(bufSize)
-		bufSize32[1], bufSize32[0] = bufSize[0], bufSize[1]
-		bufSize32[2], bufSize32[3] = 0, 0
-		buf := make([]byte, binary.BigEndian.Uint16(bufSize))
-		_, err := io.ReadFull(reader, buf)
-
+		f, err := os.Open(filepath)
 		if err != nil {
-			fmt.Println("Ошибка")
-			if err != io.EOF {
-				log.Fatal(err)
-			}
-			break
+			log.Fatal(err)
 		}
+		defer f.Close()
 
-		conn.Write(bufSize32)
-		conn.Write(buf)
-		time.Sleep(1000 * time.Millisecond)
-		fmt.Println(i)
-		i += 1
+		reader := bufio.NewReader(f)
+		i := 0
+
+		for {
+			reader.Read(bufSize)
+			bufSize32[1], bufSize32[0] = bufSize[0], bufSize[1]
+			bufSize32[2], bufSize32[3] = 0, 0
+			buf := make([]byte, binary.BigEndian.Uint16(bufSize))
+			_, err := io.ReadFull(reader, buf)
+
+			if err != nil {
+				if err != io.EOF {
+					log.Fatal(err)
+				}
+				break
+			}
+
+			conn.Write(bufSize32)
+			conn.Write(buf)
+			time.Sleep(500 * time.Millisecond)
+			fmt.Println(i)
+			i += 1
+		}
+		fmt.Println("Файл подошел к концу. Начинаем заново")
 	}
-	fmt.Println("Файл подошел к концу")
 }
