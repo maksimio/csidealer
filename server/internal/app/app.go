@@ -37,10 +37,10 @@ func Run() {
 	)
 
 	tcpServer := tcp.NewTcpServer(csiUseCase, 8081)
-	websocketServer := websocket.NewWebsocketServer(csiUseCase, 7000)
+	websocketServer := websocket.NewWebsocketServer(csiUseCase, 8082)
 	httpServer := http.NewHttpServer(csiUseCase, 80, "./build")
 
-	go tcpServer.Run()
+	go httpServer.Run()
 	go websocketServer.Run()
-	httpServer.Run()
+	tcpServer.Run()
 }

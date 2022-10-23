@@ -17,8 +17,8 @@ type WebsocketServer struct {
 }
 
 func (s *WebsocketServer) send(pack entity.ApiPackage) {
-	for _, v := range s.connections {
-		v.Write(pack)
+	for _, c := range s.connections {
+		c.Write(pack)
 	}
 }
 

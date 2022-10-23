@@ -33,8 +33,8 @@ export type LogState = ResponseWithResult<ILogState>
 
 // -------- Устройства
 interface IDeviceInfo {
-  id: string,
-  addr: string,
+  id: string
+  addr: string
   is_connected: string
   is_clientmain_active: boolean
   is_sendData_active: boolean
@@ -42,3 +42,30 @@ interface IDeviceInfo {
 }
 
 export type DeviceInfo = SuccessResponseWithResult<IDeviceInfo>
+
+// -------- WebSocket
+interface CsiInfo {
+  bwidth: number
+  csilen: number
+  err: number
+  nc: number
+  noise: number
+  nr: number
+  ntones: number
+  payloadlen: number
+  rate: number
+  rssi0: number
+  rssi1: number
+  rssi2: number
+  rssi3: number
+  ts: number
+  txchan: number
+}
+
+export interface CsiPackage {
+  data: number[][]
+  id: string
+  n: number
+  ts: number
+  info: CsiInfo
+}

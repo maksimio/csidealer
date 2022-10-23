@@ -8,7 +8,7 @@ import { DeviceStore, WindowStore, NotificationStore } from 'stores'
 
 export default class Application {
   private alertService = new AlertService()
-  private apiService = new ApiService('localhost', 80, 'api/v1', 7000)
+  private apiService = new ApiService('localhost', 80, 'api/v1')
 
   windowStore = new WindowStore()
   deviceStore = new DeviceStore()

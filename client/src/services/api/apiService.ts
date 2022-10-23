@@ -1,18 +1,18 @@
 import axios, { AxiosInstance } from 'axios'
-import { IApiService, LogState, StatusResponse } from './interfaces'
+import { CsiPackage, IApiService, LogState, StatusResponse } from './interfaces'
 
 export default class ApiService implements IApiService {
   private readonly baseUrl: string
   private instance: AxiosInstance
   private ws: WebSocket
 
-  constructor(domen: string, port: number, address: string, wsPort: number) {
+  constructor(domen: string, port: number, address: string) {
     this.baseUrl = `http://${domen}:${port}/${address}`
     this.instance = axios.create({ baseURL: this.baseUrl })
 
-    this.ws = new WebSocket(`ws://${domen}:${wsPort}`)
-    this.ws.onmessage = function (event) {
-      console.log('Данные получены:', JSON.parse(event.data))
+    this.ws = new WebSocket(`ws://${domen}:8082`)
+    this.ws.onmessage = (event: MessageEvent<CsiPackage>) => {
+      console.log('Данные получены:', event.data)
     }
   }
 
