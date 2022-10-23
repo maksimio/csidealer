@@ -24,6 +24,8 @@ func NewHttpServer(uc usecase.CsiUC, port int, uiPath string) *HttpServer {
 	api := NewApiV1(routGr, uc)
 	api.Register()
 
+	router.Use(static.Serve("/", static.LocalFile("../client/build", true)))
+
 	return &HttpServer{
 		port:   "localhost:" + fmt.Sprint(port),
 		router: router,

@@ -12,11 +12,11 @@ const Dashboard: FC = observer(() => {
   }
 
   return (
-    <Container>
+    <>
       <LineChart
         options={{
-          width: 840,
-          height: 520,
+          width: 1440,
+          height: 320,
           series: [
             {},
             { label: 'h11', stroke: 'black' },
@@ -30,7 +30,25 @@ const Dashboard: FC = observer(() => {
         updateDataFlag={csiStore.updFlag}
         updateSettingsFlag={false}
       />
-    </Container>
+
+      <LineChart
+        options={{
+          width: 1440,
+          height: 320,
+          series: [
+            {},
+            { label: 'h11', stroke: 'black' },
+            { label: 'h12', stroke: 'red' },
+            { label: 'h21', stroke: 'green' },
+            { label: 'h22', stroke: 'blue' },
+          ],
+          scales: { x: { time: false }, y: { min: 40, max: 300 } },
+        }}
+        data={[csiStore.xtime, ...csiStore.timeseries]}
+        updateDataFlag={csiStore.updFlag}
+        updateSettingsFlag={false}
+      />
+    </  >
   )
 })
 
