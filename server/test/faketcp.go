@@ -53,7 +53,7 @@ func RunTcpWriter(port int, filepath string) {
 
 			conn.Write(bufSize32)
 			conn.Write(buf)
-			time.Sleep(2 * time.Millisecond)
+			time.Sleep(20 * time.Millisecond)
 			fmt.Println(i)
 			i += 1
 		}

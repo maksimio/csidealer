@@ -6,7 +6,7 @@ import {
   Spacer,
   useColorMode,
 } from '@chakra-ui/react'
-import { IconSettings, IconWaveSawTool, TablerIcon } from '@tabler/icons'
+import { Icon3dRotate, IconSettings, IconWaveSawTool, TablerIcon } from '@tabler/icons'
 import { observer } from 'mobx-react-lite'
 import { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -52,6 +52,7 @@ const Sidebar: FC = () => {
     >
       <VStack>
         <IconLink label="Дашбоард" link="/dashboard" Icon={IconWaveSawTool} />
+        <IconLink label="Дашбоард" link="/devices" Icon={Icon3dRotate} />
       </VStack>
       <Spacer />
       <VStack>
