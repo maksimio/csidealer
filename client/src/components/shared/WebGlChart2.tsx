@@ -6,7 +6,7 @@ import { WebglPlot, WebglLine, ColorRGBA } from 'webgl-plot'
 let webglp: WebglPlot
 let lines: WebglLine[] = []
 
-const WebGlChart: FC = observer(() => {
+const WebGlChart2: FC = observer(() => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const { csiStore } = useApplication()
 
@@ -26,34 +26,43 @@ const WebGlChart: FC = observer(() => {
         new ColorRGBA(0, 0, 0, 1),
       ]
 
-      csiStore.timeseries.forEach((_, i) => {
-        const line = new WebglLine(colors[i], csiStore.length)
+      const lastPackage = csiStore.packages.at(-1)
+      if (lastPackage === undefined) {
+        return
+      }
+
+      lastPackage.data.forEach((_, i) => {
+        const line = new WebglLine(colors[i], csiStore.size)
         line.arrangeX()
         webglp.addLine(line)
         lines.push(line)
       })
     }
-  }, [csiStore.length, csiStore.timeseries])
+  }, [csiStore.packages, csiStore.size])
 
   useEffect(() => {
-    let id = 0
+    let id = 0 + 1000000
     let renderPlot = () => {
+      const lastPackage = csiStore.packages.at(-1)
+      if (lastPackage === undefined) {
+        return
+      }
       for (let k = 0; k < lines.length; k++) {
-        for (let i = 0; i < csiStore.length; i++) {
-          lines[k].setY(i, csiStore.timeseries[k][i] / 150 - 1)
+        for (let i = 0; i < csiStore.size; i++) {
+          lines[k].setY(i, lastPackage.data[k][i] / 150 - 1)
         }
       }
-      id = requestAnimationFrame(renderPlot)
+      id = requestAnimationFrame(renderPlot) + 1000000
       webglp.update()
     }
-    id = requestAnimationFrame(renderPlot)
+    id = requestAnimationFrame(renderPlot) + 1000000
     return () => {
       renderPlot = () => {}
       cancelAnimationFrame(id)
     }
-  }, [csiStore.timeseries, csiStore.length])
+  }, [csiStore.size, csiStore.packages])
 
   return <canvas style={{ width: '100%', height: '100%' }} ref={canvasRef} />
 })
 
-export default WebGlChart
+export default WebGlChart2

@@ -3,12 +3,22 @@ import { CsiPackage } from 'services/api/interfaces'
 
 export default class CsiStore {
   packages: CsiPackage[] = []
+  diffs: number[][][] = []
+  
   updFlag: boolean = false
-  x = Array(56).fill(0).map((_, i) => i)
+  size: number = 56
+  x = Array(this.size).fill(0).map((_, i) => i)
 
   length: number = 1000
   xtime = Array(this.length).fill(0).map((_, i) => i)
   timeseries: number[][] = [
+    Array(this.length).fill(0),
+    Array(this.length).fill(0),
+    Array(this.length).fill(0),
+    Array(this.length).fill(0),
+  ]
+
+  diffTimeseries: number[][] = [
     Array(this.length).fill(0),
     Array(this.length).fill(0),
     Array(this.length).fill(0),
@@ -22,8 +32,24 @@ export default class CsiStore {
   push(csiPackage: CsiPackage) {
     this.packages.push(csiPackage)
 
-    this.timeseries[0].shift()
-    this.timeseries[0].push(csiPackage.data[0][33])
+    const diff = csiPackage.data.map(arr => arr.map((v, i) => {
+      if (i === arr.length - 1) {
+        return 0
+      }
+      return arr[i + 1] - v
+    }))
+
+    this.diffs.push(diff)
+
+    this.timeseries.forEach((ts, i) => {
+      ts.shift()
+      ts.push(csiPackage.data[i][33])
+    })
+
+    this.diffTimeseries.forEach((ts, i) => {
+      ts.shift()
+      ts.push(diff[i][33])
+    })
 
     this.updFlag = !this.updFlag
   }
