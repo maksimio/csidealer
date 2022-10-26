@@ -8,20 +8,20 @@ import WebGlChart4 from 'components/shared/WebGlChart4'
 const Devices: FC = () => {
   return (
     <Container maxW={'full'}>
-      <Box height="45vh" display="flex" width="100%">
-        <Box width="25%">
-          <WebGlChart2 />
-        </Box>
+      <Box height="47vh" display="flex" width="100%">
         <Box width="75%">
           <WebGlChart />
         </Box>
-      </Box>
-      <Box height="45vh" display="flex">
         <Box width="25%">
-          <WebGlChart3 />
+          <WebGlChart2 />
         </Box>
+      </Box>
+      <Box height="47vh" display="flex">
         <Box width="75%">
           <WebGlChart4 />
+        </Box>
+        <Box width="25%">
+          <WebGlChart3 />
         </Box>
       </Box>
     </Container>

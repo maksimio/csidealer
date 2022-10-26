@@ -20,7 +20,7 @@ const App = () => {
         <GridItem>
           <Container maxW="full">
             <Routes>
-              <Route path="/" element={<Navigate to="dashboard" />} />
+              <Route path="/" element={<Navigate to="devices" />} />
               <Route path="*" element={<NotFound />} />
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="devices" element={<Devices />} />

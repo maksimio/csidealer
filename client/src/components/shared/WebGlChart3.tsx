@@ -1,7 +1,8 @@
+import { colors } from 'core/colors'
 import { useApplication } from 'hooks'
 import { observer } from 'mobx-react-lite'
 import { FC, useEffect, useRef } from 'react'
-import { WebglPlot, WebglLine, ColorRGBA } from 'webgl-plot'
+import { WebglPlot, WebglLine } from 'webgl-plot'
 
 let webglp: WebglPlot
 let lines: WebglLine[] = []
@@ -18,14 +19,6 @@ const WebGlChart3: FC = observer(() => {
 
       webglp = new WebglPlot(canvasRef.current)
       lines = []
-
-      const colors = [
-        new ColorRGBA(1, 0, 0, 1),
-        new ColorRGBA(0, 1, 0, 1),
-        new ColorRGBA(0, 0, 1, 1),
-        new ColorRGBA(0, 0, 0, 1),
-      ]
-
       const lastDiff = csiStore.diffs.at(-1)
       if (lastDiff === undefined) {
         return
@@ -50,7 +43,7 @@ const WebGlChart3: FC = observer(() => {
 
       for (let k = 0; k < lines.length; k++) {
         for (let i = 0; i < csiStore.size; i++) {
-          lines[k].setY(i, lastDiff[k][i] / 10)
+          lines[k].setY(i, lastDiff[k][i] / 15)
         }
       }
       id = requestAnimationFrame(renderPlot) + 1000000000

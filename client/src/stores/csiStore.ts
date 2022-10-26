@@ -32,6 +32,10 @@ export default class CsiStore {
   push(csiPackage: CsiPackage) {
     this.packages.push(csiPackage)
 
+    if(this.packages.length > 3000) {
+      this.packages.shift()
+    }
+
     const diff = csiPackage.data.map(arr => arr.map((v, i) => {
       if (i === arr.length - 1) {
         return 0
@@ -43,12 +47,12 @@ export default class CsiStore {
 
     this.timeseries.forEach((ts, i) => {
       ts.shift()
-      ts.push(csiPackage.data[i][33])
+      ts.push(csiPackage.data[i][0])
     })
 
     this.diffTimeseries.forEach((ts, i) => {
       ts.shift()
-      ts.push(diff[i][33])
+      ts.push(diff[i][0])
     })
 
     this.updFlag = !this.updFlag
