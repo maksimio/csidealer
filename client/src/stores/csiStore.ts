@@ -57,4 +57,16 @@ export default class CsiStore {
 
     this.updFlag = !this.updFlag
   }
+
+  get frequency(): number {
+    const n = 25
+    const tail = this.packages.slice(-n)
+    const first = tail.at(0)
+    const last = tail.at(-1)
+    if (first === undefined || last === undefined) {
+      return 0
+    }
+    // return (last.info.ts - first.info.ts) / n
+    return n * 1000 / (last.ts - first.ts)
+  }
 }
