@@ -19,12 +19,7 @@ const WebGlChart3: FC = observer(() => {
 
       webglp = new WebglPlot(canvasRef.current)
       lines = []
-      const lastDiff = csiStore.diffs.at(-1)
-      if (lastDiff === undefined) {
-        return
-      }
-
-      lastDiff.forEach((_, i) => {
+      ;[0, 1, 2, 3].forEach((_, i) => {
         const line = new WebglLine(colors[i], csiStore.size)
         line.arrangeX()
         webglp.addLine(line)
@@ -38,6 +33,8 @@ const WebGlChart3: FC = observer(() => {
     let renderPlot = () => {
       const lastDiff = csiStore.diffs.at(-1) 
       if (lastDiff === undefined) {
+        id = requestAnimationFrame(renderPlot) + 1000000
+        webglp.update()
         return
       }
 

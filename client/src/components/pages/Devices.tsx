@@ -8,7 +8,7 @@ import WebGlChart4 from 'components/shared/WebGlChart4'
 const Devices: FC = () => {
   return (
     <Container maxW={'full'}>
-      <Box height="47vh" display="flex" width="100%">
+      <Box height="67vh" display="flex" width="100%">
         <Box width="75%">
           <WebGlChart />
         </Box>
@@ -16,7 +16,7 @@ const Devices: FC = () => {
           <WebGlChart2 />
         </Box>
       </Box>
-      <Box height="47vh" display="flex">
+      <Box height="27vh" display="flex">
         <Box width="75%">
           <WebGlChart4 />
         </Box>
