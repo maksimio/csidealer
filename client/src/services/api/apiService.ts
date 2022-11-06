@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios'
 import EventEmitter from 'events'
-import { CsiPackage, IApiService, LogState, StatusResponse } from './interfaces'
+import { CsiPackage, IApiService, LogState, StatusResponse, TcpClientIp } from './interfaces'
 
 const EVENT_WS_DATA = 'ws.data'
 
@@ -55,6 +55,11 @@ export default class ApiService implements IApiService {
 
   async getLogState<T = LogState>(): Promise<T> {
     const response = await this.instance.get<T>('/log/state')
+    return response.data
+  }
+
+  async getTcpClientIp<T = TcpClientIp>(): Promise<T> {
+    const response = await this.instance.get<T>('/devices/tcp_client_ip')
     return response.data
   }
 }

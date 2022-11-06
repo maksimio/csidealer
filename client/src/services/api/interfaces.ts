@@ -3,6 +3,7 @@ export interface IApiService {
   logStart: (filename: string) => Promise<StatusResponse>
   logStop: () => Promise<StatusResponse>
   getLogState: () => Promise<LogState>
+  getTcpClientIp: () => Promise<TcpClientIp>
 }
 
 export interface ErrorResponse {
@@ -70,3 +71,5 @@ export interface CsiPackage {
   ts: number
   info: CsiInfo
 }
+
+export type TcpClientIp = SuccessResponseWithResult<string>

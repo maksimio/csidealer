@@ -19,7 +19,7 @@ func NewApiV1(rg *gin.RouterGroup, uc usecase.CsiUC) *ApiV1 {
 }
 
 func (a *ApiV1) Register() {
-	a.routGr.GET("/status", a.status)
+	// a.routGr.GET("/status", a.status)
 
 	csi := a.routGr.Group("/csi")
 	csi.GET("/last_n/:type", a.csiLastN)
@@ -39,6 +39,7 @@ func (a *ApiV1) Register() {
 	filter.PUT("/limits", a.setFilterLimits) // UPDATE
 
 	devices := a.routGr.Group("/devices")
+	devices.GET("/tcp_client_ip", a.tcpClientIp)
 	devices.GET("/list_info", a.deviceListInfo) // TODO
 	devices.POST("/:id")                        // TODO
 	devices.DELETE("/:id")                      // TODO
@@ -50,26 +51,30 @@ func (a *ApiV1) Register() {
 	devices.PATCH("/client/stop/:id")           // TODO
 }
 
-func (a *ApiV1) status(c *gin.Context) {
-	isActive, payloadLenMin, payloadLenMax, nr, nc, nTones := a.csiUc.GetPackageFilterLimits()
-	c.JSON(200, gin.H{
-		"success": true,
-		"result": gin.H{
-			"serverVersion":      "0.5.1",
-			"islogging":          a.csiUc.IsLog(),
-			"tcpClientAddr":      a.csiUc.GetTcpRemoteAddr(),
-			"csiPackageCount":    a.csiUc.GetCsiPackageCount(),
-			"csiPackageMaxCount": a.csiUc.GetCsiPackageMaxCount(),
-			"csiFilter": gin.H{
-				"isActive":      isActive,
-				"payloadLenMin": payloadLenMin,
-				"payloadLenMax": payloadLenMax,
-				"nr":            nr,
-				"nc":            nc,
-				"nTones":        nTones,
-			},
-			// "tcpConnStartTime"
-			// "isFileConn": false, // TODO: будет добавлено
-		},
-	})
+func (a *ApiV1) tcpClientIp(c *gin.Context) {
+	c.JSON(200, gin.H{"success": true, "result": a.csiUc.GetTcpRemoteAddr()})
 }
+
+// func (a *ApiV1) status(c *gin.Context) {
+// 	isActive, payloadLenMin, payloadLenMax, nr, nc, nTones := a.csiUc.GetPackageFilterLimits()
+// 	c.JSON(200, gin.H{
+// 		"success": true,
+// 		"result": gin.H{
+// 			"serverVersion":      "0.5.1",
+// 			"islogging":          a.csiUc.IsLog(),
+// 			"tcpClientAddr":      a.csiUc.GetTcpRemoteAddr(),
+// 			"csiPackageCount":    a.csiUc.GetCsiPackageCount(),
+// 			"csiPackageMaxCount": a.csiUc.GetCsiPackageMaxCount(),
+// 			"csiFilter": gin.H{
+// 				"isActive":      isActive,
+// 				"payloadLenMin": payloadLenMin,
+// 				"payloadLenMax": payloadLenMax,
+// 				"nr":            nr,
+// 				"nc":            nc,
+// 				"nTones":        nTones,
+// 			},
+// 			// "tcpConnStartTime"
+// 			// "isFileConn": false, // TODO: будет добавлено
+// 		},
+// 	})
+// }

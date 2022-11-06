@@ -5,7 +5,7 @@ import { FC } from 'react'
 
 const Topbar: FC = observer(() => {
   const { colorMode } = useColorMode()
-  const { csiStore } = useApplication()
+  const { csiStore, deviceStore } = useApplication()
 
   return (
     <Flex h="full" direction="row" bg={colorMode === 'light' ? 'blue.300' : 'blue.800'}>
@@ -21,6 +21,7 @@ const Topbar: FC = observer(() => {
       </HStack>
       <Spacer />
       <HStack pr={2}>
+        <Code colorScheme={deviceStore.isClientConnect ? 'green' : 'red'}>{deviceStore.isClientConnect ? 'Подключено' : 'Отключено'}</Code>
         <Code>Частота: {csiStore.frequency.toFixed(1)} Гц</Code>
       </HStack>
     </Flex>
