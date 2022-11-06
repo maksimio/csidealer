@@ -8,7 +8,7 @@ const Topbar: FC = observer(() => {
   const { csiStore } = useApplication()
 
   return (
-    <Flex h="full" direction="row" background={colorMode === 'light' ? 'blue.300' : 'blue.800'}>
+    <Flex h="full" direction="row" bg={colorMode === 'light' ? 'blue.300' : 'blue.800'}>
       <HStack>
         <Heading size="md" ml={2} letterSpacing={2}>
           <Text as="span" color={colorMode === 'light' ? 'blue.800' : 'blue.300'}>

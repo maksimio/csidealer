@@ -27,6 +27,11 @@ func (r *RawLogger) Start(filename string) error {
 		return errors.New("предыдущий файл не закрыт")
 	}
 
+	err := os.MkdirAll(r.logPath, os.ModePerm)
+	if err != nil {
+		return err
+	}
+
 	r.filename = filename
 	file, err := os.OpenFile(r.logPath+r.filename, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
 	if err != nil {

@@ -5,7 +5,7 @@ export interface IApiService {
   getLogState: () => Promise<LogState>
 }
 
-interface ErrorResponse {
+export interface ErrorResponse {
   success: false
   message: string
 }

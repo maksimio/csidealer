@@ -32,7 +32,7 @@ const IconLink: FC<IconLinkProps> = observer(({ label, link, Icon }) => {
 const Sidebar: FC = () => {
   const { colorMode } = useColorMode()
   return (
-    <Flex p={2} h="full" direction="column" background={colorMode === 'light' ? 'blue.300' : 'blue.800'}>
+    <Flex p={2} h="full" direction="column" bg={colorMode === 'light' ? 'blue.300' : 'blue.800'}>
       <VStack spacing={0}>
         <IconLink label="Устройства" link="/devices" Icon={IconRouter} />
         <IconLink label="Графики" link="/charts" Icon={IconChartLine} />

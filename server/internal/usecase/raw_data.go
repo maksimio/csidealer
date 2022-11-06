@@ -21,9 +21,10 @@ func (uc *CsiUseCase) SetTcpRemoteAddr(addr string) {
 func (uc *CsiUseCase) StartLog(filepath string) error {
 	err := uc.fl.Start(filepath)
 	if err != nil {
-		uc.logPackageCount = 0
+		return err
 	}
-	return err
+	uc.logPackageCount = 0
+	return nil
 }
 
 func (uc *CsiUseCase) StopLog() error {

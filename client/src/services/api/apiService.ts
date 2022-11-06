@@ -14,6 +14,15 @@ export default class ApiService implements IApiService {
     this.baseUrl = `http://${domen}:${port}/${address}`
     this.instance = axios.create({ baseURL: this.baseUrl })
 
+    axios.interceptors.response.use(
+      function (response) {
+        return response
+      },
+      function (error) {
+        return Promise.reject(error)
+      }
+    )
+
     this.ws = new WebSocket(`ws://${domen}:${wsPort}`)
     this.ws.onmessage = (event: MessageEvent<string>) => {
       const data: CsiPackage = JSON.parse(event.data)
@@ -25,16 +34,23 @@ export default class ApiService implements IApiService {
     this.eventEmitter.on(EVENT_WS_DATA, cl)
   }
 
-  async logStart<T = StatusResponse>(filename: string): Promise<T> {
-    const response = await this.instance.get<T>('/log/start', {
-      params: { filepath: filename },
-    })
-    return response.data
+  async logStart(filename: string): Promise<StatusResponse> {
+    try {
+      const response = await this.instance.get<StatusResponse>('/log/start', { params: { filepath: filename } })
+      return response.data
+    } catch (e) {
+      return { success: false, message: 'неизвестная ошибка' } // TODO научиться работать с AXIOS
+    }
   }
 
-  async logStop<T = StatusResponse>(): Promise<T> {
-    const response = await this.instance.get<T>('/log/stop')
-    return response.data
+  async logStop(): Promise<StatusResponse> {
+    try {
+      const response = await this.instance.get<StatusResponse>('/log/stop')
+      return response.data
+    } catch (e) {
+      debugger
+      return { success: false, message: 'неизвестная ошибка' }
+    }
   }
 
   async getLogState<T = LogState>(): Promise<T> {
