@@ -56,7 +56,7 @@ const Files: FC = observer(() => {
       <Heading mb={5}>Запись в файл</Heading>
       <Stack mb={5} direction={{ base: 'column', md: 'row' }}>
         <Input placeholder="Имя файла" value={fileStore.filename} onChange={handleInputChange} />
-        <Button disabled={!fileStore.filename.length} variant="outline" onClick={fileController.toggleLog}>
+        <Button disabled={!fileStore.filename.length || fileStore.isLogging} variant="outline" onClick={fileController.toggleLog}>
           Запись
         </Button>
       </Stack>

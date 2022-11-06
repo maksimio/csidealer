@@ -27,7 +27,7 @@ func (a *ApiV1) Register() {
 	csi.GET("/state") // TODO число пакетов, размер хранилища и т.д.
 
 	log := a.routGr.Group("/log")
-	log.GET("/start", a.startLog) // TODO переделать на patch
+	log.GET("/start", a.startLog) // TODO переделать на patch - это касается и других запросов
 	log.GET("/stop", a.stopLog)   // TODO переделать на patch
 	log.GET("/state", a.stateLog)
 
