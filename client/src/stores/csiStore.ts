@@ -30,6 +30,18 @@ export default class CsiStore {
   }
 
   push(csiPackage: CsiPackage) {
+    // const lastPackages = this.packages.slice(-10)
+    // csiPackage.data.forEach((h, i) => {
+    //   for (let j = 0; j < this.size; j++) {
+    //     let sum = 0
+    //     for (let k = 0; k < lastPackages.length; k++) {
+    //       sum += lastPackages[k].data[i][j]
+    //     }
+    //     sum += csiPackage.data[i][j]
+    //     h[j] = sum / 11
+    //   }
+    // })
+
     this.packages.push(csiPackage)
 
     if(this.packages.length > 3000) {
@@ -59,7 +71,7 @@ export default class CsiStore {
   }
 
   get frequency(): number {
-    const n = 25
+    const n = 500
     const tail = this.packages.slice(-n)
     const first = tail.at(0)
     const last = tail.at(-1)

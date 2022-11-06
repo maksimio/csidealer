@@ -5,7 +5,6 @@ import (
 	"csidealer/internal/usecase/processor"
 	"encoding/binary"
 	"errors"
-	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -57,7 +56,7 @@ func (uc *CsiUseCase) MoveRawTraffic(data []byte) {
 	splittedData := uc.rawRepo.GetAllSplitted()
 
 	for _, d := range splittedData {
-		fmt.Println(uc.csiPackageNumber)
+		// fmt.Println(uc.csiPackageNumber)
 		uc.push(d.Data)
 		uc.log(d)
 	}

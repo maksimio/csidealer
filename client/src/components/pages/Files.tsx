@@ -1,10 +1,10 @@
 import { FC } from 'react'
 
 
-const FileLog: FC = () => {
+const Files: FC = () => {
   return (
     <>Логгирование</>
   )
 }
 
-export default FileLog
+export default Files

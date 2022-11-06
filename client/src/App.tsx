@@ -1,19 +1,16 @@
 import { Route, Routes, Navigate } from 'react-router-dom'
-import {
-  Dashboard,
-  Devices,
-  FileLog,
-  NotFound,
-  Settings,
-} from 'components/pages'
+import { Charts, Devices, Files, NotFound, Settings } from 'components/pages'
 import { Container, Grid, GridItem } from '@chakra-ui/react'
-import { Statusbar, LocationProvider, Sidebar } from 'components'
+import { Topbar, LocationProvider, Sidebar } from 'components'
 
 const App = () => {
   return (
     <>
       <LocationProvider />
-      <Grid templateRows={'1fr 20px'} templateColumns={'50px 1fr'} h="100vh">
+      <Grid templateRows={'36px 1fr'} templateColumns={'50px 1fr'} h="100vh">
+        <GridItem colSpan={2}>
+          <Topbar />
+        </GridItem>
         <GridItem>
           <Sidebar />
         </GridItem>
@@ -22,15 +19,12 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Navigate to="devices" />} />
               <Route path="*" element={<NotFound />} />
-              <Route path="dashboard" element={<Dashboard />} />
               <Route path="devices" element={<Devices />} />
-              <Route path="log" element={<FileLog />} />
+              <Route path="charts" element={<Charts />} />
+              <Route path="files" element={<Files />} />
               <Route path="settings" element={<Settings />} />
             </Routes>
           </Container>
-        </GridItem>
-        <GridItem background={'cyan'} colSpan={2}>
-          <Statusbar />
         </GridItem>
       </Grid>
     </>
