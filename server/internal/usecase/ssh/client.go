@@ -165,5 +165,5 @@ func (c *AtherosClient) checkAvailable() {
 }
 
 func (c *AtherosClient) GetIsAvailable() bool {
-	return false
+	return c.isAvailable
 }

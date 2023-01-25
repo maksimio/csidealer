@@ -1,13 +1,13 @@
 import { FC } from 'react'
-import { Code, Container } from '@chakra-ui/react'
-import { Stack, Text, Button } from '@chakra-ui/react'
+import { Code, Container, Heading, VStack } from '@chakra-ui/react'
+import { Stack, Button } from '@chakra-ui/react'
 import Card from 'components/shared/Card'
 
 const RouterCard = () => {
   return (
     <Card>
       <Stack direction="row" alignItems="center">
-        <Text fontWeight="semibold">Your Privacy</Text>
+        <Heading size="md">Маршрутизатор</Heading>
       </Stack>
 
       <Stack direction={{ base: 'column', md: 'row' }} justifyContent="space-between">
@@ -28,10 +28,12 @@ const RouterCard = () => {
 const Devices: FC = () => {
   return (
     <Container maxW="2xl" width="full">
-      <RouterCard />
-      <RouterCard />
-      <RouterCard />
-      <RouterCard />
+      <VStack mt={5}>
+        <RouterCard />
+        <RouterCard />
+        <RouterCard />
+        <RouterCard />
+      </VStack>
     </Container>
   )
 }
