@@ -40,7 +40,15 @@ func Run() {
 	websocketServer := websocket.NewWebsocketServer(csiUseCase, 8082)
 	httpServer := http.NewHttpServer(csiUseCase, 80, "./build")
 
+	go tcpServer.Run()
+
+	rx := *routers[0]
+	tx := *routers[1]
+	rx.Connect("192.168.1.1")
+	tx.Connect("192.168.1.100")
+	rx.ClientMainRun("192.168.1.231", "8081")
+	tx.SendDataRun("wlan0", "FF:FF:FF:FF:FF:FF", 100, 50000, 512)
+
 	go httpServer.Run()
-	go websocketServer.Run()
-	tcpServer.Run()
+	websocketServer.Run()
 }

@@ -5,6 +5,7 @@ import (
 	"csidealer/internal/usecase/processor"
 	"encoding/binary"
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -92,6 +93,8 @@ func (uc *CsiUseCase) push(d []byte) {
 	}
 
 	uc.cbPushPacket(apiPack)
+
+	fmt.Println("PUSH ", uc.csiPackageNumber)
 
 	uc.repo.Push(pack)
 }

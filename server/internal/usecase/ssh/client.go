@@ -2,6 +2,7 @@ package ssh
 
 import (
 	"errors"
+	"fmt"
 	"os/exec"
 	"strconv"
 	"strings"
@@ -100,9 +101,16 @@ func (c AtherosClient) ClientMainRun(serverIP string, serverPort string) error {
 	}
 
 	c.isClientMainActive = true
-	if err := c.command("client_main " + serverIP + " " + serverPort); err != nil {
-		return err
-	}
+
+	fmt.Println("КОМАНДА-НАЧАТА")
+
+	go c.command("client_main " + serverIP + " " + serverPort)
+
+	// if err := c.command("client_main " + serverIP + " " + serverPort); err != nil {
+	// 	return err
+	// }
+
+	fmt.Println("КОМАНДА-ВЫПОЛНЕНА")
 
 	return nil
 }
@@ -131,19 +139,20 @@ func (c *AtherosClient) SendDataRun(ifName, dstMacAddr string, numOfPacketToSend
 	}
 	c.isSendData = true
 
-	for c.isSendData {
-		err := c.command("sendData " +
-			ifName + " " +
-			dstMacAddr + " " +
-			strconv.Itoa(int(numOfPacketToSend)) + " " +
-			strconv.Itoa(int(pktIntervalUs)) + " " +
-			strconv.Itoa(int(pktLen)))
-		if err != nil {
-			return err
+	go func() {
+		fmt.Println("Горутина sendData начата", c.isSendData)
+		for c.isSendData {
+			fmt.Println("sendData in cycle")
+			c.command("sendData " +
+				ifName + " " +
+				dstMacAddr + " " +
+				strconv.Itoa(int(numOfPacketToSend)) + " " +
+				strconv.Itoa(int(pktIntervalUs)) + " " +
+				strconv.Itoa(int(pktLen)))
 		}
-	}
+	}()
 
-	c.isSendData = false
+	// c.isSendData = false
 	return nil
 }
 
