@@ -24,9 +24,9 @@ type (
 		RoutersInfo() []entity.ApiRouterInfo
 		RouterConnect(id, addr string) error
 		RouterDisconnect(id string) error
-		RouterSendDataRun(id, DstMacAddr string, NumOfPacketToSend, pktIntervalUs, pktLen uint16)
+		RouterSendDataRun(id, dstMacAddr string, numOfPacketToSend, pktIntervalUs, pktLen uint16)
 		RouterSendDataStop(id string) error
-		RouterClientMainRun(id, ip, port string)
+		RouterClientMainRun(id, ip string, port int)
 		RouterClientMainStop(id string) error
 
 		GetPackageFilterLimits() (isActive bool, payloadLenMin, payloadLenMax uint16, nr, nc, nTones uint8)
@@ -90,11 +90,11 @@ type (
 		GetIsAvailable() bool
 		Disconnect() error
 
-		ClientMainRun(serverIP string, serverPort string) error
+		ClientMainRun(serverIP string, serverPort int) error
 		GetIsClientMainActive() bool
 		ClientMainStop() error
 
-		SendDataRun(ifName, DstMacAddr string, NumOfPacketToSend, pktIntervalUs, pktLen uint16) error
+		SendDataRun(ifName, dstMacAddr string, numOfPacketToSend, pktIntervalUs, pktLen uint16) error
 		GetIsSendDataActive() bool
 		SendDataStop() error
 	}

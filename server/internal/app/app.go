@@ -1,6 +1,7 @@
 package app
 
 import (
+	"csidealer/config"
 	"csidealer/internal/controller/http"
 	"csidealer/internal/controller/tcp"
 	"csidealer/internal/controller/websocket"
@@ -12,9 +13,17 @@ import (
 	"csidealer/internal/usecase/processor"
 	"csidealer/internal/usecase/repo"
 	"csidealer/internal/usecase/ssh"
+	"fmt"
 )
 
 func Run() {
+	conf, err := config.NewConfig()
+
+	if err != nil {
+		fmt.Println("Ошибка чтения конфигурационного файла: ", err)
+		return
+	}
+
 	clients := []*ssh.AtherosClient{
 		ssh.NewAtherosClient("root"),
 		ssh.NewAtherosClient("root"),
@@ -36,7 +45,7 @@ func Run() {
 		routers,
 	)
 
-	tcpServer := tcp.NewTcpServer(csiUseCase, 8081)
+	tcpServer := tcp.NewTcpServer(csiUseCase, conf.Tcp.Port)
 	websocketServer := websocket.NewWebsocketServer(csiUseCase, 8082)
 	httpServer := http.NewHttpServer(csiUseCase, 80, "./build")
 
@@ -44,10 +53,10 @@ func Run() {
 
 	rx := *routers[0]
 	tx := *routers[1]
-	rx.Connect("192.168.1.1")
-	tx.Connect("192.168.1.100")
-	rx.ClientMainRun("192.168.1.231", "8081")
-	tx.SendDataRun("wlan0", "FF:FF:FF:FF:FF:FF", 100, 50000, 512)
+	rx.Connect(conf.Rx.Ip)
+	tx.Connect(conf.Tx.Ip)
+	rx.ClientMainRun(conf.Rx.TargetIp, conf.Tcp.Port)
+	tx.SendDataRun(conf.Tx.IfName, conf.Tx.DstMacAddr, uint16(conf.Tx.NumOfPacketToSend), uint16(conf.Tx.PktIntervalUs), uint16(conf.Tx.PktLen))
 
 	go httpServer.Run()
 	websocketServer.Run()

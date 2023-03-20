@@ -89,7 +89,7 @@ func (c *AtherosClient) GetAddr() string {
 	return c.addr
 }
 
-func (c AtherosClient) ClientMainRun(serverIP string, serverPort string) error {
+func (c AtherosClient) ClientMainRun(serverIP string, serverPort int) error {
 	if c.isClientMainActive {
 		return errors.New("client_main уже запущен")
 	}
@@ -104,7 +104,7 @@ func (c AtherosClient) ClientMainRun(serverIP string, serverPort string) error {
 
 	fmt.Println("КОМАНДА-НАЧАТА")
 
-	go c.command("client_main " + serverIP + " " + serverPort)
+	go c.command("client_main " + serverIP + " " + strconv.Itoa(serverPort))
 
 	// if err := c.command("client_main " + serverIP + " " + serverPort); err != nil {
 	// 	return err

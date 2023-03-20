@@ -50,13 +50,13 @@ func (uc *CsiUseCase) RouterDisconnect(id string) error {
 	return (*router).Disconnect()
 }
 
-func (uc *CsiUseCase) RouterSendDataRun(id, DstMacAddr string, NumOfPacketToSend, pktIntervalUs, pktLen uint16) {
+func (uc *CsiUseCase) RouterSendDataRun(id, dstMacAddr string, numOfPacketToSend, pktIntervalUs, pktLen uint16) {
 	router, err := uc.getRouter(id)
 	if err != nil {
 		return
 	}
 
-	go (*router).SendDataRun("wlan0", DstMacAddr, NumOfPacketToSend, pktIntervalUs, pktLen)
+	go (*router).SendDataRun("wlan0", dstMacAddr, numOfPacketToSend, pktIntervalUs, pktLen)
 }
 
 func (uc *CsiUseCase) RouterSendDataStop(id string) error {
@@ -68,7 +68,7 @@ func (uc *CsiUseCase) RouterSendDataStop(id string) error {
 	return (*router).SendDataStop()
 }
 
-func (uc *CsiUseCase) RouterClientMainRun(id, ip, port string) {
+func (uc *CsiUseCase) RouterClientMainRun(id, ip string, port int) {
 	router, err := uc.getRouter(id)
 	if err != nil {
 		return
