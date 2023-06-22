@@ -1,6 +1,7 @@
 import { FC } from 'react'
 import { Box, Grid, GridItem, Button, VStack, Flex, Heading } from '@chakra-ui/react'
 import { ChartLine, FilePencil, FocusCentered,  Icon, LayoutDashboard, Settings } from 'tabler-icons-react'
+import { useNavigate } from 'react-router-dom'
 
 const Logo: FC = () => {
   return (
@@ -13,22 +14,29 @@ const Logo: FC = () => {
 interface MenuItemProps {
   LeftIcon: Icon
   text: string
+  path: string
 }
 
-const MenuItem: FC<MenuItemProps> = ({ LeftIcon, text }) => {
+const MenuItem: FC<MenuItemProps> = ({ LeftIcon, text, path }) => {
+  const navigate = useNavigate()
+
+  function handleNavigate() {
+    navigate(path)
+  }
+
   return (
-    <Button justifyContent='flex-end' size='sm' variant='ghost' leftIcon={<LeftIcon size='14' />}>{text}</Button>
+    <Button onClick={handleNavigate} justifyContent='flex-end' size='sm' variant='ghost' leftIcon={<LeftIcon size='14' />}>{text}</Button>
   )
 }
 
 const Menu: FC = () => {
   return (
     <VStack gap={1} alignItems='left' p={1}>
-      <MenuItem text='Главная' LeftIcon={LayoutDashboard} />
-      <MenuItem text='Графики' LeftIcon={ChartLine} />
-      <MenuItem text='Запись' LeftIcon={FilePencil} />
-      <MenuItem text='Распознавание' LeftIcon={FocusCentered} />
-      <MenuItem text='Параметры' LeftIcon={Settings} />
+      <MenuItem path='dashboard' text='Главная' LeftIcon={LayoutDashboard} />
+      <MenuItem path='charts' text='Графики' LeftIcon={ChartLine} />
+      <MenuItem path='record' text='Запись' LeftIcon={FilePencil} />
+      <MenuItem path='recognition' text='Распознавание' LeftIcon={FocusCentered} />
+      <MenuItem path='params' text='Параметры' LeftIcon={Settings} />
     </VStack>
   )
 }
