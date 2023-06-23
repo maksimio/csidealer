@@ -15,6 +15,7 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "axios": "^1.4.0",
+    "events": "^3.3.0",
     "framer-motion": "^10.12.16",
     "mobx": "^6.9.0",
     "mobx-react-lite": "^3.4.3",
@@ -26,6 +27,7 @@
     "webgl-plot": "^0.7.0"
   },
   "devDependencies": {
+    "@types/events": "^3.0.0",
     "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",
     "@typescript-eslint/eslint-plugin": "^5.59.0",

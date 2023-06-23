@@ -9,6 +9,7 @@ import { Settings } from 'pages/settings'
 import { Recognition } from 'pages/recognition'
 import { Charts } from 'pages/charts'
 import { Record } from 'pages/record'
+import { Devices } from 'tabler-icons-react'
 
 const ColorMode: FC = () => {
   const { colorMode, toggleColorMode } = useColorMode()
@@ -38,6 +39,7 @@ const App: FC = () => {
               <Route path='recognition' Component={Recognition} />
               <Route path='charts' Component={Charts} />
               <Route path='record' Component={Record} />
+              <Route path='devices' Component={Devices} />
               <Route path='params' Component={Settings} />
               <Route />
             </Routes>

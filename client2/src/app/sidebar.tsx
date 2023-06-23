@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { Grid, GridItem, Button, VStack, Flex, Heading } from '@chakra-ui/react'
-import { ChartLine, FilePencil, FocusCentered,  Icon, LayoutDashboard, Settings } from 'tabler-icons-react'
+import { AccessPoint, ChartLine, FilePencil, FocusCentered,  Icon, LayoutDashboard, Settings } from 'tabler-icons-react'
 import { useNavigate } from 'react-router-dom'
 import { Card } from 'shared/card'
 
@@ -37,6 +37,7 @@ const Menu: FC = () => {
       <MenuItem path='charts' text='Графики' LeftIcon={ChartLine} />
       <MenuItem path='record' text='Запись' LeftIcon={FilePencil} />
       <MenuItem path='recognition' text='Распознавание' LeftIcon={FocusCentered} />
+      <MenuItem path='devices' text='Устройства' LeftIcon={AccessPoint} />
       <MenuItem path='params' text='Параметры' LeftIcon={Settings} />
     </VStack>
   )
