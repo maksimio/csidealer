@@ -2,6 +2,7 @@ import { FC } from 'react'
 import { Box, Grid, GridItem, Button, VStack, Flex, Heading } from '@chakra-ui/react'
 import { ChartLine, FilePencil, FocusCentered,  Icon, LayoutDashboard, Settings } from 'tabler-icons-react'
 import { useNavigate } from 'react-router-dom'
+import { Card } from 'shared/card'
 
 const Logo: FC = () => {
   return (
@@ -43,13 +44,13 @@ const Menu: FC = () => {
 
 const ShortInfo: FC = () => {
   return (
-    <Box>Краткая информация</Box>
+    <Card mr={1} h='full'>Краткая информация</Card>
   )
 }
 
 export const Sidebar: FC = () => {
   return (
-    <Grid templateRows='100px 1fr 100px' h='100vh'>
+    <Grid pt={1} pb={1} templateRows='100px 1fr 250px' h='100vh'>
       <GridItem><Logo /></GridItem>
       <GridItem><Menu /></GridItem>
       <GridItem><ShortInfo /></GridItem>

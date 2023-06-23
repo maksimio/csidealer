@@ -3,12 +3,12 @@ import { ChakraProvider, Grid, GridItem, useColorMode } from '@chakra-ui/react'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { Sidebar } from './sidebar'
-import { BrowserRouter, Route, Navigate, RouterProvider, createBrowserRouter, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Navigate, Routes } from 'react-router-dom'
+import { Dashboard } from 'pages/dashboard'
 import { Settings } from 'pages/settings'
-import { Dashboard } from 'tabler-icons-react'
-import { Recognition } from '../pages/recognition'
-import { Charts } from '../pages/charts'
-import { Record } from '../pages/record'
+import { Recognition } from 'pages/recognition'
+import { Charts } from 'pages/charts'
+import { Record } from 'pages/record'
 
 const ColorMode: FC = () => {
   const { colorMode, toggleColorMode } = useColorMode()
