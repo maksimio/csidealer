@@ -1,3 +1,7 @@
+import { makeAutoObservable } from 'mobx'
+
 export class Store {
-  csi
+  constructor() {
+    makeAutoObservable(this)
+  }
 }

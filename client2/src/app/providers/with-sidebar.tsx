@@ -1,6 +1,6 @@
-import { FC } from 'react'
+import { FC, PropsWithChildren } from 'react'
 import { Grid, GridItem, Button, VStack, Flex, Heading } from '@chakra-ui/react'
-import { AccessPoint, ChartLine, FilePencil, FocusCentered,  Help,  Icon, LayoutDashboard, Settings } from 'tabler-icons-react'
+import { AccessPoint, ChartLine, FilePencil, FocusCentered, Help, Icon, LayoutDashboard, Settings } from 'tabler-icons-react'
 import { useNavigate } from 'react-router-dom'
 import { Card } from 'shared/card'
 
@@ -50,12 +50,23 @@ const ShortInfo: FC = () => {
   )
 }
 
-export const Sidebar: FC = () => {
+const Sidebar: FC = () => {
   return (
     <Grid pl={1} pb={1} templateRows='100px 1fr 250px' h='100vh'>
-      <GridItem><Logo/></GridItem>
-      <GridItem><Menu/></GridItem>
+      <GridItem><Logo /></GridItem>
+      <GridItem><Menu /></GridItem>
       <GridItem><ShortInfo /></GridItem>
+    </Grid>
+  )
+}
+
+export const WithSidebar: FC<PropsWithChildren> = ({ children }) => {
+  return (
+    <Grid gap={2} templateColumns='200px 1fr' h='full'>
+      <GridItem h='full'>
+        <Sidebar />
+      </GridItem>
+      <GridItem>{children}</GridItem>
     </Grid>
   )
 }
