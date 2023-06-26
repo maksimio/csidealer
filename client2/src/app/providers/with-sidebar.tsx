@@ -3,6 +3,8 @@ import { Grid, GridItem, Button, VStack, Flex, Heading } from '@chakra-ui/react'
 import { AccessPoint, ChartLine, FilePencil, FocusCentered, Help, Icon, LayoutDashboard, Settings } from 'tabler-icons-react'
 import { useNavigate } from 'react-router-dom'
 import { Card } from 'shared/card'
+import { observer } from 'mobx-react-lite'
+import { useControllers, useStore } from 'browser'
 
 const Logo: FC = () => {
   return (
@@ -18,17 +20,22 @@ interface MenuItemProps {
   path: string
 }
 
-const MenuItem: FC<MenuItemProps> = ({ LeftIcon, text, path }) => {
+const MenuItem: FC<MenuItemProps> = observer(({ LeftIcon, text, path }) => {
+  const store = useStore()
+  const { navController } = useControllers()
   const navigate = useNavigate()
 
   function handleNavigate() {
+    navController.setPath(path)
     navigate(path)
   }
 
+  const active = path === store.path
+
   return (
-    <Button onClick={handleNavigate} justifyContent='flex-end' size='sm' variant='ghost' leftIcon={<LeftIcon size='18' />}>{text}</Button>
+    <Button onClick={handleNavigate} justifyContent='flex-end' size='sm' variant={active ? 'solid' : 'ghost'} leftIcon={<LeftIcon size='18' />}>{text}</Button>
   )
-}
+})
 
 const Menu: FC = () => {
   return (

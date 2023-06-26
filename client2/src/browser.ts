@@ -1,8 +1,11 @@
+import { NavController } from 'controllers/nav'
 import { createContext, useContext } from 'react'
 import { Store } from 'store'
 
 export class Browser {
   store = new Store()
+
+  navController = new NavController(this.store)
 }
 
 
@@ -12,7 +15,7 @@ export function getStore(b: Browser) {
 
 export function getControllers(b: Browser) {
   return {
-
+    navController: b.navController
   }
 }
 
