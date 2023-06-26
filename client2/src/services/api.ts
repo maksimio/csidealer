@@ -95,7 +95,6 @@ export default class ApiService {
     this.ws.onmessage = (event: MessageEvent<string>) => {
       const data: CsiPackage = JSON.parse(event.data)
       this.eventEmitter.emit(EVENT_WS_DATA, data)
-      console.log(data)
     }
   }
 

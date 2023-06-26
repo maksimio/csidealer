@@ -1,3 +1,4 @@
+import { ChartController } from 'controllers/chart'
 import { NavController } from 'controllers/nav'
 import { createContext, useContext } from 'react'
 import ApiService from 'services/api'
@@ -9,6 +10,7 @@ export class Browser {
   store = new Store()
 
   navController = new NavController(this.store)
+  chartController = new ChartController(this.store, this.apiService)
 }
 
 

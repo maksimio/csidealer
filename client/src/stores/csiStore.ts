@@ -2,7 +2,7 @@ import { makeAutoObservable } from 'mobx'
 import { CsiPackage } from 'services/api/interfaces'
 
 export default class CsiStore {
-  packages: CsiPackage[] = []
+  packages: CsiPwebglplotackage[] = []
   
   updFlag: boolean = false
   size: number = 56

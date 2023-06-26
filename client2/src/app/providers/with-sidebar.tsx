@@ -73,7 +73,7 @@ export const WithSidebar: FC<PropsWithChildren> = ({ children }) => {
       <GridItem h='full'>
         <Sidebar />
       </GridItem>
-      <GridItem>{children}</GridItem>
+      <GridItem pt={3} pr={3}>{children}</GridItem>
     </Grid>
   )
 }
