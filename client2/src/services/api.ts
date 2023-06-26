@@ -1,12 +1,5 @@
-import EventEmitter from 'events'
-
-export interface IApiService {
-  onWsData: (cl: (data: CsiPackage) => void) => void
-  logStart: (filename: string) => Promise<StatusResponse>
-  logStop: () => Promise<StatusResponse>
-  getLogState: () => Promise<LogState>
-  getTcpClientIp: () => Promise<TcpClientIp>
-}
+import axios, { AxiosInstance } from 'axios'
+import { EventEmitter } from 'events'
 
 export interface ErrorResponse {
   success: false
@@ -79,11 +72,11 @@ export type TcpClientIp = SuccessResponseWithResult<string>
 
 const EVENT_WS_DATA = 'ws.data'
 
-export default class ApiService implements IApiService {
+export default class ApiService {
   private readonly baseUrl: string
   private instance: AxiosInstance
   private ws: WebSocket
-  private eventEmitter: EventEmitter = new EventEmitter()
+  private eventEmitter = new EventEmitter()
 
   constructor(domen: string, port: number, address: string, wsPort: number) {
     this.baseUrl = `http://${domen}:${port}/${address}`
@@ -102,6 +95,7 @@ export default class ApiService implements IApiService {
     this.ws.onmessage = (event: MessageEvent<string>) => {
       const data: CsiPackage = JSON.parse(event.data)
       this.eventEmitter.emit(EVENT_WS_DATA, data)
+      console.log(data)
     }
   }
 

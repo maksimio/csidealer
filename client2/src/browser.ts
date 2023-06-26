@@ -1,8 +1,11 @@
 import { NavController } from 'controllers/nav'
 import { createContext, useContext } from 'react'
+import ApiService from 'services/api'
 import { Store } from 'store'
 
 export class Browser {
+  apiService = new ApiService('127.0.0.1', 80, 'api/v1', 8082)
+
   store = new Store()
 
   navController = new NavController(this.store)
