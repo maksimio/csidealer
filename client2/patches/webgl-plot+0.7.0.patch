@@ -1,0 +1,20 @@
+diff --git a/node_modules/webgl-plot/package.json b/node_modules/webgl-plot/package.json
+index 8068954..c5ecf4d 100644
+--- a/node_modules/webgl-plot/package.json
++++ b/node_modules/webgl-plot/package.json
+@@ -6,13 +6,13 @@
+   "exports": {
+     ".": {
+       "require": "./dist/webglplot.cjs",
+-      "import": "./dist/webglplot.esm.mjs"
++      "import": "./dist/webglplot.esm.mjs",
++      "types": "./dist/webglplot.d.ts"
+     },
+     "./package.json": "./package.json"
+   },
+   "module": "./dist/webglplot.esm.js",
+   "typings": "./dist/webglplot.d.ts",
+-  "types": "./dist/webglplot.d.ts",
+   "keywords": [
+     "webgl",
+     "plot",

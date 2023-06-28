@@ -3,7 +3,6 @@ import { observer } from 'mobx-react-lite'
 import { FC, useEffect, useRef } from 'react'
 import { colors } from 'shared/chart'
 import { MAX_SERIES_LENGTH } from 'store'
-// @ts-ignore
 import { WebglPlot, WebglLine } from 'webgl-plot'
 
 let webglp: WebglPlot
