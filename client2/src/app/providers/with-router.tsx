@@ -31,7 +31,6 @@ export const WithRouter: FC = () => {
         <Route path='help' Component={Help} />
         <Route path='params' Component={Settings} />
         <Route path='*' Component={NotFound} />
-        <Route />
       </Routes>
     </Suspense>
   )

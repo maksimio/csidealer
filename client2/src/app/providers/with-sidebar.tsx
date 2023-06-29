@@ -18,9 +18,10 @@ interface MenuItemProps {
   LeftIcon: Icon
   text: string
   path: string
+  isDisabled?: boolean
 }
 
-const MenuItem: FC<MenuItemProps> = observer(({ LeftIcon, text, path }) => {
+const MenuItem: FC<MenuItemProps> = observer(({ LeftIcon, text, path, isDisabled }) => {
   const store = useStore()
   const { navController } = useControllers()
   const navigate = useNavigate()
@@ -33,7 +34,7 @@ const MenuItem: FC<MenuItemProps> = observer(({ LeftIcon, text, path }) => {
   const active = path === store.path
 
   return (
-    <Button onClick={handleNavigate} justifyContent='flex-end' size='sm' variant={active ? 'solid' : 'ghost'} leftIcon={<LeftIcon size='18' />}>{text}</Button>
+    <Button isDisabled={isDisabled} onClick={handleNavigate} justifyContent='flex-end' size='sm' variant={active ? 'solid' : 'ghost'} leftIcon={<LeftIcon size='18' />}>{text}</Button>
   )
 })
 
@@ -43,10 +44,10 @@ const Menu: FC = () => {
       <MenuItem path='dashboard' text='Главная' LeftIcon={LayoutDashboard} />
       <MenuItem path='charts' text='Графики' LeftIcon={ChartLine} />
       <MenuItem path='record' text='Запись' LeftIcon={FilePencil} />
-      <MenuItem path='recognition' text='Распознавание' LeftIcon={FocusCentered} />
-      <MenuItem path='devices' text='Устройства' LeftIcon={AccessPoint} />
+      <MenuItem isDisabled path='recognition' text='Распознавание' LeftIcon={FocusCentered} />
+      <MenuItem isDisabled path='devices' text='Устройства' LeftIcon={AccessPoint} />
       <MenuItem path='params' text='Параметры' LeftIcon={Settings} />
-      <MenuItem path='help' text='Помощь' LeftIcon={Help} />
+      <MenuItem isDisabled path='help' text='Помощь' LeftIcon={Help} />
     </VStack>
   )
 }
