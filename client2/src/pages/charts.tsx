@@ -14,7 +14,7 @@ export const Charts: FC = () => {
           <ChartTimeline />
         </Card>
         <Card h='400px' width="25%">
-          <Heading size='md'>Подследний пакет CSI</Heading>
+          <Heading size='md'>Пакет CSI</Heading>
           <ChartSubcarriers />
         </Card>
       </HStack>
