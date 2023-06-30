@@ -4,7 +4,7 @@ import { Card } from 'shared/card'
 import { ChartSubcarriers } from 'widgets/chartsubcarriers'
 import { ChartTimeline } from 'widgets/charttimeline'
 
-export const Charts: FC = () => {
+export const Data: FC = () => {
   return (
     <>
       <Heading>Амплитудные значения</Heading>

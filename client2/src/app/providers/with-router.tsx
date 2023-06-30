@@ -4,8 +4,8 @@ import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 
 const Dashboard = lazy(async () => ({ default: (await import('pages/dashboard')).Dashboard }))
 const Recognition = lazy(async () => ({ default: (await import('pages/recognition')).Recognition }))
-const Charts = lazy(async () => ({ default: (await import('pages/charts')).Charts }))
-const Record = lazy(async () => ({ default: (await import('pages/record')).Record }))
+const Data = lazy(async () => ({ default: (await import('pages/data')).Data }))
+const Files = lazy(async () => ({ default: (await import('pages/files')).Files }))
 const Devices = lazy(async () => ({ default: (await import('pages/devices')).Devices }))
 const Help = lazy(async () => ({ default: (await import('pages/help')).Help }))
 const Settings = lazy(async () => ({ default: (await import('pages/settings')).Settings }))
@@ -25,8 +25,8 @@ export const WithRouter: FC = () => {
         <Route path='/' element={<Navigate to='dashboard' />} />
         <Route path='dashboard' Component={Dashboard} />
         <Route path='recognition' Component={Recognition} />
-        <Route path='charts' Component={Charts} />
-        <Route path='record' Component={Record} />
+        <Route path='data' Component={Data} />
+        <Route path='files' Component={Files} />
         <Route path='devices' Component={Devices} />
         <Route path='help' Component={Help} />
         <Route path='params' Component={Settings} />

@@ -21,7 +21,7 @@ import { FC } from 'react'
 import { Card } from 'shared/card'
 import { Plus, X } from 'tabler-icons-react'
 
-export const Record: FC = () => {
+export const Files: FC = () => {
   return (
     <Box>
       <Heading>Запись CSI в файл</Heading>

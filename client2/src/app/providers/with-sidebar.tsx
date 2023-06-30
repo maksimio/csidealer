@@ -9,7 +9,9 @@ import { useControllers, useStore } from 'browser'
 const Logo: FC = () => {
   return (
     <Flex h='full' justifyContent='center' alignItems='center'>
-      <Heading size='md' color='blue.400'>Smart Wi-Fi</Heading>
+      <Heading size='md' color='blue.400'>
+        Smart Wi-Fi
+      </Heading>
     </Flex>
   )
 }
@@ -34,7 +36,16 @@ const MenuItem: FC<MenuItemProps> = observer(({ LeftIcon, text, path, isDisabled
   const active = path === store.path
 
   return (
-    <Button isDisabled={isDisabled} onClick={handleNavigate} justifyContent='flex-end' size='sm' variant={active ? 'solid' : 'ghost'} leftIcon={<LeftIcon size='18' />}>{text}</Button>
+    <Button
+      isDisabled={isDisabled}
+      onClick={handleNavigate}
+      justifyContent='flex-end'
+      size='sm'
+      variant={active ? 'solid' : 'ghost'}
+      leftIcon={<LeftIcon size='18' />}
+    >
+      {text}
+    </Button>
   )
 })
 
@@ -42,10 +53,10 @@ const Menu: FC = () => {
   return (
     <VStack gap={2} alignItems='left'>
       <MenuItem path='dashboard' text='Главная' LeftIcon={LayoutDashboard} />
-      <MenuItem path='charts' text='Графики' LeftIcon={ChartLine} />
-      <MenuItem path='record' text='Запись' LeftIcon={FilePencil} />
+      <MenuItem path='data' text='Данные' LeftIcon={ChartLine} />
+      <MenuItem path='files' text='Файлы' LeftIcon={FilePencil} />
+      <MenuItem path='devices' text='Устройства' LeftIcon={AccessPoint} />
       <MenuItem isDisabled path='recognition' text='Распознавание' LeftIcon={FocusCentered} />
-      <MenuItem isDisabled path='devices' text='Устройства' LeftIcon={AccessPoint} />
       <MenuItem path='params' text='Параметры' LeftIcon={Settings} />
       <MenuItem isDisabled path='help' text='Помощь' LeftIcon={Help} />
     </VStack>
@@ -53,17 +64,21 @@ const Menu: FC = () => {
 }
 
 const ShortInfo: FC = () => {
-  return (
-    <Card h='full'>Краткая информация</Card>
-  )
+  return <Card h='full'>Краткая информация</Card>
 }
 
 const Sidebar: FC = () => {
   return (
     <Grid pl={1} pb={1} templateRows='100px 1fr 250px' h='100vh'>
-      <GridItem><Logo /></GridItem>
-      <GridItem><Menu /></GridItem>
-      <GridItem><ShortInfo /></GridItem>
+      <GridItem>
+        <Logo />
+      </GridItem>
+      <GridItem>
+        <Menu />
+      </GridItem>
+      <GridItem>
+        <ShortInfo />
+      </GridItem>
     </Grid>
   )
 }
@@ -74,7 +89,9 @@ export const WithSidebar: FC<PropsWithChildren> = ({ children }) => {
       <GridItem h='full'>
         <Sidebar />
       </GridItem>
-      <GridItem pt={3} pr={3}>{children}</GridItem>
+      <GridItem pt={3} pr={3}>
+        {children}
+      </GridItem>
     </Grid>
   )
 }
