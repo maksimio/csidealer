@@ -15,13 +15,23 @@ export class RecordController {
       return
     }
 
-    console.log(res.result)
     runInAction(() => {
       this.store.recording = res.result.is_open
-      this.store.recordSize = res.result.write_byte_count
+      this.store.recordSize = res.result.write_byte_count / 1048576
       this.store.recordCount = res.result.package_count
-      this.store.recordDuration = res.result.start_ts
+      this.store.recordStartTimestamp = res.result.start_ts
     })
+
+    if (!this.store.recording) {
+      return 
+    }
+
+    if (
+      (this.store.limitCount && this.store.recordCount > this.store.countLimitation) ||
+      (this.store.limitSize && this.store.recordSize > this.store.sizeLimitation)
+    ) {
+      await this.apiService.logStop()
+    }
   }
 
   toggleRecording = async () => {

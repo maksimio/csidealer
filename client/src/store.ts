@@ -40,9 +40,9 @@ export class Store {
   countLimitation = 1000
 
   recording = false
-  recordSize = 0 // в Байтах
+  recordSize = 0 // в МБайтах
   recordCount = 0
-  recordDuration = 0
+  recordStartTimestamp = 0
 
   get filename() {
     const d = this.date

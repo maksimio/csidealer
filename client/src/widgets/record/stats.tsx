@@ -43,6 +43,11 @@ export const Stats: FC = observer(() => {
   const store = useStore()
   const { recordController } = useControllers()
 
+  const duration = Math.round((new Date().getTime() - store.recordStartTimestamp) / 1000)
+  const seconds = Math.round(duration % 60)
+  const minutes = (duration - seconds) / 60
+  const durationStr = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
+
   return (
     <VStack gap={5} alignItems='flex-start'>
       <Box>
@@ -71,15 +76,15 @@ export const Stats: FC = observer(() => {
       </Box>
       <HStack>
         <Text color='gray.400'>Размер файла (МБайт):</Text>
-        <Code>100.2</Code>
+        <Code>{store.recording ? store.recordSize.toFixed(2) : '-'}</Code>
       </HStack>
       <HStack>
         <Text color='gray.400'>Число пакетов:</Text>
-        <Code>103</Code>
+        <Code>{store.recording ? store.recordCount : '-'}</Code>
       </HStack>
-      <HStack>
-        <Text color='gray.400'>Длительность записи (мм:сс):</Text>
-        <Code>03:11</Code>
+      <HStack w='250px'>
+        <Text color='gray.400'>Длительность (мм:сс):</Text>
+        <Code>{store.recording ? durationStr : '-'}</Code>
       </HStack>
     </VStack>
   )

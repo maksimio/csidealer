@@ -58,7 +58,7 @@ export const NameConf: FC = observer(() => {
         <Checkbox onChange={recordController.toggleUseFileType} isChecked={store.useFileType}>
           Тип
         </Checkbox>
-        <RadioGroup mt={2} onChange={recordController.setFileType} value={store.fileType}>
+        <RadioGroup isDisabled={!store.useFileType} mt={2} onChange={recordController.setFileType} value={store.fileType}>
           <HStack alignItems='flex-start'>
             <Radio value={FileType.Train}>{FileType.Train}</Radio>
             <Radio value={FileType.Test}>{FileType.Test}</Radio>
