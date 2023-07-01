@@ -1,5 +1,0 @@
-export { default as Charts } from './Charts'
-export { default as Devices } from './Devices'
-export { default as Files } from './Files'
-export { default as NotFound } from './NotFound'
-export { default as Settings } from './Settings'
