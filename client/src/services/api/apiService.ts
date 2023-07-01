@@ -48,7 +48,6 @@ export default class ApiService implements IApiService {
       const response = await this.instance.get<StatusResponse>('/log/stop')
       return response.data
     } catch (e) {
-      debugger
       return { success: false, message: 'неизвестная ошибка' }
     }
   }

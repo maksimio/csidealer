@@ -1,8 +1,38 @@
-import { action } from 'mobx'
+import { action, runInAction } from 'mobx'
+import ApiService from 'services/api'
 import { FileType, Store } from 'store'
 
 export class RecordController {
-  constructor(private store: Store) {}
+  constructor(private store: Store, private apiService: ApiService) {
+    setInterval(() => {
+      this.updateLogState()
+    }, 1000)
+  }
+
+  private updateLogState = async () => {
+    const res = await this.apiService.getLogState()
+    if (!res.success) {
+      return
+    }
+
+    console.log(res.result)
+    runInAction(() => {
+      this.store.recording = res.result.is_open
+      this.store.recordSize = res.result.write_byte_count
+      this.store.recordCount = res.result.package_count
+      this.store.recordDuration = res.result.start_ts
+    })
+  }
+
+  toggleRecording = async () => {
+    await this.updateLogState()
+    if (this.store.recording) {
+      await this.apiService.logStop()
+    } else {
+      await this.apiService.logStart(this.store.filename)
+    }
+    await this.updateLogState()
+  }
 
   toggleUseFileType = action(() => {
     this.store.useFileType = !this.store.useFileType
@@ -16,6 +46,14 @@ export class RecordController {
     this.store.useLabel = !this.store.useLabel
   })
 
+  toggleLimitCount = action(() => {
+    this.store.limitCount = !this.store.limitCount
+  })
+
+  toggleLimitSize = action(() => {
+    this.store.limitSize = !this.store.limitSize
+  })
+
   setFileType = action((fileType: FileType) => {
     this.store.fileType = fileType
   })
@@ -26,6 +64,20 @@ export class RecordController {
 
   setName = action((name: string) => {
     this.store.name = name
+  })
+
+  setSizeLimitation = action((limitation: string) => {
+    const l = Number(limitation)
+    if (!isNaN(l)) {
+      this.store.sizeLimitation = Number(limitation)
+    }
+  })
+
+  setCountLimitation = action((limitation: string) => {
+    const l = Number(limitation)
+    if (!isNaN(l)) {
+      this.store.countLimitation = l
+    }
   })
 
   removeName = action((name: string) => {

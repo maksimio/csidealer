@@ -1,6 +1,5 @@
 import {
   VStack,
-  Text,
   HStack,
   RadioGroup,
   Input,
@@ -11,7 +10,6 @@ import {
   Radio,
   Box,
   Tag,
-  Code,
 } from '@chakra-ui/react'
 import { useControllers, useStore } from 'browser'
 import { observer } from 'mobx-react-lite'
@@ -36,7 +34,12 @@ const NameTemplate: FC<NameTemplateProps> = ({ name }) => {
       transition='all linear 0.1s'
     >
       <TagLabel>{name}</TagLabel>
-      <TagCloseButton onClick={() => recordController.removeName(name)} />
+      <TagCloseButton
+        onClick={(e) => {
+          e.stopPropagation()
+          recordController.removeName(name)
+        }}
+      />
     </Tag>
   )
 }
@@ -47,22 +50,22 @@ export const NameConf: FC = observer(() => {
   const names = [...store.names.values()].map((v) => <NameTemplate name={v} />)
 
   return (
-    <VStack alignItems='flex-start'>
-      <HStack gap={5}>
+    <VStack gap={5} alignItems='flex-start'>
+      <Checkbox onChange={recordController.toggleUseDate} isChecked={store.useDate}>
+        Дата
+      </Checkbox>
+      <Box>
         <Checkbox onChange={recordController.toggleUseFileType} isChecked={store.useFileType}>
           Тип
         </Checkbox>
-        <Checkbox onChange={recordController.toggleUseDate} isChecked={store.useDate}>
-          Дата
-        </Checkbox>
-      </HStack>
-      <RadioGroup onChange={recordController.setFileType} value={store.fileType}>
-        <HStack alignItems='flex-start'>
-          <Radio value={FileType.Train}>{FileType.Train}</Radio>
-          <Radio value={FileType.Test}>{FileType.Test}</Radio>
-          <Radio value={FileType.Validate}>{FileType.Validate}</Radio>
-        </HStack>
-      </RadioGroup>
+        <RadioGroup mt={2} onChange={recordController.setFileType} value={store.fileType}>
+          <HStack alignItems='flex-start'>
+            <Radio value={FileType.Train}>{FileType.Train}</Radio>
+            <Radio value={FileType.Test}>{FileType.Test}</Radio>
+            <Radio value={FileType.Validate}>{FileType.Validate}</Radio>
+          </HStack>
+        </RadioGroup>
+      </Box>
       <HStack>
         <Checkbox onChange={recordController.toggleUseLabel} isChecked={store.useLabel}>
           Метка
@@ -82,6 +85,7 @@ export const NameConf: FC = observer(() => {
           onChange={(e) => recordController.setName(e.target.value)}
           size='sm'
           placeholder='Введите название'
+          maxLength={20}
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !store.names.has(store.name) && store.name.length) {
               recordController.addName()
@@ -97,8 +101,6 @@ export const NameConf: FC = observer(() => {
         />
       </HStack>
       <Box maxW='350px'>{names}</Box>
-      <Text>Название файла:</Text>
-      <Code>{store.filename}</Code>
     </VStack>
   )
 })

@@ -116,7 +116,6 @@ export default class ApiService {
       const response = await this.instance.get<StatusResponse>('/log/stop')
       return response.data
     } catch (e) {
-      debugger
       return { success: false, message: 'неизвестная ошибка' }
     }
   }

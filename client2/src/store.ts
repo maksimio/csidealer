@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx'
+import { action, makeAutoObservable } from 'mobx'
 import { CsiPackage } from 'services/api'
 
 export const MAX_SERIES_LENGTH = 1000
@@ -28,6 +28,7 @@ export class Store {
   useFileType = true
   fileType: FileType = FileType.Train
   useDate = true
+  private date = new Date()
   useLabel = false
   label = ''
   name = ''
@@ -38,13 +39,18 @@ export class Store {
   limitCount = false
   countLimitation = 1000
 
-  isRecord = false
-  recordSize = 0
+  recording = false
+  recordSize = 0 // в Байтах
   recordCount = 0
   recordDuration = 0
 
   get filename() {
-    const date = this.useDate ? `2023.08.13-17.46.51_` : ''
+    const d = this.date
+    const date = this.useDate
+      ? `${d.getFullYear()}.${String(d.getMonth()).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}-${String(
+          d.getHours()
+        ).padStart(2, '0')}.${String(d.getMinutes()).padStart(2, '0')}.${String(d.getSeconds()).padStart(2, '0')}_`
+      : ''
     const fileType = this.useFileType ? `${this.fileType}_` : ''
     const label = this.useLabel ? `_(${this.label})` : ''
 
@@ -53,5 +59,9 @@ export class Store {
 
   constructor() {
     makeAutoObservable(this)
+
+    setInterval(action(() => {
+      this.date = new Date()
+    }), 1000)
   }
 }

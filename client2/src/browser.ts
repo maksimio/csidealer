@@ -12,7 +12,7 @@ export class Browser {
 
   navController = new NavController(this.store)
   chartController = new ChartController(this.store, this.apiService)
-  recordController = new RecordController(this.store)
+  recordController = new RecordController(this.store, this.apiService)
 }
 
 export function getStore(b: Browser) {
