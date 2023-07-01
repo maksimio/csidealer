@@ -1,5 +1,6 @@
 import { ChartController } from 'controllers/chart'
 import { NavController } from 'controllers/nav'
+import { RecordController } from 'controllers/record'
 import { createContext, useContext } from 'react'
 import ApiService from 'services/api'
 import { Store } from 'store'
@@ -11,8 +12,8 @@ export class Browser {
 
   navController = new NavController(this.store)
   chartController = new ChartController(this.store, this.apiService)
+  recordController = new RecordController(this.store)
 }
-
 
 export function getStore(b: Browser) {
   return b.store
@@ -20,7 +21,8 @@ export function getStore(b: Browser) {
 
 export function getControllers(b: Browser) {
   return {
-    navController: b.navController
+    navController: b.navController,
+    recordController: b.recordController,
   }
 }
 
@@ -42,4 +44,3 @@ export const useControllers = () => {
   }
   return controllers
 }
-
