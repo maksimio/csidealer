@@ -52,10 +52,10 @@ const MenuItem: FC<MenuItemProps> = observer(({ LeftIcon, text, path, isDisabled
 const Menu: FC = () => {
   return (
     <VStack gap={2} alignItems='left'>
-      <MenuItem path='dashboard' text='Главная' LeftIcon={LayoutDashboard} />
+      <MenuItem isDisabled path='dashboard' text='Главная' LeftIcon={LayoutDashboard} />
       <MenuItem path='data' text='Данные' LeftIcon={ChartLine} />
       <MenuItem path='files' text='Файлы' LeftIcon={FilePencil} />
-      <MenuItem path='devices' text='Устройства' LeftIcon={AccessPoint} />
+      <MenuItem isDisabled path='devices' text='Устройства' LeftIcon={AccessPoint} />
       <MenuItem isDisabled path='recognition' text='Распознавание' LeftIcon={FocusCentered} />
       <MenuItem path='params' text='Параметры' LeftIcon={Settings} />
       <MenuItem isDisabled path='help' text='Помощь' LeftIcon={Help} />

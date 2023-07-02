@@ -8,8 +8,8 @@ export const Files: FC = () => {
     <Box>
       <Heading>Запись CSI в файл</Heading>
       <Record />
-      <Heading>Список файлов</Heading>
-      <FileList />
+      {/* <Heading>Список файлов</Heading>
+      <FileList /> */}
     </Box>
   )
 }
