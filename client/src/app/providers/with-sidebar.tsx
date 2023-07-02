@@ -64,7 +64,7 @@ const Menu: FC = () => {
 }
 
 const ShortInfo: FC = () => {
-  return <Card h='full'>Краткая информация</Card>
+  return <Card h='full'></Card>
 }
 
 const Sidebar: FC = () => {

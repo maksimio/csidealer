@@ -14,7 +14,14 @@ export class Store {
 
   // данные csi
   package?: CsiPackage
-  seriesY: number[][] = [
+  abs: number[][] = [
+    Array(MAX_SERIES_LENGTH).fill(0),
+    Array(MAX_SERIES_LENGTH).fill(0),
+    Array(MAX_SERIES_LENGTH).fill(0),
+    Array(MAX_SERIES_LENGTH).fill(0),
+  ]
+
+  phase: number[][] = [
     Array(MAX_SERIES_LENGTH).fill(0),
     Array(MAX_SERIES_LENGTH).fill(0),
     Array(MAX_SERIES_LENGTH).fill(0),

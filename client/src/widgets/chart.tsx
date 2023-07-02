@@ -14,9 +14,11 @@ const SHIFT = -1
 
 interface ChartProps {
   data: number[][]
+  delimeter: number
+  shift: number
 }
 
-export const Chart: FC<ChartProps> = ({ data }) => {
+export const Chart: FC<ChartProps> = ({ data, delimeter, shift }) => {
   const ref = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
@@ -42,7 +44,7 @@ export const Chart: FC<ChartProps> = ({ data }) => {
     let renderPlot = () => {
       for (let k = 0; k < lines.length; k++) {
         for (let i = 0; i < data[k].length; i++) {
-          lines[k].setY(i, data[k][i] / DELIMETER + SHIFT)
+          lines[k].setY(i, data[k][i] / delimeter + shift)
         }
       }
       id = requestAnimationFrame(renderPlot)

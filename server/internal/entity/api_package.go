@@ -25,3 +25,12 @@ type ApiPackage struct {
 	Info      *PackageInfo `json:"info"`
 	Data      [][]float64  `json:"data"`
 }
+
+type ApiPackageAbsPhase struct {
+	Timestamp int64        `json:"ts"`
+	Id        string       `json:"id"`
+	Number    uint64       `json:"n"`
+	Info      *PackageInfo `json:"info"`
+	Abs       [][]float64  `json:"abs"`
+	Phase     [][]float64  `json:"phase"`
+}

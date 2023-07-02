@@ -60,7 +60,8 @@ interface CsiInfo {
 }
 
 export interface CsiPackage {
-  data: number[][]
+  abs: number[][]
+  phase: number[][]
   id: string
   n: number
   ts: number

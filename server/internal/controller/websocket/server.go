@@ -16,7 +16,7 @@ type WebsocketServer struct {
 	connections []Connection
 }
 
-func (s *WebsocketServer) send(pack entity.ApiPackage) {
+func (s *WebsocketServer) send(pack entity.ApiPackageAbsPhase) {
 	for _, c := range s.connections {
 		c.Write(pack)
 	}

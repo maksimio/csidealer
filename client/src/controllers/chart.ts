@@ -16,20 +16,22 @@ export class ChartController {
       this.store.package.n = data.n
       this.store.package.ts = data.ts
       // Для работы графиков WebGL необходимо изменение существующего массива
-      for (let i = 0; i < this.store.package.data.length; i++) {
-        for (let k = 0; k < this.store.package.data[i].length; k++) {
-          this.store.package.data[i][k] = data.data[i][k]
+      for (let i = 0; i < this.store.package.abs.length; i++) {
+        for (let k = 0; k < this.store.package.abs[i].length; k++) {
+          this.store.package.abs[i][k] = data.abs[i][k]
+          this.store.package.phase[i][k] = data.phase[i][k]
         }
       }
     }
 
-    // this.store.package.data.forEach((s, i) => {
-    //   data
-    // })
+    for (let i = 0; i < this.store.abs.length; i++) {
+      this.store.abs[i].shift()
+      this.store.abs[i].push(data.abs[i][0])
+    }
 
-    for (let i = 0; i < this.store.seriesY.length; i++) {
-      this.store.seriesY[i].shift()
-      this.store.seriesY[i].push(data.data[i][0])
+    for (let i = 0; i < this.store.phase.length; i++) {
+      this.store.phase[i].shift()
+      this.store.phase[i].push(data.phase[i][0])
     }
   })
 }

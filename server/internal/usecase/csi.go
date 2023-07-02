@@ -16,7 +16,7 @@ type CsiUseCase struct {
 	isFilterActive   bool
 	logPackageCount  uint64
 
-	cbPushPacket func(entity.ApiPackage)
+	cbPushPacket func(entity.ApiPackageAbsPhase)
 }
 
 func NewCsiUseCase(

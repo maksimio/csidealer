@@ -84,12 +84,13 @@ func (uc *CsiUseCase) push(d []byte) {
 	pack.Number = uc.csiPackageNumber
 	uc.csiPackageNumber += 1
 
-	apiPack := entity.ApiPackage{
+	apiPack := entity.ApiPackageAbsPhase{
 		Timestamp: pack.Timestamp,
 		Id:        pack.Uuid,
 		Info:      pack.Info,
 		Number:    pack.Number,
-		Data:      uc.proc.CsiMap(pack.Data, processor.AbsHandler),
+		Abs:       uc.proc.CsiMap(pack.Data, processor.AbsHandler),
+		Phase:     uc.proc.CsiMap(pack.Data, processor.PhaseHandler),
 	}
 
 	uc.cbPushPacket(apiPack)
@@ -111,6 +112,6 @@ func (uc *CsiUseCase) log(pack entity.RawPackage) {
 	uc.logPackageCount += 1
 }
 
-func (uc *CsiUseCase) OnPushPacket(cb func(entity.ApiPackage)) {
+func (uc *CsiUseCase) OnPushPacket(cb func(entity.ApiPackageAbsPhase)) {
 	uc.cbPushPacket = cb
 }

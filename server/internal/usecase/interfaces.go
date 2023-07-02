@@ -32,7 +32,7 @@ type (
 		GetPackageFilterLimits() (isActive bool, payloadLenMin, payloadLenMax uint16, nr, nc, nTones uint8)
 		SetPackageFilterLimits(isActive bool, payloadLenMin, payloadLenMax uint16, nr, nc, nTones uint8)
 
-		OnPushPacket(cb func(entity.ApiPackage))
+		OnPushPacket(cb func(entity.ApiPackageAbsPhase))
 	}
 
 	IRepo interface {
