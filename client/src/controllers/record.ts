@@ -6,7 +6,7 @@ export class RecordController {
   constructor(private store: Store, private apiService: ApiService) {
     setInterval(() => {
       this.updateLogState()
-    }, 1000)
+    }, 100)
   }
 
   private updateLogState = async () => {

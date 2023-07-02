@@ -1,24 +1,31 @@
-import { HStack, Heading } from '@chakra-ui/react'
+import { HStack, Heading, Box } from '@chakra-ui/react'
+import { useStore } from 'browser'
+import { observer } from 'mobx-react-lite'
 import { FC } from 'react'
 import { Card } from 'shared/card'
-import { ChartSubcarriers } from 'widgets/chartsubcarriers'
-import { ChartTimeline } from 'widgets/charttimeline'
+import { Chart } from 'widgets/chart'
 
-export const Data: FC = () => {
+export const Data: FC = observer(() => {
+  const store = useStore()
+
   return (
     <>
       <Heading>Амплитудные значения</Heading>
       <HStack>
-        <Card h='400px' width="75%">
+        <Card width='75%'>
           <Heading size='md'>График поднесущих во времени</Heading>
-          <ChartTimeline />
+          <Box h='300px'>
+            <Chart data={store.seriesY} />
+          </Box>
         </Card>
-        <Card h='400px' width="25%">
+        <Card width='25%'>
           <Heading size='md'>Пакет CSI</Heading>
-          <ChartSubcarriers />
+          <Box h='300px'>
+            {store.package && <Chart data={store.package.data} />}
+          </Box>
         </Card>
       </HStack>
       <Heading>Фазовые значения</Heading>
     </>
   )
-}
+})

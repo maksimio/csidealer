@@ -8,11 +8,28 @@ export class ChartController {
   }
 
   private handleCsiData = action((data: CsiPackage) => {
-    this.store.package = data
+    if (this.store.package === undefined) {
+      this.store.package = data
+    } else {
+      this.store.package.id = data.id
+      this.store.package.info = data.info
+      this.store.package.n = data.n
+      this.store.package.ts = data.ts
+      // Для работы графиков WebGL необходимо изменение существующего массива
+      for (let i = 0; i < this.store.package.data.length; i++) {
+        for (let k = 0; k < this.store.package.data[i].length; k++) {
+          this.store.package.data[i][k] = data.data[i][k]
+        }
+      }
+    }
 
-    this.store.seriesY.forEach((s, i) => {
-      s.shift()
-      s.push(data.data[i][0])
-    })
+    // this.store.package.data.forEach((s, i) => {
+    //   data
+    // })
+
+    for (let i = 0; i < this.store.seriesY.length; i++) {
+      this.store.seriesY[i].shift()
+      this.store.seriesY[i].push(data.data[i][0])
+    }
   })
 }
