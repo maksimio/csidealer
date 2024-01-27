@@ -84,20 +84,45 @@ func (uc *CsiUseCase) push(d []byte) {
 	pack.Number = uc.csiPackageNumber
 	uc.csiPackageNumber += 1
 
+	fmt.Println("PUSH ", uc.csiPackageNumber)
+
+	uc.repo.Push(pack)
+
+	// Сглаживание
+	N := 10 // Порядок сглаживания
+	abs := uc.proc.CsiMap(pack.Data, processor.AbsHandler)
+
+	if uc.csiPackageNumber > uint64(N) {
+		prevs := uc.repo.GetLastN(N)
+
+		for i := 0; i < N; i++ {
+			prev_abs := uc.proc.CsiMap(prevs[i].Data, processor.AbsHandler)
+			for j := 0; j < 4; j++ {
+				for k := 0; k < 56; k++ {
+					abs[j][k] += prev_abs[j][k]
+				}
+			}
+		}
+
+		for j := 0; j < 4; j++ {
+			for k := 0; k < 56; k++ {
+				abs[j][k] /= float64(N)
+			}
+		}
+	}
+	uc.repo.GetLastN(3)
+	// Конец сглаживания
+
 	apiPack := entity.ApiPackageAbsPhase{
 		Timestamp: pack.Timestamp,
 		Id:        pack.Uuid,
 		Info:      pack.Info,
 		Number:    pack.Number,
-		Abs:       uc.proc.CsiMap(pack.Data, processor.AbsHandler),
+		Abs:       abs,
 		Phase:     uc.proc.CsiMap(pack.Data, processor.PhaseHandler),
 	}
 
 	uc.cbPushPacket(apiPack)
-
-	fmt.Println("PUSH ", uc.csiPackageNumber)
-
-	uc.repo.Push(pack)
 }
 
 func (uc *CsiUseCase) log(pack entity.RawPackage) {

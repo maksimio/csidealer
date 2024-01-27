@@ -51,7 +51,7 @@ func Run() {
 
 	go tcpServer.Run()
 	go httpServer.Run()
-	websocketServer.Run()
+	// websocketServer.Run()
 
 	rx := *routers[0]
 	tx := *routers[1]
@@ -59,5 +59,6 @@ func Run() {
 	tx.Connect(conf.Tx.Ip)
 	rx.ClientMainRun(conf.Rx.TargetIp, conf.Tcp.Port)
 	tx.SendDataRun(conf.Tx.IfName, conf.Tx.DstMacAddr, uint16(conf.Tx.NumOfPacketToSend), uint16(conf.Tx.PktIntervalUs), uint16(conf.Tx.PktLen))
+	websocketServer.Run()
 
 }
