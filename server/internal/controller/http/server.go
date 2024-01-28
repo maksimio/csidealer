@@ -3,6 +3,7 @@ package http
 import (
 	"csidealer/internal/usecase"
 	"fmt"
+	"log"
 
 	"github.com/gin-gonic/contrib/cors"
 	"github.com/gin-gonic/contrib/static"
@@ -33,6 +34,6 @@ func NewHttpServer(uc usecase.CsiUC, port int, uiPath string) *HttpServer {
 }
 
 func (s HttpServer) Run() {
-	fmt.Println("HTTP-сервер ожидает подключение на", s.port, "порту")
+	log.Printf("HTTP-сервер ожидает подключение на %s порту", s.port)
 	s.router.Run(s.port)
 }

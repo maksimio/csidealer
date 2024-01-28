@@ -13,15 +13,16 @@ import (
 	"csidealer/internal/usecase/processor"
 	"csidealer/internal/usecase/repo"
 	"csidealer/internal/usecase/ssh"
-	"fmt"
+	"log"
 )
 
 func Run() {
-	conf, err := config.NewConfig()
-
+	conf, err := config.ReadConfig()
 	if err != nil {
-		fmt.Println("Ошибка чтения конфигурационного файла: ", err)
+		log.Print("возникла ошибка при чтении конфигурационного файла: ", err)
 		return
+	} else {
+		log.Print("конфигурационный файл успешно прочитан")
 	}
 
 	clients := []*ssh.AtherosClient{
@@ -51,7 +52,6 @@ func Run() {
 
 	go tcpServer.Run()
 	go httpServer.Run()
-	// websocketServer.Run()
 
 	rx := *routers[0]
 	tx := *routers[1]
@@ -59,6 +59,7 @@ func Run() {
 	tx.Connect(conf.Tx.Ip)
 	rx.ClientMainRun(conf.Rx.TargetIp, conf.Tcp.Port)
 	tx.SendDataRun(conf.Tx.IfName, conf.Tx.DstMacAddr, uint16(conf.Tx.NumOfPacketToSend), uint16(conf.Tx.PktIntervalUs), uint16(conf.Tx.PktLen))
+
 	websocketServer.Run()
 
 }

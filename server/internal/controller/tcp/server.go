@@ -3,8 +3,8 @@ package tcp
 import (
 	"csidealer/internal/usecase"
 	"fmt"
+	"log"
 	"net"
-	"os"
 )
 
 const _buf_len = 2048
@@ -24,14 +24,13 @@ func NewTcpServer(uc usecase.CsiUC, port int) *TcpServer {
 func (s *TcpServer) Run() {
 	ln, err := net.Listen("tcp", s.port)
 	if err != nil {
-		fmt.Println("Ошибка прослушки на порту", s.port, ":", err)
-		os.Exit(1) //TODO сделать более элегантно
+		log.Fatal("ошибка открытия порта", s.port, ":", err)
 	}
 
 	defer ln.Close()
 
 	for {
-		fmt.Println("TCP-сервер ожидает подключение на", s.port, "порту")
+		log.Printf("TCP-сервер ожидает подключение на %s порту", s.port)
 		conn, _ := ln.Accept()
 		s.listenConnection(conn)
 	}
@@ -39,14 +38,14 @@ func (s *TcpServer) Run() {
 
 func (s *TcpServer) listenConnection(conn net.Conn) {
 	s.csiUc.FlushBuffer()
-	fmt.Println("Новое подключение от:", conn.RemoteAddr())
+	log.Printf("новое подключение от %s", conn.RemoteAddr())
 	s.csiUc.SetTcpRemoteAddr(conn.RemoteAddr().String())
 	data := make([]byte, _buf_len)
 
 	for {
 		readCount, err := conn.Read(data)
 		if err != nil {
-			fmt.Println("Ошибка чтения из сокета:", err)
+			log.Print("ошибка чтения из сокета:", err)
 			s.csiUc.SetTcpRemoteAddr("")
 			break
 		}

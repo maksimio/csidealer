@@ -5,7 +5,6 @@ import (
 	"csidealer/internal/usecase/processor"
 	"encoding/binary"
 	"errors"
-	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -58,7 +57,7 @@ func (uc *CsiUseCase) MoveRawTraffic(data []byte) {
 	splittedData := uc.rawRepo.GetAllSplitted()
 
 	for _, d := range splittedData {
-		// fmt.Println(uc.csiPackageNumber)
+		// log.Print(uc.csiPackageNumber)
 		uc.push(d.Data)
 		uc.log(d)
 	}
@@ -84,7 +83,7 @@ func (uc *CsiUseCase) push(d []byte) {
 	pack.Number = uc.csiPackageNumber
 	uc.csiPackageNumber += 1
 
-	fmt.Println("PUSH ", uc.csiPackageNumber)
+	// log.Print("PUSH ", uc.csiPackageNumber)
 
 	uc.repo.Push(pack)
 
@@ -110,7 +109,7 @@ func (uc *CsiUseCase) push(d []byte) {
 			}
 		}
 	}
-	uc.repo.GetLastN(3)
+	// uc.repo.GetLastN(3)
 	// Конец сглаживания
 
 	apiPack := entity.ApiPackageAbsPhase{

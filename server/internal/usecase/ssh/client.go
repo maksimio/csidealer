@@ -2,7 +2,7 @@ package ssh
 
 import (
 	"errors"
-	"fmt"
+	"log"
 	"os/exec"
 	"strconv"
 	"strings"
@@ -102,7 +102,7 @@ func (c AtherosClient) ClientMainRun(serverIP string, serverPort int) error {
 
 	c.isClientMainActive = true
 
-	fmt.Println("КОМАНДА-НАЧАТА")
+	log.Print("КОМАНДА-НАЧАТА")
 
 	go c.command("client_main " + serverIP + " " + strconv.Itoa(serverPort))
 
@@ -110,7 +110,7 @@ func (c AtherosClient) ClientMainRun(serverIP string, serverPort int) error {
 	// 	return err
 	// }
 
-	fmt.Println("КОМАНДА-ВЫПОЛНЕНА")
+	log.Print("КОМАНДА-ВЫПОЛНЕНА")
 
 	return nil
 }
@@ -140,9 +140,9 @@ func (c *AtherosClient) SendDataRun(ifName, dstMacAddr string, numOfPacketToSend
 	c.isSendData = true
 
 	go func() {
-		fmt.Println("Горутина sendData начата", c.isSendData)
+		log.Print("горутина sendData начата", c.isSendData)
 		for c.isSendData {
-			fmt.Println("sendData in cycle")
+			log.Print("sendData in cycle")
 			c.command("sendData " +
 				ifName + " " +
 				dstMacAddr + " " +

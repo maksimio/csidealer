@@ -18,11 +18,11 @@ func main() {
 func RunTcpWriter(port int, filepath string) {
 	conn, err := net.Dial("tcp", ":"+fmt.Sprint(port))
 	if err != nil {
-		fmt.Println(err)
+		log.Print(err)
 		return
 	}
 	defer conn.Close()
-	fmt.Println("Успешное подключение к серверу на порту", port)
+	log.Print("успешное подключение к серверу на порту", port)
 
 	bufSize := make([]byte, 2)
 	bufSize32 := make([]byte, 4)
@@ -54,9 +54,9 @@ func RunTcpWriter(port int, filepath string) {
 			conn.Write(bufSize32)
 			conn.Write(buf)
 			time.Sleep(100 * time.Millisecond)
-			fmt.Println(i)
+			log.Print(i)
 			i += 1
 		}
-		fmt.Println("Файл подошел к концу. Начинаем заново")
+		log.Print("файл закончился. Повторное чтение")
 	}
 }

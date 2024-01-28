@@ -2,10 +2,10 @@ package main
 
 import (
 	"csidealer/internal/app"
-	"fmt"
+	"log"
 )
 
 func main() {
-	fmt.Println("Сервер начинает работу")
+	log.Println("сервер начинает работу")
 	app.Run()
 }

@@ -2,7 +2,7 @@ package fs_logger
 
 import (
 	"errors"
-	"fmt"
+	"log"
 	"os"
 	"time"
 )
@@ -43,18 +43,18 @@ func (r *RawLogger) Start(filename string) error {
 	r.writeByteCount = 0
 	r.startTime = time.Now().UnixMilli()
 
-	fmt.Println("Начата запись в файл", r.filename)
+	log.Print("Начата запись в файл", r.filename)
 	return nil
 }
 
 func (r *RawLogger) Stop() {
 	defer r.file.Close()
 	r.openStatus = false
-	fmt.Println("Остановлена запись в файл", r.filename)
+	log.Print("Остановлена запись в файл", r.filename)
 }
 
 func (r *RawLogger) Write(data []byte) error {
-	fmt.Println("write data")
+	// log.Print("write data")
 	if _, err := r.file.Write(data); err != nil {
 		return err
 	}
