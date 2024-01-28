@@ -12,3 +12,4 @@ tx:
   numOfPacketToSend: 400
   pktIntervalUs: 60000
   pktLen: 512
+

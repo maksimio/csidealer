@@ -6,6 +6,22 @@
   <a href="https://github.com/maksimio/smartwifi">smart Wi-Fi</a>
 </p>
 
+# Запуск
+`git clone https://github.com/maksimio/csidealer.git` - скопируйте репозиторий в терминале
+
+## Сервер
+1. `cd csidealer/server` - перейдите в серверную часть
+2. `go get ./...` - установите зависимости
+3. `go run cmd/app/main.go` - запустите серверное приложение
+4. `go run test/faketcp.go` - запустите эмулятор посылок CSI в соседнем терминале
+5. в директории `server` появится `config.yml`. Отредактируйте его содержимое при необходимости
+
+## Клиент
+1. `cd csidealer/client` - перейдите в клиентскую часть (в новом терминале)
+2. `npm i` - установите зависимости
+3. `npm start` - запустите интерфейс
+4. в консоли будет выведен адрес интерфейса, например `http://localhost:5173`. Необходимо перейти по нему
+
 # Сервер-менеджер посылок CSI
 Сервер принимает, декодирует, записывает и раздает посылки CSI, отправленных по TCP с роутера (функция client_main). На роутере установлена [модифицированная](https://github.com/xieyaxiongfly/Atheros_CSI_tool_OpenWRT_src) прошивка OpenWRT с [Atheros CSI Tool](https://wands.sg/research/wifi/AtherosCSI/)
 
@@ -37,7 +53,3 @@
 1. `csi/last_n/:type` - параметры: n.
 2. `csi/subcarrier_last_n/:type` - параметры: n.
 
-## Запуск и отладка
-1. Запустить сервер командой `go run .\server\cmd\app\main.go`
-2. Запустить эмулятор работы client_main командой `go run .\server\test\faketcp.go`
-3. Из другого терминала перейти в `client` и ввести `npm i`, `npm start`

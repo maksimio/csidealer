@@ -53,6 +53,7 @@ func Run() {
 	go tcpServer.Run()
 	go httpServer.Run()
 
+	log.Print("запуск передачи пакетов")
 	rx := *routers[0]
 	tx := *routers[1]
 	rx.Connect(conf.Rx.Ip)
@@ -60,6 +61,7 @@ func Run() {
 	rx.ClientMainRun(conf.Rx.TargetIp, conf.Tcp.Port)
 	tx.SendDataRun(conf.Tx.IfName, conf.Tx.DstMacAddr, uint16(conf.Tx.NumOfPacketToSend), uint16(conf.Tx.PktIntervalUs), uint16(conf.Tx.PktLen))
 
+	log.Print("запуск сервера websocket...")
 	websocketServer.Run()
 
 }

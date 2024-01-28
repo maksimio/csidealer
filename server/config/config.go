@@ -8,8 +8,8 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-const configPath = "./config.yml"
-const defaultConfigPath = "config/defaultConfig.yml"
+const configPath = "/home/m/dev/csidealer/server/config.yml" // TODO: решить проблему с путями при отладке
+const defaultConfigPath = "/home/m/dev/csidealer/server/config/defaultConfig.yml"
 
 type Config struct {
 	Tcp struct {
@@ -60,6 +60,14 @@ func ReadConfig() (*Config, error) {
 }
 
 func copyConfig() error {
+	entries, err := os.ReadDir("./")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, e := range entries {
+		log.Println(e.Name())
+	}
 	data, err := os.ReadFile(defaultConfigPath)
 	if err != nil {
 		return err
