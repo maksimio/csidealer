@@ -8,35 +8,23 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-const configPath = "/home/m/dev/csidealer/server/config.yml" // TODO: решить проблему с путями при отладке
+// TODO: решить проблему с путями при отладке
+const configPath = "/home/m/dev/csidealer/server/config.yml"
 const defaultConfigPath = "/home/m/dev/csidealer/server/config/defaultConfig.yml"
 
 type Config struct {
-	Tcp struct {
-		Port int `yaml:"port"`
-	} `yaml:"tcp"`
-	Rx struct {
-		Ip       string `yaml:"ip"`
-		TargetIp string `yaml:"targetIp"`
-	} `yaml:"rx"`
-	Tx struct {
-		Ip                string `yaml:"ip"`
-		IfName            string `yaml:"ifName"`
-		DstMacAddr        string `yaml:"dstMacAddr"`
-		NumOfPacketToSend int    `yaml:"numOfPacketToSend"`
-		PktIntervalUs     int    `yaml:"pktIntervalUs"`
-		PktLen            int    `yaml:"pktLen"`
-	} `yaml:"tx"`
+	Values FileScheme
+	path   string
 }
 
-func ReadConfig() (*Config, error) {
-	config := &Config{}
+func NewConfig() *Config {
+	values := &FileScheme{}
 
 	if _, err := os.Stat(configPath); errors.Is(err, os.ErrNotExist) {
 		log.Print("конфигурационный файл не найден")
 		err = copyConfig()
 		if err != nil {
-			return nil, err
+			log.Fatal("не удалось создать конфигурационный файл по-умолчанию")
 		} else {
 			log.Print("создан конфигурационный файл с значениями по-умолчанию")
 		}
@@ -46,17 +34,45 @@ func ReadConfig() (*Config, error) {
 
 	file, err := os.Open(configPath)
 	if err != nil {
-		return nil, err
+		log.Fatalf("не удалось открыть конфигурационный файл %s", configPath)
 	}
 	defer file.Close()
 
 	d := yaml.NewDecoder(file)
 
-	if err := d.Decode(&config); err != nil {
-		return nil, err
+	if err := d.Decode(&values); err != nil {
+		log.Fatalf("не удалось декодировать конфигурационный файл %s", configPath)
 	}
 
-	return config, nil
+	return &Config{path: configPath, Values: *values}
+}
+
+func (c *Config) Update(key string, value interface{}) error {
+	data, _ := yaml.Marshal(c.Values)
+	var f map[string]interface{}
+	yaml.Unmarshal(data, &f) // ошибки быть не может
+	// TODO: придумать вариант красивее + чтобы комментарии сохранялись
+
+	f[key] = value
+
+	data, err := yaml.Marshal(f)
+	if err != nil {
+		return err
+	}
+	err = yaml.Unmarshal(data, &c.Values)
+	if err != nil {
+		log.Printf("конфиг: ошибка, у поля %s неверный тип", value)
+		return err
+	}
+
+	err = os.WriteFile(configPath, data, 0)
+	if err != nil {
+		return err
+	}
+
+	log.Printf("конфиг: обновлено поле %s: %s", key, value)
+
+	return nil
 }
 
 func copyConfig() error {

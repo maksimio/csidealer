@@ -109,7 +109,7 @@ func (uc *CsiUseCase) push(d []byte) {
 			}
 		}
 	}
-	// uc.repo.GetLastN(3)
+
 	// Конец сглаживания
 
 	apiPack := entity.ApiPackageAbsPhase{

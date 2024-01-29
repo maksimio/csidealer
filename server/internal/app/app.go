@@ -14,16 +14,14 @@ import (
 	"csidealer/internal/usecase/repo"
 	"csidealer/internal/usecase/ssh"
 	"log"
+	"os"
 )
 
 func Run() {
-	conf, err := config.ReadConfig()
-	if err != nil {
-		log.Print("возникла ошибка при чтении конфигурационного файла: ", err)
-		return
-	} else {
-		log.Print("конфигурационный файл успешно прочитан")
-	}
+	conf := config.NewConfig()
+
+	log.Printf("НОВОЕ ЗНАЧЕНИЕ: %s", conf.Values.RxIp)
+	os.Exit(1)
 
 	clients := []*ssh.AtherosClient{
 		ssh.NewAtherosClient("root"),
@@ -46,20 +44,20 @@ func Run() {
 		routers,
 	)
 
-	tcpServer := tcp.NewTcpServer(csiUseCase, conf.Tcp.Port)
+	tcpServer := tcp.NewTcpServer(csiUseCase, conf.Values.TcpPort)
 	websocketServer := websocket.NewWebsocketServer(csiUseCase, 8082)
 	httpServer := http.NewHttpServer(csiUseCase, 80, "./build")
 
 	go tcpServer.Run()
 	go httpServer.Run()
 
-	log.Print("запуск передачи пакетов")
-	rx := *routers[0]
-	tx := *routers[1]
-	rx.Connect(conf.Rx.Ip)
-	tx.Connect(conf.Tx.Ip)
-	rx.ClientMainRun(conf.Rx.TargetIp, conf.Tcp.Port)
-	tx.SendDataRun(conf.Tx.IfName, conf.Tx.DstMacAddr, uint16(conf.Tx.NumOfPacketToSend), uint16(conf.Tx.PktIntervalUs), uint16(conf.Tx.PktLen))
+	// log.Print("запуск передачи пакетов")
+	// rx := *routers[0]
+	// tx := *routers[1]
+	// rx.Connect(conf.Rx.Ip)
+	// tx.Connect(conf.Tx.Ip)
+	// rx.ClientMainRun(conf.Rx.TargetIp, conf.Tcp.Port)
+	// tx.SendDataRun(conf.Tx.IfName, conf.Tx.DstMacAddr, uint16(conf.Tx.NumOfPacketToSend), uint16(conf.Tx.PktIntervalUs), uint16(conf.Tx.PktLen))
 
 	log.Print("запуск сервера websocket...")
 	websocketServer.Run()
