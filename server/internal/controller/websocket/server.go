@@ -4,6 +4,7 @@ import (
 	"csidealer/internal/entity"
 	"csidealer/internal/usecase"
 	"fmt"
+	"log"
 	"net/http"
 
 	ws "github.com/gorilla/websocket"
@@ -38,7 +39,7 @@ func (s *WebsocketServer) Run() {
 	s.csiUc.OnPushPacket(s.send)
 
 	http.HandleFunc("/", s.startConn)
-	fmt.Println("WebSocket-сервер ожидает подключение на", s.port, "порту")
+	log.Print("WebSocket-сервер ожидает подключение на", s.port, "порту")
 	http.ListenAndServe(s.port, nil)
 
 }

@@ -13,16 +13,11 @@ import (
 	"csidealer/internal/usecase/processor"
 	"csidealer/internal/usecase/repo"
 	"csidealer/internal/usecase/ssh"
-	"fmt"
+	"log"
 )
 
 func Run() {
-	conf, err := config.NewConfig()
-
-	if err != nil {
-		fmt.Println("Ошибка чтения конфигурационного файла: ", err)
-		return
-	}
+	config, _ := config.ReadConfig()
 
 	clients := []*ssh.AtherosClient{
 		ssh.NewAtherosClient("root"),
@@ -36,29 +31,44 @@ func Run() {
 	}
 
 	csiUseCase := usecase.NewCsiUseCase(
-		repo.NewCsiLocalRepo(1000),
+		repo.NewCsiLocalRepo(config.CsiLocalRepoMaxCount),
 		buffer.NewCsiRawRepo(),
-		fs_logger.NewFileLogger("./logs/"),
-		processor.NewProcessor(3),
-		filter.NewFilter(500, 1800, 2, 2, 56),
+		fs_logger.NewFileLogger(config.DatFilePath),
+		processor.NewProcessor(config.ProcessorRounder),
+		filter.NewFilter(
+			config.Filter.PayloadLen.Min,
+			config.Filter.PayloadLen.Max,
+			config.Filter.Nr,
+			config.Filter.Nc,
+			config.Filter.NTones,
+		),
 		decoder.NewCsiDecoder(),
 		routers,
+		config.SmoothOrder,
 	)
 
-	tcpServer := tcp.NewTcpServer(csiUseCase, conf.Tcp.Port)
-	websocketServer := websocket.NewWebsocketServer(csiUseCase, 8082)
-	httpServer := http.NewHttpServer(csiUseCase, 80, "./build")
+	tcpServer := tcp.NewTcpServer(csiUseCase, config.TcpPort)
+	websocketServer := websocket.NewWebsocketServer(csiUseCase, config.WebsocketPort)
+	httpServer := http.NewHttpServer(csiUseCase, config.HttpPort, config.HttpStaticPath)
 
 	go tcpServer.Run()
 	go httpServer.Run()
-	// websocketServer.Run()
 
+	log.Print("запуск передачи пакетов")
 	rx := *routers[0]
 	tx := *routers[1]
-	rx.Connect(conf.Rx.Ip)
-	tx.Connect(conf.Tx.Ip)
-	rx.ClientMainRun(conf.Rx.TargetIp, conf.Tcp.Port)
-	tx.SendDataRun(conf.Tx.IfName, conf.Tx.DstMacAddr, uint16(conf.Tx.NumOfPacketToSend), uint16(conf.Tx.PktIntervalUs), uint16(conf.Tx.PktLen))
+	rx.Connect(config.RxIp)
+	tx.Connect(config.TxIp)
+	rx.ClientMainRun(config.TargetIp, config.TcpPort)
+	tx.SendDataRun(
+		config.IfName,
+		config.DstMacAddr,
+		config.NumOfPacketToSend,
+		config.PktIntervalUs,
+		config.PktLen,
+	)
+
+	log.Print("запуск сервера websocket...")
 	websocketServer.Run()
 
 }

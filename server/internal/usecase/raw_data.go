@@ -5,7 +5,6 @@ import (
 	"csidealer/internal/usecase/processor"
 	"encoding/binary"
 	"errors"
-	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -58,7 +57,7 @@ func (uc *CsiUseCase) MoveRawTraffic(data []byte) {
 	splittedData := uc.rawRepo.GetAllSplitted()
 
 	for _, d := range splittedData {
-		// fmt.Println(uc.csiPackageNumber)
+		// log.Print(uc.csiPackageNumber)
 		uc.push(d.Data)
 		uc.log(d)
 	}
@@ -84,18 +83,17 @@ func (uc *CsiUseCase) push(d []byte) {
 	pack.Number = uc.csiPackageNumber
 	uc.csiPackageNumber += 1
 
-	fmt.Println("PUSH ", uc.csiPackageNumber)
+	// log.Print("PUSH ", uc.csiPackageNumber)
 
 	uc.repo.Push(pack)
 
 	// Сглаживание
-	N := 10 // Порядок сглаживания
 	abs := uc.proc.CsiMap(pack.Data, processor.AbsHandler)
 
-	if uc.csiPackageNumber > uint64(N) {
-		prevs := uc.repo.GetLastN(N)
+	if uc.csiPackageNumber > uint64(uc.smoothOrder) {
+		prevs := uc.repo.GetLastN(uc.smoothOrder)
 
-		for i := 0; i < N; i++ {
+		for i := 0; i < uc.smoothOrder; i++ {
 			prev_abs := uc.proc.CsiMap(prevs[i].Data, processor.AbsHandler)
 			for j := 0; j < 4; j++ {
 				for k := 0; k < 56; k++ {
@@ -106,11 +104,10 @@ func (uc *CsiUseCase) push(d []byte) {
 
 		for j := 0; j < 4; j++ {
 			for k := 0; k < 56; k++ {
-				abs[j][k] /= float64(N)
+				abs[j][k] /= float64(uc.smoothOrder)
 			}
 		}
 	}
-	uc.repo.GetLastN(3)
 	// Конец сглаживания
 
 	apiPack := entity.ApiPackageAbsPhase{
