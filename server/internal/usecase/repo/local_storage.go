@@ -1,7 +1,7 @@
 package repo
 
 import (
-	"csidealer/internal/entity"
+	entity "csidealer/internal/models"
 )
 
 type CsiLocalRepo struct {

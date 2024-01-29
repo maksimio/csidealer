@@ -1,6 +1,6 @@
 package filter
 
-import "csidealer/internal/entity"
+import entity "csidealer/internal/models"
 
 type Filter struct {
 	payloadLenMin uint16

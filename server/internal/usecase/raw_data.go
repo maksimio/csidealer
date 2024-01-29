@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	"csidealer/internal/entity"
+	entity "csidealer/internal/models"
 	"csidealer/internal/usecase/processor"
 	"encoding/binary"
 	"errors"

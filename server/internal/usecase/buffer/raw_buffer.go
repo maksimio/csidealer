@@ -1,7 +1,7 @@
 package buffer
 
 import (
-	"csidealer/internal/entity"
+	entity "csidealer/internal/models"
 	"encoding/binary"
 )
 

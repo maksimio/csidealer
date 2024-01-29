@@ -2,9 +2,9 @@ package app
 
 import (
 	"csidealer/config"
-	"csidealer/internal/controller/http"
-	"csidealer/internal/controller/tcp"
-	"csidealer/internal/controller/websocket"
+	"csidealer/internal/controllers/http"
+	"csidealer/internal/controllers/tcp"
+	"csidealer/internal/controllers/websocket"
 	"csidealer/internal/usecase"
 	"csidealer/internal/usecase/buffer"
 	"csidealer/internal/usecase/decoder"

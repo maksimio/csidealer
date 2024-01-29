@@ -1,6 +1,6 @@
 package decoder
 
-import "csidealer/internal/entity"
+import entity "csidealer/internal/models"
 
 type CsiDecoder struct{}
 

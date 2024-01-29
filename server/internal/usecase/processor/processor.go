@@ -1,7 +1,7 @@
 package processor
 
 import (
-	"csidealer/internal/entity"
+	entity "csidealer/internal/models"
 	"errors"
 	"math"
 )

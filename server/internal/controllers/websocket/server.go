@@ -1,7 +1,7 @@
 package websocket
 
 import (
-	"csidealer/internal/entity"
+	entity "csidealer/internal/models"
 	"csidealer/internal/usecase"
 	"fmt"
 	"log"

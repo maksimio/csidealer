@@ -1,6 +1,6 @@
 package usecase
 
-import "csidealer/internal/entity"
+import entity "csidealer/internal/models"
 
 type (
 	CsiUC interface {

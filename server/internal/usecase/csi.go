@@ -1,6 +1,6 @@
 package usecase
 
-import "csidealer/internal/entity"
+import "csidealer/internal/models"
 
 type CsiUseCase struct {
 	repo        IRepo
