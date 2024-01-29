@@ -1,7 +1,7 @@
 package config
 
 // Конфиг сделано одноуровневым для метода Update
-type FileScheme struct {
+type Config struct {
 	// IP-адреса и порты
 	TcpPort  int    `yaml:"tcpPort"`
 	RxIp     string `yaml:"rxIp"`
@@ -16,5 +16,18 @@ type FileScheme struct {
 	PktLen            int    `yaml:"pktLen"`
 
 	// различные параметры
-	FilterOrder int `yaml:"filterOrder"`
+	FilterOrder          int    `yaml:"filterOrder"`
+	CsiLocalRepoMaxCount uint64 `yaml:"csiLocalRepoMaxCount"`
+	DatFilePath          string `yaml:"datFilePath"`
+	ProcessorRounder     int    `yaml:"ProcessorRounder"`
+
+	Filter struct {
+		PayloadLen struct {
+			Min uint16 `yaml:"min"`
+			Max uint16 `yaml:"max"`
+		} `yaml:"payloadLen"`
+		Nr     int `yaml:"nr"`
+		Nc     int `yaml:"nc"`
+		NTones int `yaml:"nTones"`
+	} `yaml:"filter"`
 }

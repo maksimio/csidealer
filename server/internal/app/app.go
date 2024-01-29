@@ -14,14 +14,10 @@ import (
 	"csidealer/internal/usecase/repo"
 	"csidealer/internal/usecase/ssh"
 	"log"
-	"os"
 )
 
 func Run() {
-	conf := config.NewConfig()
-
-	log.Printf("НОВОЕ ЗНАЧЕНИЕ: %s", conf.Values.RxIp)
-	os.Exit(1)
+	config, _ := config.ReadConfig()
 
 	clients := []*ssh.AtherosClient{
 		ssh.NewAtherosClient("root"),
@@ -35,16 +31,16 @@ func Run() {
 	}
 
 	csiUseCase := usecase.NewCsiUseCase(
-		repo.NewCsiLocalRepo(1000),
+		repo.NewCsiLocalRepo(config.CsiLocalRepoMaxCount),
 		buffer.NewCsiRawRepo(),
-		fs_logger.NewFileLogger("./logs/"),
-		processor.NewProcessor(3),
+		fs_logger.NewFileLogger(config.DatFilePath),
+		processor.NewProcessor(config.ProcessorRounder),
 		filter.NewFilter(500, 1800, 2, 2, 56),
 		decoder.NewCsiDecoder(),
 		routers,
 	)
 
-	tcpServer := tcp.NewTcpServer(csiUseCase, conf.Values.TcpPort)
+	tcpServer := tcp.NewTcpServer(csiUseCase, config.TcpPort)
 	websocketServer := websocket.NewWebsocketServer(csiUseCase, 8082)
 	httpServer := http.NewHttpServer(csiUseCase, 80, "./build")
 

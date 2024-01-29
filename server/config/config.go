@@ -12,13 +12,8 @@ import (
 const configPath = "/home/m/dev/csidealer/server/config.yml"
 const defaultConfigPath = "/home/m/dev/csidealer/server/config/defaultConfig.yml"
 
-type Config struct {
-	Values FileScheme
-	path   string
-}
-
-func NewConfig() *Config {
-	values := &FileScheme{}
+func ReadConfig() (*Config, error) {
+	config := &Config{}
 
 	if _, err := os.Stat(configPath); errors.Is(err, os.ErrNotExist) {
 		log.Print("конфигурационный файл не найден")
@@ -40,39 +35,11 @@ func NewConfig() *Config {
 
 	d := yaml.NewDecoder(file)
 
-	if err := d.Decode(&values); err != nil {
+	if err := d.Decode(&config); err != nil {
 		log.Fatalf("не удалось декодировать конфигурационный файл %s", configPath)
 	}
 
-	return &Config{path: configPath, Values: *values}
-}
-
-func (c *Config) Update(key string, value interface{}) error {
-	data, _ := yaml.Marshal(c.Values)
-	var f map[string]interface{}
-	yaml.Unmarshal(data, &f) // ошибки быть не может
-	// TODO: придумать вариант красивее + чтобы комментарии сохранялись
-
-	f[key] = value
-
-	data, err := yaml.Marshal(f)
-	if err != nil {
-		return err
-	}
-	err = yaml.Unmarshal(data, &c.Values)
-	if err != nil {
-		log.Printf("конфиг: ошибка, у поля %s неверный тип", value)
-		return err
-	}
-
-	err = os.WriteFile(configPath, data, 0)
-	if err != nil {
-		return err
-	}
-
-	log.Printf("конфиг: обновлено поле %s: %s", key, value)
-
-	return nil
+	return config, nil
 }
 
 func copyConfig() error {

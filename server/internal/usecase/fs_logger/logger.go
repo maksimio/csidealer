@@ -33,6 +33,7 @@ func (r *RawLogger) Start(filename string) error {
 	}
 
 	r.filename = filename
+	// TODO: использовать JOIN
 	file, err := os.OpenFile(r.logPath+r.filename, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
 	if err != nil {
 		return err
