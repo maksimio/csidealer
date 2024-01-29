@@ -1,4 +1,7 @@
+httpStaticPath: './build'
 tcpPort: 8081
+httpPort: 80
+websocketPort: 8082
 rxIp: 192.168.1.1
 txIp: 192.168.1.100
 targetIp: 192.168.1.231
@@ -9,7 +12,7 @@ numOfPacketToSend: 400
 pktIntervalUs: 60000
 pktLen: 512
 
-filterOrder: 10 # фильтрация амплитудных
+smoothOrder: 10 # сглаживание амплитудных значений
 csiLocalRepoMaxCount: 1000
 datFilePath: 'logs/'
 ProcessorRounder: 3

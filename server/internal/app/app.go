@@ -35,25 +35,38 @@ func Run() {
 		buffer.NewCsiRawRepo(),
 		fs_logger.NewFileLogger(config.DatFilePath),
 		processor.NewProcessor(config.ProcessorRounder),
-		filter.NewFilter(500, 1800, 2, 2, 56),
+		filter.NewFilter(
+			config.Filter.PayloadLen.Min,
+			config.Filter.PayloadLen.Max,
+			config.Filter.Nr,
+			config.Filter.Nc,
+			config.Filter.NTones,
+		),
 		decoder.NewCsiDecoder(),
 		routers,
+		config.SmoothOrder,
 	)
 
 	tcpServer := tcp.NewTcpServer(csiUseCase, config.TcpPort)
-	websocketServer := websocket.NewWebsocketServer(csiUseCase, 8082)
-	httpServer := http.NewHttpServer(csiUseCase, 80, "./build")
+	websocketServer := websocket.NewWebsocketServer(csiUseCase, config.WebsocketPort)
+	httpServer := http.NewHttpServer(csiUseCase, config.HttpPort, config.HttpStaticPath)
 
 	go tcpServer.Run()
 	go httpServer.Run()
 
-	// log.Print("запуск передачи пакетов")
-	// rx := *routers[0]
-	// tx := *routers[1]
-	// rx.Connect(conf.Rx.Ip)
-	// tx.Connect(conf.Tx.Ip)
-	// rx.ClientMainRun(conf.Rx.TargetIp, conf.Tcp.Port)
-	// tx.SendDataRun(conf.Tx.IfName, conf.Tx.DstMacAddr, uint16(conf.Tx.NumOfPacketToSend), uint16(conf.Tx.PktIntervalUs), uint16(conf.Tx.PktLen))
+	log.Print("запуск передачи пакетов")
+	rx := *routers[0]
+	tx := *routers[1]
+	rx.Connect(config.RxIp)
+	tx.Connect(config.TxIp)
+	rx.ClientMainRun(config.TargetIp, config.TcpPort)
+	tx.SendDataRun(
+		config.IfName,
+		config.DstMacAddr,
+		config.NumOfPacketToSend,
+		config.PktIntervalUs,
+		config.PktLen,
+	)
 
 	log.Print("запуск сервера websocket...")
 	websocketServer.Run()

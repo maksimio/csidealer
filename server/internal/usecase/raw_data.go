@@ -88,13 +88,12 @@ func (uc *CsiUseCase) push(d []byte) {
 	uc.repo.Push(pack)
 
 	// Сглаживание
-	N := 10 // Порядок сглаживания
 	abs := uc.proc.CsiMap(pack.Data, processor.AbsHandler)
 
-	if uc.csiPackageNumber > uint64(N) {
-		prevs := uc.repo.GetLastN(N)
+	if uc.csiPackageNumber > uint64(uc.smoothOrder) {
+		prevs := uc.repo.GetLastN(uc.smoothOrder)
 
-		for i := 0; i < N; i++ {
+		for i := 0; i < uc.smoothOrder; i++ {
 			prev_abs := uc.proc.CsiMap(prevs[i].Data, processor.AbsHandler)
 			for j := 0; j < 4; j++ {
 				for k := 0; k < 56; k++ {
@@ -105,11 +104,10 @@ func (uc *CsiUseCase) push(d []byte) {
 
 		for j := 0; j < 4; j++ {
 			for k := 0; k < 56; k++ {
-				abs[j][k] /= float64(N)
+				abs[j][k] /= float64(uc.smoothOrder)
 			}
 		}
 	}
-
 	// Конец сглаживания
 
 	apiPack := entity.ApiPackageAbsPhase{
