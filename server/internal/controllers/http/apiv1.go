@@ -1,17 +1,17 @@
 package http
 
 import (
-	"csidealer/internal/usecase"
+	"csidealer/internal/services"
 
 	"github.com/gin-gonic/gin"
 )
 
 type ApiV1 struct {
 	routGr *gin.RouterGroup
-	csiUc  usecase.CsiUC
+	csiUc  services.CsiUC
 }
 
-func NewApiV1(rg *gin.RouterGroup, uc usecase.CsiUC) *ApiV1 {
+func NewApiV1(rg *gin.RouterGroup, uc services.CsiUC) *ApiV1 {
 	return &ApiV1{
 		routGr: rg,
 		csiUc:  uc,

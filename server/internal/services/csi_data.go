@@ -1,8 +1,8 @@
-package usecase
+package services
 
 import (
 	entity "csidealer/internal/models"
-	"csidealer/internal/usecase/processor"
+	"csidealer/internal/services/processor"
 	"errors"
 )
 

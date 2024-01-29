@@ -1,4 +1,4 @@
-package usecase
+package services
 
 import (
 	entity "csidealer/internal/models"

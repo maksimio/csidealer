@@ -1,7 +1,7 @@
 package http
 
 import (
-	"csidealer/internal/usecase"
+	"csidealer/internal/services"
 	"fmt"
 	"log"
 
@@ -15,7 +15,7 @@ type HttpServer struct {
 	router *gin.Engine
 }
 
-func NewHttpServer(uc usecase.CsiUC, port int, uiPath string) *HttpServer {
+func NewHttpServer(uc services.CsiUC, port int, uiPath string) *HttpServer {
 	router := gin.Default()
 
 	router.Use(static.Serve("/", static.LocalFile(uiPath, true)))

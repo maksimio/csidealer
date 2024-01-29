@@ -2,7 +2,7 @@ package websocket
 
 import (
 	entity "csidealer/internal/models"
-	"csidealer/internal/usecase"
+	"csidealer/internal/services"
 	"fmt"
 	"log"
 	"net/http"
@@ -11,7 +11,7 @@ import (
 )
 
 type WebsocketServer struct {
-	csiUc       usecase.CsiUC
+	csiUc       services.CsiUC
 	port        string
 	upgrader    ws.Upgrader
 	connections []Connection
@@ -23,7 +23,7 @@ func (s *WebsocketServer) send(pack entity.ApiPackageAbsPhase) {
 	}
 }
 
-func NewWebsocketServer(uc usecase.CsiUC, port int) *WebsocketServer {
+func NewWebsocketServer(uc services.CsiUC, port int) *WebsocketServer {
 	return &WebsocketServer{
 		csiUc: uc,
 		port:  "localhost:" + fmt.Sprint(port),

@@ -1,10 +1,10 @@
 package console
 
-import "csidealer/internal/usecase"
+import "csidealer/internal/services"
 
 type ConsoleServer struct {
 }
 
-func NewConsoleServer(uc usecase.CsiUC) *ConsoleServer {
+func NewConsoleServer(uc services.CsiUC) *ConsoleServer {
 	return &ConsoleServer{}
 }

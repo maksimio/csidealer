@@ -1,7 +1,7 @@
 package tcp
 
 import (
-	"csidealer/internal/usecase"
+	"csidealer/internal/services"
 	"fmt"
 	"log"
 	"net"
@@ -10,11 +10,11 @@ import (
 const _buf_len = 2048
 
 type TcpServer struct {
-	csiUc usecase.CsiUC
+	csiUc services.CsiUC
 	port  string
 }
 
-func NewTcpServer(uc usecase.CsiUC, port int) *TcpServer {
+func NewTcpServer(uc services.CsiUC, port int) *TcpServer {
 	return &TcpServer{
 		csiUc: uc,
 		port:  ":" + fmt.Sprint(port),

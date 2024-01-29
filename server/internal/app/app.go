@@ -5,14 +5,14 @@ import (
 	"csidealer/internal/controllers/http"
 	"csidealer/internal/controllers/tcp"
 	"csidealer/internal/controllers/websocket"
-	"csidealer/internal/usecase"
-	"csidealer/internal/usecase/buffer"
-	"csidealer/internal/usecase/decoder"
-	"csidealer/internal/usecase/filter"
-	"csidealer/internal/usecase/fs_logger"
-	"csidealer/internal/usecase/processor"
-	"csidealer/internal/usecase/repo"
-	"csidealer/internal/usecase/ssh"
+	"csidealer/internal/services"
+	"csidealer/internal/services/buffer"
+	"csidealer/internal/services/decoder"
+	"csidealer/internal/services/filter"
+	"csidealer/internal/services/fs_logger"
+	"csidealer/internal/services/processor"
+	"csidealer/internal/services/repo"
+	"csidealer/internal/services/ssh"
 	"log"
 )
 
@@ -24,13 +24,13 @@ func Run() {
 		ssh.NewAtherosClient("root"),
 	}
 
-	routers := make([]*usecase.IAtherosClient, len(clients))
+	routers := make([]*services.IAtherosClient, len(clients))
 	for i, v := range clients {
-		iRouter := usecase.IAtherosClient(v)
+		iRouter := services.IAtherosClient(v)
 		routers[i] = &iRouter // TODO: Разобраться, как лучше работать с указателями
 	}
 
-	csiUseCase := usecase.NewCsiUseCase(
+	csiUseCase := services.NewCsiUseCase(
 		repo.NewCsiLocalRepo(config.CsiLocalRepoMaxCount),
 		buffer.NewCsiRawRepo(),
 		fs_logger.NewFileLogger(config.DatFilePath),
