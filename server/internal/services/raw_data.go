@@ -3,54 +3,10 @@ package services
 import (
 	entity "csidealer/internal/models"
 	"csidealer/internal/services/processor"
-	"encoding/binary"
-	"errors"
 	"time"
 
 	"github.com/google/uuid"
 )
-
-func (uc *CsiUseCase) GetTcpRemoteAddr() string {
-	return uc.TcpRemoteAddr
-}
-
-func (uc *CsiUseCase) SetTcpRemoteAddr(addr string) {
-	uc.TcpRemoteAddr = addr
-}
-
-func (uc *CsiUseCase) StartLog(filepath string) error {
-	err := uc.fl.Start(filepath)
-	if err != nil {
-		return err
-	}
-	uc.logPackageCount = 0
-	return nil
-}
-
-func (uc *CsiUseCase) StopLog() error {
-	if !uc.fl.IsOpen() {
-		return errors.New("сейчас запись в файл не происходит. Нечего останавливать")
-	}
-
-	uc.fl.Stop()
-	return nil
-}
-
-func (uc *CsiUseCase) IsLog() bool {
-	return uc.fl.IsOpen()
-}
-
-func (uc *CsiUseCase) GetLogWriteByteCount() uint64 {
-	return uc.fl.GetWriteByteCount()
-}
-
-func (uc *CsiUseCase) GetLogStartTime() int64 {
-	return uc.fl.GetStartTime()
-}
-
-func (uc *CsiUseCase) GetLogPackageCount() uint64 {
-	return uc.logPackageCount
-}
 
 func (uc *CsiUseCase) MoveRawTraffic(data []byte) {
 	uc.rawRepo.Push(data)
@@ -58,7 +14,7 @@ func (uc *CsiUseCase) MoveRawTraffic(data []byte) {
 
 	for _, d := range splittedData {
 		// log.Print(uc.csiPackageNumber)
-		uc.log(d)
+		// uc.log(d)
 		uc.push(d.Data)
 	}
 }
@@ -116,18 +72,6 @@ func (uc *CsiUseCase) push(d []byte) {
 	}
 
 	uc.cbPushPacket(apiPack)
-}
-
-func (uc *CsiUseCase) log(pack entity.RawPackage) {
-	if !uc.fl.IsOpen() {
-		return
-	}
-
-	bufSize16 := make([]byte, 2)
-	binary.BigEndian.PutUint16(bufSize16, pack.Size)
-	uc.fl.Write(bufSize16)
-	uc.fl.Write(pack.Data)
-	uc.logPackageCount += 1
 }
 
 func (uc *CsiUseCase) OnPushPacket(cb func(entity.ApiPackageAbsPhase)) {

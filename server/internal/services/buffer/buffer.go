@@ -12,11 +12,13 @@ type BufferService struct {
 	currentPackageSize int
 	splittedData       []models.RawPackage
 	TcpRemoteAddr      string
-	out                chan<- models.RawPackage
+	outs               []chan<- models.RawPackage
 }
 
-func NewBufferService(out chan<- models.RawPackage) *BufferService {
-	return &BufferService{}
+func NewBufferService(outs []chan<- models.RawPackage) *BufferService {
+	return &BufferService{
+		outs: outs,
+	}
 }
 
 func (c *BufferService) Push(data []byte) {
@@ -24,7 +26,9 @@ func (c *BufferService) Push(data []byte) {
 	c.splitPackageAll()
 
 	for _, d := range c.splittedData {
-		c.out <- d
+		for _, out := range c.outs {
+			out <- d
+		}
 	}
 	c.splittedData = []models.RawPackage{}
 }

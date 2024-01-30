@@ -8,6 +8,7 @@ import (
 	"csidealer/internal/models"
 	"csidealer/internal/services"
 	"csidealer/internal/services/buffer"
+	"csidealer/internal/services/decoder"
 	"csidealer/internal/services/raw_writer"
 	"csidealer/internal/services/ssh"
 	"log"
@@ -44,11 +45,13 @@ func Run() {
 	// 	config.SmoothOrder,
 	// )
 
-	rawData := make(chan models.RawPackage)
+	forRawWriter := make(chan models.RawPackage)
+	forDecoder := make(chan models.RawPackage)
 
-	bufferService := buffer.NewBufferService(rawData)
-	rawWriterService := raw_writer.NewRawWriterService(rawData, config.DatFilePath)
-	go rawWriterService.Log()
+	bufferService := buffer.NewBufferService([]chan<- models.RawPackage{forRawWriter, forDecoder})
+	rawWriterService := raw_writer.NewRawWriterService(forRawWriter, config.DatFilePath)
+	go rawWriterService.Run()
+	decoderService := decoder.NewDecoderService(forDecoder, []chan<- models.Package{})
 
 	tcpServer := tcp.NewTcpServer(bufferService, config.TcpPort)
 

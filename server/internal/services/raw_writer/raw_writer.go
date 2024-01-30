@@ -48,15 +48,25 @@ func (r *RawWriterService) Start(filename string) error {
 	r.openStatus = true
 	r.writeByteCount = 0
 	r.startTime = time.Now().UnixMilli()
+	r.logPackageCount = 0
 
-	log.Print("Начата запись в файл", r.filename)
+	log.Print("начата запись в файл", r.filename)
 	return nil
 }
 
-func (r *RawWriterService) Stop() {
-	defer r.file.Close()
+func (r *RawWriterService) Stop() error {
+	if !r.IsOpen() {
+		return errors.New("сейчас запись в файл не происходит. Нечего останавливать")
+	}
+
+	err := r.file.Close()
+	if err != nil {
+		return err
+	}
+
 	r.openStatus = false
-	log.Print("Остановлена запись в файл", r.filename)
+	log.Print("остановлена запись в файл", r.filename)
+	return nil
 }
 
 func (r *RawWriterService) write(data []byte) error {
@@ -80,7 +90,7 @@ func (r *RawWriterService) GetStartTime() int64 {
 	return r.startTime
 }
 
-func (r *RawWriterService) Log() {
+func (r *RawWriterService) Run() {
 	for {
 		rawPackage := <-r.in
 		if !r.openStatus {

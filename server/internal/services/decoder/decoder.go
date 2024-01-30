@@ -1,15 +1,31 @@
 package decoder
 
-import entity "csidealer/internal/models"
+import "csidealer/internal/models"
 
-type CsiDecoder struct{}
-
-func NewCsiDecoder() *CsiDecoder {
-	return &CsiDecoder{}
+type DecoderService struct {
+	in   <-chan models.RawPackage
+	outs []chan<- models.Package
 }
 
-func (*CsiDecoder) DecodeCsiPackage(data []byte) *entity.Package {
-	pack := &entity.Package{
+func NewDecoderService(in <-chan models.RawPackage, outs []chan<- models.Package) *DecoderService {
+	return &DecoderService{
+		in:   in,
+		outs: outs,
+	}
+}
+
+func (d *DecoderService) Run() {
+	for {
+		rawPackage := <-d.in
+		pack := decodeCsiPackage(rawPackage.Data)
+		for _, out := range d.outs {
+			out <- pack
+		}
+	}
+}
+
+func decodeCsiPackage(data []byte) models.Package {
+	pack := models.Package{
 		Info: decodePackageInfo(data),
 	}
 
