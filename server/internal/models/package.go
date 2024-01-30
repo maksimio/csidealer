@@ -1,4 +1,4 @@
-package entity
+package models
 
 type Package struct {
 	Timestamp int64

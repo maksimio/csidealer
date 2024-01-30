@@ -63,10 +63,6 @@ func (uc *CsiUseCase) MoveRawTraffic(data []byte) {
 	}
 }
 
-func (uc *CsiUseCase) FlushBuffer() {
-	uc.rawRepo.Flush()
-}
-
 func (uc *CsiUseCase) push(d []byte) {
 	pack := uc.decoder.DecodeCsiPackage(d)
 

@@ -1,4 +1,4 @@
-package entity
+package models
 
 type PackageInfo struct {
 	Timestamp     uint64 `json:"ts"`

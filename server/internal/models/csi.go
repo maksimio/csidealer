@@ -1,3 +1,3 @@
-package entity
+package models
 
 type Csi [][]complex128

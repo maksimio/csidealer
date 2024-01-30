@@ -1,4 +1,4 @@
-package entity
+package models
 
 type ApiRouterInfo struct {
 	Id                 string `json:"id"`

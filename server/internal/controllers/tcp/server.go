@@ -1,7 +1,7 @@
 package tcp
 
 import (
-	"csidealer/internal/services"
+	"csidealer/internal/services/buffer"
 	"fmt"
 	"log"
 	"net"
@@ -10,14 +10,14 @@ import (
 const _buf_len = 2048
 
 type TcpServer struct {
-	csiUc services.CsiUC
-	port  string
+	bufferService *buffer.BufferService
+	port          string
 }
 
-func NewTcpServer(uc services.CsiUC, port int) *TcpServer {
+func NewTcpServer(bufferService *buffer.BufferService, port int) *TcpServer {
 	return &TcpServer{
-		csiUc: uc,
-		port:  ":" + fmt.Sprint(port),
+		bufferService: bufferService,
+		port:          ":" + fmt.Sprint(port),
 	}
 }
 
@@ -37,19 +37,19 @@ func (s *TcpServer) Run() {
 }
 
 func (s *TcpServer) listenConnection(conn net.Conn) {
-	s.csiUc.FlushBuffer()
+	s.bufferService.Flush()
 	log.Printf("новое подключение от %s", conn.RemoteAddr())
-	s.csiUc.SetTcpRemoteAddr(conn.RemoteAddr().String())
+	s.bufferService.TcpRemoteAddr = conn.RemoteAddr().String()
 	data := make([]byte, _buf_len)
 
 	for {
 		readCount, err := conn.Read(data)
 		if err != nil {
 			log.Print("ошибка чтения из сокета:", err)
-			s.csiUc.SetTcpRemoteAddr("")
+			s.bufferService.TcpRemoteAddr = ""
 			break
 		}
 
-		s.csiUc.MoveRawTraffic(data[:readCount])
+		s.bufferService.Push(data[:readCount])
 	}
 }

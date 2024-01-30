@@ -1,4 +1,4 @@
-package entity
+package models
 
 const (
 	CSI_ABS uint8 = iota

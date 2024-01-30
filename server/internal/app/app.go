@@ -5,6 +5,7 @@ import (
 	"csidealer/internal/controllers/http"
 	"csidealer/internal/controllers/tcp"
 	"csidealer/internal/controllers/websocket"
+	"csidealer/internal/models"
 	"csidealer/internal/services"
 	"csidealer/internal/services/buffer"
 	"csidealer/internal/services/decoder"
@@ -30,24 +31,29 @@ func Run() {
 		routers[i] = &iRouter // TODO: Разобраться, как лучше работать с указателями
 	}
 
-	csiUseCase := services.NewCsiUseCase(
-		repo.NewCsiLocalRepo(config.CsiLocalRepoMaxCount),
-		buffer.NewCsiRawRepo(),
-		fs_logger.NewFileLogger(config.DatFilePath),
-		processor.NewProcessor(config.ProcessorRounder),
-		filter.NewFilter(
-			config.Filter.PayloadLen.Min,
-			config.Filter.PayloadLen.Max,
-			config.Filter.Nr,
-			config.Filter.Nc,
-			config.Filter.NTones,
-		),
-		decoder.NewCsiDecoder(),
-		routers,
-		config.SmoothOrder,
-	)
+	// csiUseCase := services.NewCsiUseCase(
+	// 	repo.NewCsiLocalRepo(config.CsiLocalRepoMaxCount),
+	// 	buffer.NewBufferService(),
+	// 	fs_logger.NewFileLogger(config.DatFilePath),
+	// 	processor.NewProcessor(config.ProcessorRounder),
+	// 	filter.NewFilter(
+	// 		config.Filter.PayloadLen.Min,
+	// 		config.Filter.PayloadLen.Max,
+	// 		config.Filter.Nr,
+	// 		config.Filter.Nc,
+	// 		config.Filter.NTones,
+	// 	),
+	// 	decoder.NewCsiDecoder(),
+	// 	routers,
+	// 	config.SmoothOrder,
+	// )
 
-	tcpServer := tcp.NewTcpServer(csiUseCase, config.TcpPort)
+	rawData := make(chan<- models.RawPackage)
+
+	bufferService := buffer.NewBufferService(rawData)
+
+	tcpServer := tcp.NewTcpServer(bufferService, config.TcpPort)
+
 	websocketServer := websocket.NewWebsocketServer(csiUseCase, config.WebsocketPort)
 	httpServer := http.NewHttpServer(csiUseCase, config.HttpPort, config.HttpStaticPath)
 

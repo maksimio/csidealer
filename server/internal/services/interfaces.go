@@ -4,8 +4,6 @@ import entity "csidealer/internal/models"
 
 type (
 	CsiUC interface {
-		MoveRawTraffic(data []byte)
-		FlushBuffer()
 		GetTcpRemoteAddr() string
 		SetTcpRemoteAddr(addr string)
 
@@ -40,12 +38,6 @@ type (
 		GetLastN(n int) []*entity.Package
 		GetFullCount() uint64
 		GetMaxCount() uint64
-	}
-
-	IBuffer interface {
-		Push(data []byte)
-		GetAllSplitted() []entity.RawPackage
-		Flush()
 	}
 
 	IFSLogger interface {

@@ -13,7 +13,6 @@ type CsiUseCase struct {
 	smoothOrder int
 
 	csiPackageNumber uint64
-	TcpRemoteAddr    string
 	isFilterActive   bool
 	logPackageCount  uint64
 
