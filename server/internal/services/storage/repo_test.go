@@ -1,4 +1,4 @@
-package repo
+package storage
 
 import (
 	entity "csidealer/internal/models"
@@ -6,7 +6,7 @@ import (
 )
 
 func TestRepoMaxLength(t *testing.T) {
-	repo := NewCsiLocalRepo(3)
+	repo := NewStorageService(3)
 	pack := &entity.Package{}
 	repo.Push(pack)
 	repo.Push(pack)
@@ -18,7 +18,7 @@ func TestRepoMaxLength(t *testing.T) {
 }
 
 func TestRepoGet(t *testing.T) {
-	repo := NewCsiLocalRepo(3)
+	repo := NewStorageService(3)
 	pack := &entity.Package{}
 	repo.Push(pack)
 	repo.Push(pack)

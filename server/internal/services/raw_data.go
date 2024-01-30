@@ -3,9 +3,6 @@ package services
 import (
 	entity "csidealer/internal/models"
 	"csidealer/internal/services/processor"
-	"time"
-
-	"github.com/google/uuid"
 )
 
 func (uc *CsiUseCase) MoveRawTraffic(data []byte) {
@@ -37,7 +34,7 @@ func (uc *CsiUseCase) push(d []byte) {
 
 	// log.Print("PUSH ", uc.csiPackageNumber)
 
-	uc.repo.Push(pack)
+	// uc.repo.Push(pack)
 
 	// Сглаживание
 	abs := uc.proc.CsiMap(pack.Data, processor.AbsHandler)

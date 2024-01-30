@@ -9,8 +9,10 @@ import (
 	"csidealer/internal/services"
 	"csidealer/internal/services/buffer"
 	"csidealer/internal/services/decoder"
+	"csidealer/internal/services/filter"
 	"csidealer/internal/services/raw_writer"
 	"csidealer/internal/services/ssh"
+	"csidealer/internal/services/storage"
 	"log"
 )
 
@@ -34,25 +36,39 @@ func Run() {
 	// 	fs_logger.NewFileLogger(config.DatFilePath),
 	// 	processor.NewProcessor(config.ProcessorRounder),
 	// 	filter.NewFilter(
-	// 		config.Filter.PayloadLen.Min,
-	// 		config.Filter.PayloadLen.Max,
-	// 		config.Filter.Nr,
-	// 		config.Filter.Nc,
-	// 		config.Filter.NTones,
+	// config.Filter.PayloadLen.Min,
+	// config.Filter.PayloadLen.Max,
+	// config.Filter.Nr,
+	// config.Filter.Nc,
+	// config.Filter.NTones,
 	// 	),
 	// 	decoder.NewCsiDecoder(),
 	// 	routers,
 	// 	config.SmoothOrder,
 	// )
 
-	forRawWriter := make(chan models.RawPackage)
-	forDecoder := make(chan models.RawPackage)
+	toRawWriter := make(chan models.RawPackage)
+	toDecoder := make(chan models.RawPackage)
+	toFilter := make(chan models.Package)
+	toStorage := make(chan models.Package)
 
-	bufferService := buffer.NewBufferService([]chan<- models.RawPackage{forRawWriter, forDecoder})
-	rawWriterService := raw_writer.NewRawWriterService(forRawWriter, config.DatFilePath)
+	bufferService := buffer.NewBufferService([]chan<- models.RawPackage{toRawWriter, toDecoder})
+	rawWriterService := raw_writer.NewRawWriterService(toRawWriter, config.DatFilePath)
 	go rawWriterService.Run()
-	decoderService := decoder.NewDecoderService(forDecoder, []chan<- models.Package{})
+	decoderService := decoder.NewDecoderService(toDecoder, []chan<- models.Package{toFilter})
 	go decoderService.Run()
+	filterService := filter.NewFilterService(
+		toFilter,
+		[]chan<- models.Package{toStorage},
+		config.Filter.PayloadLen.Min,
+		config.Filter.PayloadLen.Max,
+		config.Filter.Nr,
+		config.Filter.Nc,
+		config.Filter.NTones,
+	)
+	go filterService.Run()
+	storageService := storage.NewStorageService(toStorage, config.CsiLocalRepoMaxCount)
+	go storageService.Run()
 
 	tcpServer := tcp.NewTcpServer(bufferService, config.TcpPort)
 
