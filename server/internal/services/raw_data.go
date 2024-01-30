@@ -58,8 +58,8 @@ func (uc *CsiUseCase) MoveRawTraffic(data []byte) {
 
 	for _, d := range splittedData {
 		// log.Print(uc.csiPackageNumber)
-		uc.push(d.Data)
 		uc.log(d)
+		uc.push(d.Data)
 	}
 }
 

@@ -14,7 +14,6 @@ type CsiUseCase struct {
 
 	csiPackageNumber uint64
 	isFilterActive   bool
-	logPackageCount  uint64
 
 	cbPushPacket func(entity.ApiPackageAbsPhase)
 }
