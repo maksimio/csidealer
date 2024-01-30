@@ -52,6 +52,7 @@ func Run() {
 	rawWriterService := raw_writer.NewRawWriterService(forRawWriter, config.DatFilePath)
 	go rawWriterService.Run()
 	decoderService := decoder.NewDecoderService(forDecoder, []chan<- models.Package{})
+	go decoderService.Run()
 
 	tcpServer := tcp.NewTcpServer(bufferService, config.TcpPort)
 

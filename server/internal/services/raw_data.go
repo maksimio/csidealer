@@ -20,20 +20,20 @@ func (uc *CsiUseCase) MoveRawTraffic(data []byte) {
 }
 
 func (uc *CsiUseCase) push(d []byte) {
-	pack := uc.decoder.DecodeCsiPackage(d)
+	// pack := uc.decoder.DecodeCsiPackage(d)
 
-	if pack.Info.CsiLength == 0 {
-		return
-	}
+	// if pack.Info.CsiLength == 0 {
+	// 	return
+	// }
 
-	if uc.isFilterActive && !uc.filter.Check(pack.Info) {
-		return
-	}
+	// if uc.isFilterActive && !uc.filter.Check(pack.Info) {
+	// 	return
+	// }
 
-	pack.Uuid = uuid.New().String()
-	pack.Timestamp = time.Now().UnixMilli()
-	pack.Number = uc.csiPackageNumber
-	uc.csiPackageNumber += 1
+	// pack.Uuid = uuid.New().String()
+	// pack.Timestamp = time.Now().UnixMilli()
+	// pack.Number = uc.csiPackageNumber
+	// uc.csiPackageNumber += 1
 
 	// log.Print("PUSH ", uc.csiPackageNumber)
 
