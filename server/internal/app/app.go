@@ -5,43 +5,17 @@ import (
 	"csidealer/internal/controllers/http"
 	"csidealer/internal/controllers/tcp"
 	"csidealer/internal/controllers/websocket"
-
-	// "csidealer/internal/controllers/websocket"
 	"csidealer/internal/models"
-	// "csidealer/internal/services"
 	"csidealer/internal/services/buffer"
 	"csidealer/internal/services/decoder"
 	"csidealer/internal/services/filter"
 	"csidealer/internal/services/processor"
 	"csidealer/internal/services/raw_writer"
 	"csidealer/internal/services/storage"
-	// "log"
 )
 
 func Run() {
 	config, _ := config.ReadConfig()
-
-	// routers := []*ssh_client.SshClient{
-	// 	ssh_client.NewSshClient("root"),
-	// 	ssh_client.NewSshClient("root"),
-	// }
-
-	// csiUseCase := services.NewCsiUseCase(
-	// 	repo.NewCsiLocalRepo(config.CsiLocalRepoMaxCount),
-	// 	buffer.NewBufferService(),
-	// 	fs_logger.NewFileLogger(config.DatFilePath),
-	// 	processor.NewProcessor(config.ProcessorRounder),
-	// 	filter.NewFilter(
-	// config.Filter.PayloadLen.Min,
-	// config.Filter.PayloadLen.Max,
-	// config.Filter.Nr,
-	// config.Filter.Nc,
-	// config.Filter.NTones,
-	// 	),
-	// 	decoder.NewCsiDecoder(),
-	// 	routers,
-	// 	config.SmoothOrder,
-	// )
 
 	toRawWriter := make(chan models.RawPackage)
 	toDecoder := make(chan models.RawPackage)
@@ -90,8 +64,6 @@ func Run() {
 	// 	config.PktIntervalUs,
 	// 	config.PktLen,
 	// )
-
-	// log.Print("запуск сервера websocket...")
 	// -------------------------------------
 
 	websocketController.Run()
