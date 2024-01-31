@@ -12,8 +12,8 @@ import (
 const configPath = "/home/m/dev/csidealer/server/config.yml"
 const defaultConfigPath = "/home/m/dev/csidealer/server/config/defaultConfig.yml"
 
-func ReadConfig() (*Config, error) {
-	config := &Config{}
+func ReadConfig() (Config, error) {
+	config := Config{}
 
 	if _, err := os.Stat(configPath); errors.Is(err, os.ErrNotExist) {
 		log.Print("конфигурационный файл не найден")

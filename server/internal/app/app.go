@@ -1,7 +1,7 @@
 package app
 
 import (
-	"csidealer/config"
+	"csidealer/config" // TODO: в internal не должно быть внешних зависимостей
 	"csidealer/internal/controllers/http"
 	"csidealer/internal/controllers/tcp"
 	"csidealer/internal/controllers/websocket"
@@ -14,8 +14,7 @@ import (
 	"csidealer/internal/services/storage"
 )
 
-func Run() {
-	config, _ := config.ReadConfig()
+func Run(conf config.Config) {
 
 	toRawWriter := make(chan models.RawPackage)
 	toDecoder := make(chan models.RawPackage)
@@ -29,18 +28,18 @@ func Run() {
 	filterService := filter.NewFilterService(
 		toFilter,
 		[]chan<- models.Package{toStorage, toWebsocket},
-		config.Filter.PayloadLen.Min,
-		config.Filter.PayloadLen.Max,
-		config.Filter.Nr,
-		config.Filter.Nc,
-		config.Filter.NTones,
+		conf.Filter.PayloadLen.Min,
+		conf.Filter.PayloadLen.Max,
+		conf.Filter.Nr,
+		conf.Filter.Nc,
+		conf.Filter.NTones,
 	)
-	storageService := storage.NewStorageService(toStorage, config.CsiLocalRepoMaxCount)
-	processorService := processor.NewProcessorService(config.ProcessorRounder)
+	storageService := storage.NewStorageService(toStorage, conf.CsiLocalRepoMaxCount)
+	processorService := processor.NewProcessorService(conf.ProcessorRounder)
 
-	tcpController := tcp.NewTcpController(bufferService, config.TcpPort)
-	httpController := http.NewHttpController(bufferService, rawWriterService, config.HttpPort, config.HttpStaticPath)
-	websocketController := websocket.NewWebsocketController(toWebsocket, processorService, config.WebsocketPort)
+	tcpController := tcp.NewTcpController(bufferService, conf.TcpPort)
+	httpController := http.NewHttpController(bufferService, rawWriterService, conf.HttpPort, conf.HttpStaticPath)
+	websocketController := websocket.NewWebsocketController(toWebsocket, processorService, conf.WebsocketPort)
 
 	go rawWriterService.Run()
 	go decoderService.Run()
