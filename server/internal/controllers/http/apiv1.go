@@ -1,20 +1,26 @@
 package http
 
 import (
-	"csidealer/internal/services"
+	"csidealer/internal/services/buffer"
+	"csidealer/internal/services/raw_writer"
 
 	"github.com/gin-gonic/gin"
 )
 
 type ApiV1 struct {
-	routGr *gin.RouterGroup
-	csiUc  services.CsiUC
+	routGr           *gin.RouterGroup
+	bufferService    *buffer.BufferService
+	rawWriterService *raw_writer.RawWriterService
 }
 
-func NewApiV1(rg *gin.RouterGroup, uc services.CsiUC) *ApiV1 {
+func NewApiV1(
+	bufferService *buffer.BufferService,
+	rawWriterService *raw_writer.RawWriterService,
+	rg *gin.RouterGroup) *ApiV1 {
 	return &ApiV1{
-		routGr: rg,
-		csiUc:  uc,
+		routGr:           rg,
+		bufferService:    bufferService,
+		rawWriterService: rawWriterService,
 	}
 }
 
@@ -32,27 +38,27 @@ func (a *ApiV1) Register() {
 	log.GET("/state", a.stateLog)
 
 	filter := a.routGr.Group("/filter")
-	filter.PATCH("/start")                   // TODO
-	filter.PATCH("/stop")                    // TODO
-	filter.GET("/state")                     // TODO
-	filter.PUT("/state", a.setFilterState)   // UPDATE
-	filter.PUT("/limits", a.setFilterLimits) // UPDATE
+	filter.PATCH("/start") // TODO
+	filter.PATCH("/stop")  // TODO
+	filter.GET("/state")   // TODO
+	// filter.PUT("/state", a.setFilterState)   // UPDATE
+	// filter.PUT("/limits", a.setFilterLimits) // UPDATE
 
 	devices := a.routGr.Group("/devices")
 	devices.GET("/tcp_client_ip", a.tcpClientIp)
-	devices.GET("/list_info", a.deviceListInfo) // TODO
-	devices.POST("/:id")                        // TODO
-	devices.DELETE("/:id")                      // TODO
-	devices.PATCH("/connect/:id")               // TODO
-	devices.PATCH("/disconnect/:id")            // TODO
-	devices.PATCH("/send/start/:id")            // TODO
-	devices.PATCH("/send/stop/:id")             // TODO
-	devices.PATCH("/client/start/:id")          // TODO
-	devices.PATCH("/client/stop/:id")           // TODO
+	// devices.GET("/list_info", a.deviceListInfo) // TODO
+	devices.POST("/:id")               // TODO
+	devices.DELETE("/:id")             // TODO
+	devices.PATCH("/connect/:id")      // TODO
+	devices.PATCH("/disconnect/:id")   // TODO
+	devices.PATCH("/send/start/:id")   // TODO
+	devices.PATCH("/send/stop/:id")    // TODO
+	devices.PATCH("/client/start/:id") // TODO
+	devices.PATCH("/client/stop/:id")  // TODO
 }
 
 func (a *ApiV1) tcpClientIp(c *gin.Context) {
-	c.JSON(200, gin.H{"success": true, "result": a.csiUc.GetTcpRemoteAddr()})
+	c.JSON(200, gin.H{"success": true, "result": a.bufferService.TcpRemoteAddr})
 }
 
 // func (a *ApiV1) status(c *gin.Context) {

@@ -1,87 +1,87 @@
 package services
 
-import (
-	entity "csidealer/internal/models"
-	"errors"
-)
+// import (
+// 	entity "csidealer/internal/models"
+// 	"errors"
+// )
 
-func (uc *CsiUseCase) getRouter(id string) (*IAtherosClient, error) {
-	for _, value := range uc.routers {
-		if (*value).GetId() == id {
-			return value, nil
-		}
-	}
+// func (uc *CsiUseCase) getRouter(id string) (*IAtherosClient, error) {
+// 	for _, value := range uc.routers {
+// 		if (*value).GetId() == id {
+// 			return value, nil
+// 		}
+// 	}
 
-	return nil, errors.New("не существует устройства с id " + id)
-}
+// 	return nil, errors.New("не существует устройства с id " + id)
+// }
 
-func (uc *CsiUseCase) RoutersInfo() []entity.ApiRouterInfo {
-	info := []entity.ApiRouterInfo{}
-	for _, value := range uc.routers {
-		router := (*value)
-		info = append(info, entity.ApiRouterInfo{
-			Id:                 router.GetId(),
-			Addr:               router.GetAddr(),
-			IsConnected:        router.GetIsConnected(),
-			IsClientMainActive: router.GetIsClientMainActive(),
-			IsSendDataActive:   router.GetIsSendDataActive(),
-			IsAvailable:        router.GetIsAvailable(),
-		})
-	}
+// func (uc *CsiUseCase) RoutersInfo() []entity.ApiRouterInfo {
+// 	info := []entity.ApiRouterInfo{}
+// 	for _, value := range uc.routers {
+// 		router := (*value)
+// 		info = append(info, entity.ApiRouterInfo{
+// 			Id:                 router.GetId(),
+// 			Addr:               router.GetAddr(),
+// 			IsConnected:        router.GetIsConnected(),
+// 			IsClientMainActive: router.GetIsClientMainActive(),
+// 			IsSendDataActive:   router.GetIsSendDataActive(),
+// 			IsAvailable:        router.GetIsAvailable(),
+// 		})
+// 	}
 
-	return info
-}
+// 	return info
+// }
 
-func (uc *CsiUseCase) RouterConnect(id, addr string) error {
-	router, err := uc.getRouter(id)
-	if err != nil {
-		return err
-	}
+// func (uc *CsiUseCase) RouterConnect(id, addr string) error {
+// 	router, err := uc.getRouter(id)
+// 	if err != nil {
+// 		return err
+// 	}
 
-	return (*router).Connect(addr)
-}
+// 	return (*router).Connect(addr)
+// }
 
-func (uc *CsiUseCase) RouterDisconnect(id string) error {
-	router, err := uc.getRouter(id)
-	if err != nil {
-		return err
-	}
+// func (uc *CsiUseCase) RouterDisconnect(id string) error {
+// 	router, err := uc.getRouter(id)
+// 	if err != nil {
+// 		return err
+// 	}
 
-	return (*router).Disconnect()
-}
+// 	return (*router).Disconnect()
+// }
 
-func (uc *CsiUseCase) RouterSendDataRun(id, dstMacAddr string, numOfPacketToSend, pktIntervalUs, pktLen uint16) {
-	router, err := uc.getRouter(id)
-	if err != nil {
-		return
-	}
+// func (uc *CsiUseCase) RouterSendDataRun(id, dstMacAddr string, numOfPacketToSend, pktIntervalUs, pktLen uint16) {
+// 	router, err := uc.getRouter(id)
+// 	if err != nil {
+// 		return
+// 	}
 
-	go (*router).SendDataRun("wlan0", dstMacAddr, numOfPacketToSend, pktIntervalUs, pktLen)
-}
+// 	go (*router).SendDataRun("wlan0", dstMacAddr, numOfPacketToSend, pktIntervalUs, pktLen)
+// }
 
-func (uc *CsiUseCase) RouterSendDataStop(id string) error {
-	router, err := uc.getRouter(id)
-	if err != nil {
-		return err
-	}
+// func (uc *CsiUseCase) RouterSendDataStop(id string) error {
+// 	router, err := uc.getRouter(id)
+// 	if err != nil {
+// 		return err
+// 	}
 
-	return (*router).SendDataStop()
-}
+// 	return (*router).SendDataStop()
+// }
 
-func (uc *CsiUseCase) RouterClientMainRun(id, ip string, port int) {
-	router, err := uc.getRouter(id)
-	if err != nil {
-		return
-	}
+// func (uc *CsiUseCase) RouterClientMainRun(id, ip string, port int) {
+// 	router, err := uc.getRouter(id)
+// 	if err != nil {
+// 		return
+// 	}
 
-	go (*router).ClientMainRun(ip, port)
-}
+// 	go (*router).ClientMainRun(ip, port)
+// }
 
-func (uc *CsiUseCase) RouterClientMainStop(id string) error {
-	router, err := uc.getRouter(id)
-	if err != nil {
-		return err
-	}
+// func (uc *CsiUseCase) RouterClientMainStop(id string) error {
+// 	router, err := uc.getRouter(id)
+// 	if err != nil {
+// 		return err
+// 	}
 
-	return (*router).ClientMainStop()
-}
+// 	return (*router).ClientMainStop()
+// }

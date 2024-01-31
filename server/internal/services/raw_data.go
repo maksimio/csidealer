@@ -1,76 +1,62 @@
 package services
 
-import (
-	entity "csidealer/internal/models"
-	"csidealer/internal/services/processor"
-)
+// func (uc *CsiUseCase) push(d []byte) {
+// pack := uc.decoder.DecodeCsiPackage(d)
 
-func (uc *CsiUseCase) MoveRawTraffic(data []byte) {
-	uc.rawRepo.Push(data)
-	splittedData := uc.rawRepo.GetAllSplitted()
+// if pack.Info.CsiLength == 0 {
+// 	return
+// }
 
-	for _, d := range splittedData {
-		// log.Print(uc.csiPackageNumber)
-		// uc.log(d)
-		uc.push(d.Data)
-	}
-}
+// if uc.isFilterActive && !uc.filter.Check(pack.Info) {
+// 	return
+// }
 
-func (uc *CsiUseCase) push(d []byte) {
-	// pack := uc.decoder.DecodeCsiPackage(d)
+// pack.Uuid = uuid.New().String()
+// pack.Timestamp = time.Now().UnixMilli()
+// pack.Number = uc.csiPackageNumber
+// uc.csiPackageNumber += 1
 
-	// if pack.Info.CsiLength == 0 {
-	// 	return
-	// }
+// log.Print("PUSH ", uc.csiPackageNumber)
 
-	// if uc.isFilterActive && !uc.filter.Check(pack.Info) {
-	// 	return
-	// }
+// uc.repo.Push(pack)
 
-	// pack.Uuid = uuid.New().String()
-	// pack.Timestamp = time.Now().UnixMilli()
-	// pack.Number = uc.csiPackageNumber
-	// uc.csiPackageNumber += 1
+// Сглаживание
+// Нужно эту обработку вынести в WebSocketController
+// там будет вытягиваться отдельный сервис обработки
+// abs := uc.proc.CsiMap(pack.Data, processor.AbsHandler)
 
-	// log.Print("PUSH ", uc.csiPackageNumber)
+// if uc.csiPackageNumber > uint64(uc.smoothOrder) {
+// 	prevs := uc.repo.GetLastN(uc.smoothOrder)
 
-	// uc.repo.Push(pack)
+// 	for i := 0; i < uc.smoothOrder; i++ {
+// 		prev_abs := uc.proc.CsiMap(prevs[i].Data, processor.AbsHandler)
+// 		for j := 0; j < 4; j++ {
+// 			for k := 0; k < 56; k++ {
+// 				abs[j][k] += prev_abs[j][k]
+// 			}
+// 		}
+// 	}
 
-	// Сглаживание
-	abs := uc.proc.CsiMap(pack.Data, processor.AbsHandler)
+// 	for j := 0; j < 4; j++ {
+// 		for k := 0; k < 56; k++ {
+// 			abs[j][k] /= float64(uc.smoothOrder)
+// 		}
+// 	}
+// }
+// Конец сглаживания
 
-	if uc.csiPackageNumber > uint64(uc.smoothOrder) {
-		prevs := uc.repo.GetLastN(uc.smoothOrder)
+// apiPack := entity.ApiPackageAbsPhase{
+// 	Timestamp: pack.Timestamp,
+// 	Id:        pack.Uuid,
+// 	Info:      pack.Info,
+// 	Number:    pack.Number,
+// 	Abs:       abs,
+// 	Phase:     uc.proc.CsiMap(pack.Data, processor.PhaseHandler),
+// }
 
-		for i := 0; i < uc.smoothOrder; i++ {
-			prev_abs := uc.proc.CsiMap(prevs[i].Data, processor.AbsHandler)
-			for j := 0; j < 4; j++ {
-				for k := 0; k < 56; k++ {
-					abs[j][k] += prev_abs[j][k]
-				}
-			}
-		}
+// uc.cbPushPacket(apiPack)
+// }
 
-		for j := 0; j < 4; j++ {
-			for k := 0; k < 56; k++ {
-				abs[j][k] /= float64(uc.smoothOrder)
-			}
-		}
-	}
-	// Конец сглаживания
-
-	apiPack := entity.ApiPackageAbsPhase{
-		Timestamp: pack.Timestamp,
-		Id:        pack.Uuid,
-		Info:      pack.Info,
-		Number:    pack.Number,
-		Abs:       abs,
-		Phase:     uc.proc.CsiMap(pack.Data, processor.PhaseHandler),
-	}
-
-	uc.cbPushPacket(apiPack)
-}
-
-func (uc *CsiUseCase) OnPushPacket(cb func(entity.ApiPackageAbsPhase)) {
-	uc.cbPushPacket = cb
-}
+// func (uc *CsiUseCase) OnPushPacket(cb func(entity.ApiPackageAbsPhase)) {
+// 	uc.cbPushPacket = cb
+// }

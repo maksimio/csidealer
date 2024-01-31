@@ -10,14 +10,15 @@ import (
 )
 
 type RawWriterService struct {
-	filename        string
-	file            *os.File
-	openStatus      bool
-	path            string
-	writeByteCount  uint64
-	startTime       int64
-	logPackageCount uint64
-	in              <-chan models.RawPackage
+	WriteByteCount    uint64
+	WritePackageCount uint64
+	IsOpen            bool
+	StartTime         int64
+
+	filename string
+	file     *os.File
+	path     string
+	in       <-chan models.RawPackage
 }
 
 func NewRawWriterService(in <-chan models.RawPackage, path string) *RawWriterService {
@@ -28,7 +29,7 @@ func NewRawWriterService(in <-chan models.RawPackage, path string) *RawWriterSer
 }
 
 func (r *RawWriterService) Start(filename string) error {
-	if r.openStatus {
+	if r.IsOpen {
 		return errors.New("предыдущий файл не закрыт")
 	}
 
@@ -45,17 +46,17 @@ func (r *RawWriterService) Start(filename string) error {
 	}
 
 	r.file = file
-	r.openStatus = true
-	r.writeByteCount = 0
-	r.startTime = time.Now().UnixMilli()
-	r.logPackageCount = 0
+	r.IsOpen = true
+	r.WriteByteCount = 0
+	r.StartTime = time.Now().UnixMilli()
+	r.WritePackageCount = 0
 
 	log.Print("начата запись в файл", r.filename)
 	return nil
 }
 
 func (r *RawWriterService) Stop() error {
-	if !r.IsOpen() {
+	if !r.IsOpen {
 		return errors.New("сейчас запись в файл не происходит. Нечего останавливать")
 	}
 
@@ -64,7 +65,7 @@ func (r *RawWriterService) Stop() error {
 		return err
 	}
 
-	r.openStatus = false
+	r.IsOpen = false
 	log.Print("остановлена запись в файл", r.filename)
 	return nil
 }
@@ -74,26 +75,14 @@ func (r *RawWriterService) write(data []byte) error {
 	if _, err := r.file.Write(data); err != nil {
 		return err
 	}
-	r.writeByteCount += uint64(len(data))
+	r.WriteByteCount += uint64(len(data))
 	return nil
-}
-
-func (r *RawWriterService) IsOpen() bool {
-	return r.openStatus
-}
-
-func (r *RawWriterService) GetWriteByteCount() uint64 {
-	return r.writeByteCount
-}
-
-func (r *RawWriterService) GetStartTime() int64 {
-	return r.startTime
 }
 
 func (r *RawWriterService) Run() {
 	for {
 		rawPackage := <-r.in
-		if !r.openStatus {
+		if !r.IsOpen {
 			continue
 		}
 
@@ -101,6 +90,6 @@ func (r *RawWriterService) Run() {
 		binary.BigEndian.PutUint16(bufSize16, rawPackage.Size)
 		r.write(bufSize16)
 		r.write(rawPackage.Data)
-		r.logPackageCount += 1
+		r.WritePackageCount += 1
 	}
 }

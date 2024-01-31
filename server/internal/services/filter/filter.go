@@ -10,6 +10,7 @@ type FilterService struct {
 	nTones        uint8
 	in            <-chan models.Package
 	outs          []chan<- models.Package
+	isActive      bool
 }
 
 func NewFilterService(in <-chan models.Package, outs []chan<- models.Package, payloadLenMin, payloadLenMax uint16, nr, nc, nTones uint8) *FilterService {

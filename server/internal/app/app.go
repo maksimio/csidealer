@@ -4,31 +4,25 @@ import (
 	"csidealer/config"
 	"csidealer/internal/controllers/http"
 	"csidealer/internal/controllers/tcp"
-	"csidealer/internal/controllers/websocket"
+
+	// "csidealer/internal/controllers/websocket"
 	"csidealer/internal/models"
-	"csidealer/internal/services"
+	// "csidealer/internal/services"
 	"csidealer/internal/services/buffer"
 	"csidealer/internal/services/decoder"
 	"csidealer/internal/services/filter"
 	"csidealer/internal/services/raw_writer"
-	"csidealer/internal/services/ssh"
 	"csidealer/internal/services/storage"
-	"log"
+	// "log"
 )
 
 func Run() {
 	config, _ := config.ReadConfig()
 
-	clients := []*ssh.AtherosClient{
-		ssh.NewAtherosClient("root"),
-		ssh.NewAtherosClient("root"),
-	}
-
-	routers := make([]*services.IAtherosClient, len(clients))
-	for i, v := range clients {
-		iRouter := services.IAtherosClient(v)
-		routers[i] = &iRouter // TODO: Разобраться, как лучше работать с указателями
-	}
+	// routers := []*ssh_client.SshClient{
+	// 	ssh_client.NewSshClient("root"),
+	// 	ssh_client.NewSshClient("root"),
+	// }
 
 	// csiUseCase := services.NewCsiUseCase(
 	// 	repo.NewCsiLocalRepo(config.CsiLocalRepoMaxCount),
@@ -51,6 +45,7 @@ func Run() {
 	toDecoder := make(chan models.RawPackage)
 	toFilter := make(chan models.Package)
 	toStorage := make(chan models.Package)
+	// toWebsocket := make(chan models.Package)
 
 	bufferService := buffer.NewBufferService([]chan<- models.RawPackage{toRawWriter, toDecoder})
 	rawWriterService := raw_writer.NewRawWriterService(toRawWriter, config.DatFilePath)
@@ -71,28 +66,30 @@ func Run() {
 	go storageService.Run()
 
 	tcpServer := tcp.NewTcpServer(bufferService, config.TcpPort)
-
-	websocketServer := websocket.NewWebsocketServer(csiUseCase, config.WebsocketPort)
-	httpServer := http.NewHttpServer(csiUseCase, config.HttpPort, config.HttpStaticPath)
+	httpServer := http.NewHttpController(csiUseCase, config.HttpPort, config.HttpStaticPath)
+	// websocketServer := websocket.NewWebsocketServer(csiUseCase, config.WebsocketPort)
 
 	go tcpServer.Run()
-	go httpServer.Run()
+	httpServer.Run()
 
-	log.Print("запуск передачи пакетов")
-	rx := *routers[0]
-	tx := *routers[1]
-	rx.Connect(config.RxIp)
-	tx.Connect(config.TxIp)
-	rx.ClientMainRun(config.TargetIp, config.TcpPort)
-	tx.SendDataRun(
-		config.IfName,
-		config.DstMacAddr,
-		config.NumOfPacketToSend,
-		config.PktIntervalUs,
-		config.PktLen,
-	)
+	// -------------------------------------
+	// log.Print("запуск передачи пакетов")
+	// rx := *routers[0]
+	// tx := *routers[1]
+	// rx.Connect(config.RxIp)
+	// tx.Connect(config.TxIp)
+	// rx.ClientMainRun(config.TargetIp, config.TcpPort)
+	// tx.SendDataRun(
+	// 	config.IfName,
+	// 	config.DstMacAddr,
+	// 	config.NumOfPacketToSend,
+	// 	config.PktIntervalUs,
+	// 	config.PktLen,
+	// )
 
-	log.Print("запуск сервера websocket...")
-	websocketServer.Run()
+	// log.Print("запуск сервера websocket...")
+	// -------------------------------------
+
+	// websocketServer.Run()
 
 }

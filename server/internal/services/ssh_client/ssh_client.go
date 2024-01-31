@@ -1,4 +1,4 @@
-package ssh
+package ssh_client
 
 import (
 	"errors"
@@ -11,7 +11,7 @@ import (
 	"golang.org/x/crypto/ssh"
 )
 
-type AtherosClient struct {
+type SshClient struct {
 	isClientMainActive bool
 	isSendData         bool
 	isAvailable        bool
@@ -21,18 +21,18 @@ type AtherosClient struct {
 	conn               *ssh.Client
 }
 
-func NewAtherosClient(username string) *AtherosClient {
-	return &AtherosClient{
+func NewSshClient(username string) *SshClient {
+	return &SshClient{
 		username: username,
 		uuid:     uuid.New().String(),
 	}
 }
 
-func (c *AtherosClient) GetId() string {
+func (c *SshClient) GetId() string {
 	return c.uuid
 }
 
-func (c *AtherosClient) command(text string) error {
+func (c *SshClient) command(text string) error {
 	session, err := c.conn.NewSession()
 	if err != nil {
 		return err
@@ -45,7 +45,7 @@ func (c *AtherosClient) command(text string) error {
 	return nil
 }
 
-func (c *AtherosClient) Connect(addr string) error {
+func (c *SshClient) Connect(addr string) error {
 	config := &ssh.ClientConfig{
 		User:            c.username,
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
@@ -64,11 +64,11 @@ func (c *AtherosClient) Connect(addr string) error {
 	return nil
 }
 
-func (c *AtherosClient) GetIsConnected() bool {
+func (c *SshClient) GetIsConnected() bool {
 	return c.conn != nil
 }
 
-func (c *AtherosClient) Disconnect() error {
+func (c *SshClient) Disconnect() error {
 	if !c.GetIsConnected() {
 		return errors.New("нет соединения. Нечего отключать")
 	}
@@ -85,11 +85,11 @@ func (c *AtherosClient) Disconnect() error {
 	return nil
 }
 
-func (c *AtherosClient) GetAddr() string {
+func (c *SshClient) GetAddr() string {
 	return c.addr
 }
 
-func (c AtherosClient) ClientMainRun(serverIP string, serverPort int) error {
+func (c SshClient) ClientMainRun(serverIP string, serverPort int) error {
 	if c.isClientMainActive {
 		return errors.New("client_main уже запущен")
 	}
@@ -115,11 +115,11 @@ func (c AtherosClient) ClientMainRun(serverIP string, serverPort int) error {
 	return nil
 }
 
-func (c *AtherosClient) GetIsClientMainActive() bool {
+func (c *SshClient) GetIsClientMainActive() bool {
 	return c.isClientMainActive
 }
 
-func (c *AtherosClient) ClientMainStop() error {
+func (c *SshClient) ClientMainStop() error {
 	if err := c.command("killall client_main"); err != nil {
 		return err
 	}
@@ -127,7 +127,7 @@ func (c *AtherosClient) ClientMainStop() error {
 	return nil
 }
 
-func (c *AtherosClient) SendDataRun(ifName, dstMacAddr string, numOfPacketToSend, pktIntervalUs, pktLen uint16) error {
+func (c *SshClient) SendDataRun(ifName, dstMacAddr string, numOfPacketToSend, pktIntervalUs, pktLen uint16) error {
 	if c.isSendData {
 		return errors.New("данные уже передаются")
 	}
@@ -156,11 +156,11 @@ func (c *AtherosClient) SendDataRun(ifName, dstMacAddr string, numOfPacketToSend
 	return nil
 }
 
-func (c *AtherosClient) GetIsSendDataActive() bool {
+func (c *SshClient) GetIsSendDataActive() bool {
 	return c.isSendData
 }
 
-func (c *AtherosClient) SendDataStop() error {
+func (c *SshClient) SendDataStop() error {
 	if err := c.command("killall sendData"); err != nil {
 		return err
 	}
@@ -168,11 +168,11 @@ func (c *AtherosClient) SendDataStop() error {
 	return nil
 }
 
-func (c *AtherosClient) checkAvailable() {
+func (c *SshClient) checkAvailable() {
 	out, _ := exec.Command("ping", c.addr, "-c 5", "-i 3", "-w 10").Output()
 	c.isAvailable = !strings.Contains(string(out), "Destination Host Unreachable")
 }
 
-func (c *AtherosClient) GetIsAvailable() bool {
+func (c *SshClient) GetIsAvailable() bool {
 	return c.isAvailable
 }
