@@ -6,17 +6,17 @@ import (
 	"math"
 )
 
-type Processor struct {
+type ProcessorService struct {
 	rounder float64
 }
 
-func NewProcessor(rounder int) *Processor {
-	return &Processor{
+func NewProcessorService(rounder int) *ProcessorService {
+	return &ProcessorService{
 		rounder: math.Pow10(rounder),
 	}
 }
 
-func (p *Processor) CsiMap(csi entity.Csi, f func(complex128) float64) [][]float64 {
+func (p *ProcessorService) CsiMap(csi entity.Csi, f func(complex128) float64) [][]float64 {
 	data := make([][]float64, len(csi))
 	for i := range csi {
 		data[i] = make([]float64, len(csi[i]))
@@ -29,7 +29,7 @@ func (p *Processor) CsiMap(csi entity.Csi, f func(complex128) float64) [][]float
 	return data
 }
 
-func (p *Processor) PackageMap(data []*entity.Package, handler func(complex128) float64) []entity.ApiPackage {
+func (p *ProcessorService) PackageMap(data []*entity.Package, handler func(complex128) float64) []entity.ApiPackage {
 	packs := make([]entity.ApiPackage, 0, len(data))
 
 	for _, value := range data {
@@ -45,7 +45,7 @@ func (p *Processor) PackageMap(data []*entity.Package, handler func(complex128) 
 	return packs
 }
 
-func (p *Processor) SubcarrierMap(data []*entity.Package, handler func(complex128) float64, h, i int) ([]float64, error) {
+func (p *ProcessorService) SubcarrierMap(data []*entity.Package, handler func(complex128) float64, h, i int) ([]float64, error) {
 	subcarrierData := make([]float64, 0, len(data))
 
 	for _, pack := range data {

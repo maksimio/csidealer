@@ -2,6 +2,8 @@ package decoder
 
 import (
 	"csidealer/internal/models"
+	"errors"
+	"log"
 	"time"
 
 	"github.com/google/uuid"
@@ -23,8 +25,9 @@ func NewDecoderService(in <-chan models.RawPackage, outs []chan<- models.Package
 func (d *DecoderService) Run() {
 	for {
 		rawPackage := <-d.in
-		pack := d.decodeCsiPackage(rawPackage.Data)
-		if pack.Info.CsiLength == 0 {
+		pack, err := d.decodeCsiPackage(rawPackage.Data)
+		if err != nil {
+			log.Print(err)
 			continue
 		}
 
@@ -34,11 +37,12 @@ func (d *DecoderService) Run() {
 	}
 }
 
-func (d *DecoderService) decodeCsiPackage(data []byte) models.Package {
+func (d *DecoderService) decodeCsiPackage(data []byte) (models.Package, error) {
 	info := decodePackageInfo(data)
 
-	// if info.CsiLength == 0 {
-	// } // TODO: не будет ли бага в decodeCsi?
+	if info.CsiLength == 0 {
+		return models.Package{}, errors.New("нет данных CSI в пакете")
+	}
 
 	rawCsi := data[SHIFT_CSI_INFO : SHIFT_CSI_INFO+info.CsiLength]
 
@@ -51,5 +55,5 @@ func (d *DecoderService) decodeCsiPackage(data []byte) models.Package {
 	}
 
 	d.csiPackageNumber += 1
-	return pack
+	return pack, nil
 }

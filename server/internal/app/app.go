@@ -4,6 +4,7 @@ import (
 	"csidealer/config"
 	"csidealer/internal/controllers/http"
 	"csidealer/internal/controllers/tcp"
+	"csidealer/internal/controllers/websocket"
 
 	// "csidealer/internal/controllers/websocket"
 	"csidealer/internal/models"
@@ -11,6 +12,7 @@ import (
 	"csidealer/internal/services/buffer"
 	"csidealer/internal/services/decoder"
 	"csidealer/internal/services/filter"
+	"csidealer/internal/services/processor"
 	"csidealer/internal/services/raw_writer"
 	"csidealer/internal/services/storage"
 	// "log"
@@ -45,32 +47,34 @@ func Run() {
 	toDecoder := make(chan models.RawPackage)
 	toFilter := make(chan models.Package)
 	toStorage := make(chan models.Package)
-	// toWebsocket := make(chan models.Package)
+	toWebsocket := make(chan models.Package)
 
 	bufferService := buffer.NewBufferService([]chan<- models.RawPackage{toRawWriter, toDecoder})
 	rawWriterService := raw_writer.NewRawWriterService(toRawWriter, config.DatFilePath)
-	go rawWriterService.Run()
 	decoderService := decoder.NewDecoderService(toDecoder, []chan<- models.Package{toFilter})
-	go decoderService.Run()
 	filterService := filter.NewFilterService(
 		toFilter,
-		[]chan<- models.Package{toStorage},
+		[]chan<- models.Package{toStorage, toWebsocket},
 		config.Filter.PayloadLen.Min,
 		config.Filter.PayloadLen.Max,
 		config.Filter.Nr,
 		config.Filter.Nc,
 		config.Filter.NTones,
 	)
-	go filterService.Run()
 	storageService := storage.NewStorageService(toStorage, config.CsiLocalRepoMaxCount)
+	processorService := processor.NewProcessorService(config.ProcessorRounder)
+
+	tcpController := tcp.NewTcpController(bufferService, config.TcpPort)
+	httpController := http.NewHttpController(bufferService, rawWriterService, config.HttpPort, config.HttpStaticPath)
+	websocketController := websocket.NewWebsocketController(toWebsocket, processorService, config.WebsocketPort)
+
+	go rawWriterService.Run()
+	go decoderService.Run()
+	go filterService.Run()
 	go storageService.Run()
 
-	tcpServer := tcp.NewTcpServer(bufferService, config.TcpPort)
-	httpServer := http.NewHttpController(bufferService, rawWriterService, config.HttpPort, config.HttpStaticPath)
-	// websocketServer := websocket.NewWebsocketServer(csiUseCase, config.WebsocketPort)
-
-	go tcpServer.Run()
-	httpServer.Run()
+	go tcpController.Run()
+	go httpController.Run()
 
 	// -------------------------------------
 	// log.Print("запуск передачи пакетов")
@@ -90,6 +94,6 @@ func Run() {
 	// log.Print("запуск сервера websocket...")
 	// -------------------------------------
 
-	// websocketServer.Run()
+	websocketController.Run()
 
 }

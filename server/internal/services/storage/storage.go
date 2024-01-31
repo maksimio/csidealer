@@ -2,7 +2,6 @@ package storage
 
 import (
 	"csidealer/internal/models"
-	"log"
 )
 
 type StorageService struct {
@@ -27,7 +26,7 @@ func (s *StorageService) Run() {
 	for {
 		pack := <-s.in
 		s.push(pack)
-		log.Println("Push in storage", s.fullCount)
+
 		for _, out := range s.outs {
 			out <- pack
 		}

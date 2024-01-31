@@ -9,19 +9,19 @@ import (
 
 const _buf_len = 2048
 
-type TcpServer struct {
+type TcpController struct {
 	bufferService *buffer.BufferService
 	port          string
 }
 
-func NewTcpServer(bufferService *buffer.BufferService, port int) *TcpServer {
-	return &TcpServer{
+func NewTcpController(bufferService *buffer.BufferService, port int) *TcpController {
+	return &TcpController{
 		bufferService: bufferService,
 		port:          ":" + fmt.Sprint(port),
 	}
 }
 
-func (s *TcpServer) Run() {
+func (s *TcpController) Run() {
 	ln, err := net.Listen("tcp", s.port)
 	if err != nil {
 		log.Fatal("ошибка открытия порта", s.port, ":", err)
@@ -36,7 +36,7 @@ func (s *TcpServer) Run() {
 	}
 }
 
-func (s *TcpServer) listenConnection(conn net.Conn) {
+func (s *TcpController) listenConnection(conn net.Conn) {
 	s.bufferService.Flush()
 	log.Printf("новое подключение от %s", conn.RemoteAddr())
 	s.bufferService.TcpRemoteAddr = conn.RemoteAddr().String()
