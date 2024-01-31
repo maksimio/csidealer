@@ -66,7 +66,7 @@ func Run() {
 	go storageService.Run()
 
 	tcpServer := tcp.NewTcpServer(bufferService, config.TcpPort)
-	httpServer := http.NewHttpController(csiUseCase, config.HttpPort, config.HttpStaticPath)
+	httpServer := http.NewHttpController(bufferService, rawWriterService, config.HttpPort, config.HttpStaticPath)
 	// websocketServer := websocket.NewWebsocketServer(csiUseCase, config.WebsocketPort)
 
 	go tcpServer.Run()

@@ -2,6 +2,7 @@ package storage
 
 import (
 	"csidealer/internal/models"
+	"log"
 )
 
 type StorageService struct {
@@ -26,7 +27,7 @@ func (s *StorageService) Run() {
 	for {
 		pack := <-s.in
 		s.push(pack)
-
+		log.Println("Push in storage", s.fullCount)
 		for _, out := range s.outs {
 			out <- pack
 		}
@@ -50,12 +51,4 @@ func (c *StorageService) GetLastN(n int) []models.Package {
 	}
 
 	return c.data[length-n:]
-}
-
-func (c *StorageService) GetFullCount() uint64 {
-	return c.fullCount
-}
-
-func (c *StorageService) GetMaxCount() uint64 {
-	return c.maxCount
 }

@@ -28,8 +28,8 @@ func (a *ApiV1) Register() {
 	// a.routGr.GET("/status", a.status)
 
 	csi := a.routGr.Group("/csi")
-	csi.GET("/last_n/:type", a.csiLastN)
-	csi.GET("/subcarrier_last_n/:type", a.subcarrierLastN)
+	// csi.GET("/last_n/:type", a.csiLastN)
+	// csi.GET("/subcarrier_last_n/:type", a.subcarrierLastN)
 	csi.GET("/state") // TODO число пакетов, размер хранилища и т.д.
 
 	log := a.routGr.Group("/log")
