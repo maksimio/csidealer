@@ -21,7 +21,7 @@ func (h *HttpController) stopLog(c *gin.Context) {
 	}
 }
 
-func (h *HttpController) stateLog(c *gin.Context) {
+func (h *HttpController) logStatus(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"success": true,
 		"result": gin.H{

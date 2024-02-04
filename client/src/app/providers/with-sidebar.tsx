@@ -54,7 +54,7 @@ const Menu: FC = () => {
     <VStack gap={2} alignItems='left'>
       <MenuItem isDisabled path='dashboard' text='Главная' LeftIcon={LayoutDashboard} />
       <MenuItem path='data' text='Данные' LeftIcon={ChartLine} />
-      <MenuItem path='files' text='Файлы' LeftIcon={FilePencil} />
+      <MenuItem path='files' text='Запись' LeftIcon={FilePencil} />
       <MenuItem isDisabled path='devices' text='Устройства' LeftIcon={AccessPoint} />
       <MenuItem isDisabled path='recognition' text='Распознавание' LeftIcon={FocusCentered} />
       <MenuItem path='params' text='Параметры' LeftIcon={Settings} />

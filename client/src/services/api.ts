@@ -26,7 +26,7 @@ interface ILogState {
   package_count: number
 }
 
-export type LogState = ResponseWithResult<ILogState>
+export type WriteStatus = ResponseWithResult<ILogState>
 
 // -------- Устройства
 interface IDeviceInfo {
@@ -73,7 +73,7 @@ export type TcpClientIp = SuccessResponseWithResult<string>
 
 const EVENT_WS_DATA = 'ws.data'
 
-export default class ApiService {
+export class ApiService {
   private readonly baseUrl: string
   private instance: AxiosInstance
   private ws: WebSocket
@@ -103,26 +103,27 @@ export default class ApiService {
     this.eventEmitter.on(EVENT_WS_DATA, cl)
   }
 
-  async logStart(filename: string): Promise<StatusResponse> {
+  async writeStart(filename: string): Promise<StatusResponse> {
     try {
-      const response = await this.instance.get<StatusResponse>('/log/start', { params: { filepath: filename } })
+      const response = await this.instance.get<StatusResponse>('/write/start', { params: { filepath: filename } })
       return response.data
     } catch (e) {
       return { success: false, message: 'неизвестная ошибка' } // TODO научиться работать с AXIOS
     }
   }
 
-  async logStop(): Promise<StatusResponse> {
+  async writeStop(): Promise<StatusResponse> {
     try {
-      const response = await this.instance.get<StatusResponse>('/log/stop')
+      const response = await this.instance.get<StatusResponse>('/write/stop')
       return response.data
     } catch (e) {
       return { success: false, message: 'неизвестная ошибка' }
     }
   }
 
-  async getLogState<T = LogState>(): Promise<T> {
-    const response = await this.instance.get<T>('/log/state')
+  async getWriteStatus<T = WriteStatus>(): Promise<T> {
+    console.log('fwefe')
+    const response = await this.instance.get<T>('/write/status')
     return response.data
   }
 

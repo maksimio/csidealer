@@ -1,5 +1,5 @@
 import { action } from 'mobx'
-import ApiService, { CsiPackage } from 'services/api'
+import { CsiPackage, ApiService } from 'services/api'
 import { Store } from 'store'
 
 export class ChartController {

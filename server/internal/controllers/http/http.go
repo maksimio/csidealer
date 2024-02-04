@@ -47,7 +47,7 @@ func NewHttpController(
 	log := routGr.Group("/write")
 	log.GET("/start", httpController.startLog)
 	log.GET("/stop", httpController.stopLog)
-	log.GET("/state", httpController.stateLog)
+	log.GET("/status", httpController.logStatus)
 
 	// --- Фильтрация данных
 

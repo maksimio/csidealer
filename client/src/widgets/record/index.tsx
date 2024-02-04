@@ -1,5 +1,5 @@
 import { Box, Button, HStack, Text, Code, VStack } from '@chakra-ui/react'
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import { Card } from 'shared/card'
 import { Stats } from './stats'
 import { NameConf } from './nameconf'
@@ -33,6 +33,15 @@ const RecordToggler: FC = observer(() => {
 })
 
 export const Record: FC = () => {
+  const { recordController } = useControllers()
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      await recordController.updateWriteStatus()
+    }, 500)
+
+    return () => clearInterval(interval)
+  }, [])
+
   return (
     <Card maxW='650px'>
       <HStack alignItems='flex-start' justifyContent='space-between'>

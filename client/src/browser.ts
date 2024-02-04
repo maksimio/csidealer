@@ -2,10 +2,11 @@ import { ChartController } from 'controllers/chart'
 import { NavController } from 'controllers/nav'
 import { RecordController } from 'controllers/record'
 import { createContext, useContext } from 'react'
-import ApiService from 'services/api'
+import { NotificationService, ApiService } from 'services'
 import { Store } from 'store'
 
 export class Browser {
+  notificationService = new NotificationService()
   apiService = new ApiService('127.0.0.1', 80, 'api/v1', 8082)
 
   store = new Store()
