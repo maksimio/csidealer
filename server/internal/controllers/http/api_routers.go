@@ -2,8 +2,8 @@ package http
 
 import "github.com/gin-gonic/gin"
 
-func (h *HttpController) connectRouters(c *gin.Context) {
-	if err := h.routerConnectorService.Connect(); err != nil {
+func (h *HttpController) reconnectRouters(c *gin.Context) {
+	if err := h.routerConnectorService.Reconnect(); err != nil {
 		c.JSON(500, gin.H{"success": false, "message": err.Error()})
 	} else {
 		c.JSON(200, gin.H{"success": true})

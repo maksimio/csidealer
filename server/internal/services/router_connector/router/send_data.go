@@ -8,7 +8,7 @@ import (
 
 // запускает передачу данных с флагом CSI на роутер, на котором запущен client_main
 func (c *Router) RunSendData(ifName, dstMacAddr string, numOfPacketToSend, pktIntervalUs, pktLen uint16) error {
-	if !c.isConnected() {
+	if !c.IsConnected() {
 		return errors.New("нет подключения, операция SendDataRun невозможна")
 	}
 	if c.IsSendData {
@@ -35,7 +35,7 @@ func (c *Router) RunSendData(ifName, dstMacAddr string, numOfPacketToSend, pktIn
 }
 
 func (c *Router) StopSendData() error {
-	if !c.isConnected() {
+	if !c.IsConnected() {
 		return errors.New("нет подключения, операция StopSendData невозможна")
 	}
 	c.IsSendData = false // сначала нужно убрать флаг, иначе после killall запустится следующая итерация sendData

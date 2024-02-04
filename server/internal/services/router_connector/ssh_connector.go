@@ -15,7 +15,7 @@ type RouterConnectorService struct {
 
 func NewRouterConnectorService(txInfo, rxInfo models.RouterInfo, ServerIp string, ServerPort int,
 	sendData models.SendDataInfo) *RouterConnectorService {
-	return &RouterConnectorService{
+	connector := &RouterConnectorService{
 		tx: *router.NewRouter(txInfo),
 		rx: *router.NewRouter(rxInfo),
 
@@ -23,17 +23,26 @@ func NewRouterConnectorService(txInfo, rxInfo models.RouterInfo, ServerIp string
 		ServerPort: ServerPort,
 		SendData:   sendData,
 	}
+
+	return connector
 }
 
-func (s *RouterConnectorService) Connect() error {
-	if err := s.rx.Connect(); err != nil {
+func (s *RouterConnectorService) Reconnect() error {
+	if err := s.rx.Reconnect(); err != nil {
 		return err
 	}
 
-	return s.tx.Connect()
+	return s.tx.Reconnect()
 }
 
 func (s *RouterConnectorService) Start() error {
+	// автоматически выполняем подключение
+	if !s.rx.IsConnected() || !s.tx.IsConnected() {
+		if err := s.Reconnect(); err != nil {
+			return err
+		}
+	}
+
 	if err := s.rx.RunClientMain(s.ServerIp, s.ServerPort); err != nil {
 		return err
 	}
@@ -48,6 +57,13 @@ func (s *RouterConnectorService) Start() error {
 }
 
 func (s *RouterConnectorService) Stop() error {
+	// автоматически выполняем подключение
+	if !s.rx.IsConnected() || !s.tx.IsConnected() {
+		if err := s.Reconnect(); err != nil {
+			return err
+		}
+	}
+
 	if err := s.tx.StopSendData(); err != nil {
 		return err
 	}

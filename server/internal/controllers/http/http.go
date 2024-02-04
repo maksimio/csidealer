@@ -53,7 +53,7 @@ func NewHttpController(
 
 	// --- Команды роутерам
 	routers := routGr.Group("/routers")
-	routers.POST("/connect", httpController.connectRouters)
+	routers.POST("/reconnect", httpController.reconnectRouters)
 	routers.POST("/start", httpController.startCsiTransmit)
 	routers.POST("/stop", httpController.stopCsiTransmit)
 	routers.GET("/status", httpController.routersStatus)

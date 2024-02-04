@@ -40,7 +40,7 @@ func (c *Router) command(text string) error {
 	return session.Run(text)
 }
 
-func (c *Router) Connect() error {
+func (c *Router) Reconnect() error {
 	config := &ssh.ClientConfig{
 		User:            c.Username,
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
@@ -56,12 +56,12 @@ func (c *Router) Connect() error {
 	return nil
 }
 
-func (c *Router) isConnected() bool {
+func (c *Router) IsConnected() bool {
 	return c.conn != nil
 }
 
 func (c *Router) Disconnect() error {
-	if !c.isConnected() {
+	if !c.IsConnected() {
 		return errors.New("нет соединения. Нечего отключать")
 	}
 
