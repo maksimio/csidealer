@@ -6,6 +6,11 @@ rxIp: 192.168.1.1
 txIp: 192.168.1.100
 targetIp: 192.168.1.231
 
+
+
+
+
+
 ifName: wlan0
 dstMacAddr: FF:FF:FF:FF:FF:FF # адрес может быть любым, если Rx является AP
 numOfPacketToSend: 400

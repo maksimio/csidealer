@@ -24,7 +24,7 @@ func NewHttpController(
 	bufferService *buffer.BufferService,
 	rawWriterService *raw_writer.RawWriterService,
 	port int, uiPath string) *HttpController {
-	// --- ИНИЦИАЛЦИЗАЦИЯ
+	// --- ИНИЦИАЛЦИЗАЦИЯ ---
 	router := gin.Default()
 	router.Use(static.Serve("/", static.LocalFile(uiPath, true)))
 	router.Use(cors.Default())
@@ -35,7 +35,7 @@ func NewHttpController(
 		router: router,
 		routGr: routGr,
 	}
-	// --- МАРШРУТЫ
+	// --- МАРШРУТЫ ---
 	// --- Запись сырых данных CSI
 	log := routGr.Group("/write")
 	log.GET("/start", httpController.startLog)
@@ -46,7 +46,7 @@ func NewHttpController(
 
 	// --- Команды роутерам
 
-	// ---
+	// --- Запрос и регулировка конфигурационных параметров
 
 	return httpController
 }

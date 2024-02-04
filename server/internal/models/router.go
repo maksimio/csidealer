@@ -8,3 +8,8 @@ type ApiRouterInfo struct {
 	IsSendDataActive   bool   `json:"is_sendData_active"`
 	IsAvailable        bool   `json:"is_available"`
 }
+
+type RouterInfo struct {
+	Username string
+	IpAddr   string
+}
