@@ -1,7 +1,7 @@
 package app
 
 import (
-	"csidealer/config" // TODO: в internal не должно быть внешних зависимостей
+	"csidealer/config"
 	"csidealer/internal/controllers/http"
 	"csidealer/internal/controllers/tcp"
 	"csidealer/internal/controllers/websocket"
@@ -15,15 +15,15 @@ import (
 )
 
 func Run(conf config.Config) {
-
+	// ----- КАНАЛЫ
 	toRawWriter := make(chan models.RawPackage)
 	toDecoder := make(chan models.RawPackage)
 	toFilter := make(chan models.Package)
 	toStorage := make(chan models.Package)
 	toWebsocket := make(chan models.Package)
-
+	// ----- СЕРВИСЫ
 	bufferService := buffer.NewBufferService([]chan<- models.RawPackage{toRawWriter, toDecoder})
-	rawWriterService := raw_writer.NewRawWriterService(toRawWriter, config.DatFilePath)
+	rawWriterService := raw_writer.NewRawWriterService(toRawWriter, conf.DatFilePath)
 	decoderService := decoder.NewDecoderService(toDecoder, []chan<- models.Package{toFilter})
 	filterService := filter.NewFilterService(
 		toFilter,
@@ -36,7 +36,7 @@ func Run(conf config.Config) {
 	)
 	storageService := storage.NewStorageService(toStorage, conf.CsiLocalRepoMaxCount)
 	processorService := processor.NewProcessorService(conf.ProcessorRounder)
-
+	// КОНТРОЛЛЕРЫ
 	tcpController := tcp.NewTcpController(bufferService, conf.TcpPort)
 	httpController := http.NewHttpController(bufferService, rawWriterService, conf.HttpPort, conf.HttpStaticPath)
 	websocketController := websocket.NewWebsocketController(toWebsocket, processorService, conf.WebsocketPort)

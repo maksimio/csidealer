@@ -14,27 +14,41 @@ import (
 type HttpController struct {
 	port   string
 	router *gin.Engine
-	api    *ApiV1
+	routGr *gin.RouterGroup
+
+	bufferService    *buffer.BufferService
+	rawWriterService *raw_writer.RawWriterService
 }
 
 func NewHttpController(
 	bufferService *buffer.BufferService,
 	rawWriterService *raw_writer.RawWriterService,
 	port int, uiPath string) *HttpController {
+	// --- ИНИЦИАЛЦИЗАЦИЯ
 	router := gin.Default()
-
 	router.Use(static.Serve("/", static.LocalFile(uiPath, true)))
 	router.Use(cors.Default())
-
 	routGr := router.Group("/api/v1")
-	api := NewApiV1(bufferService, rawWriterService, routGr) // TODO: сервисы передать сюда
-	api.Register()
 
-	return &HttpController{
+	httpController := &HttpController{
 		port:   "localhost:" + fmt.Sprint(port),
 		router: router,
-		api:    api,
+		routGr: routGr,
 	}
+	// --- МАРШРУТЫ
+	// --- Запись сырых данных CSI
+	log := routGr.Group("/write")
+	log.GET("/start", httpController.startLog)
+	log.GET("/stop", httpController.stopLog)
+	log.GET("/state", httpController.stateLog)
+
+	// --- Фильтрация данных
+
+	// --- Команды роутерам
+
+	// ---
+
+	return httpController
 }
 
 func (s HttpController) Run() {
