@@ -2,14 +2,15 @@ package storage
 
 import (
 	"csidealer/internal/models"
+	"log"
 )
 
 type StorageService struct {
-	data      []models.Package
-	fullCount uint64
-	maxCount  uint64
-	in        <-chan models.Package
-	outs      []chan<- models.Package // при добавлении пакета отправляет в эти каналы данные
+	data     []models.Package
+	count    uint64
+	maxCount uint64
+	in       <-chan models.Package
+	outs     []chan<- models.Package // при добавлении пакета отправляет в эти каналы данные
 	// сейчас нужно для отправки в WebSocket сглаженных данных. После декомпозиции нужно оформить
 	// сглаживание как отдельный сервис
 }
@@ -27,6 +28,8 @@ func (s *StorageService) Run() {
 		pack := <-s.in
 		s.push(pack)
 
+		log.Println("PUSH", s.count)
+
 		for _, out := range s.outs {
 			out <- pack
 		}
@@ -35,8 +38,8 @@ func (s *StorageService) Run() {
 
 func (c *StorageService) push(csiPackage models.Package) {
 	c.data = append(c.data, csiPackage)
-	c.fullCount += 1
-	if c.fullCount > c.maxCount {
+	c.count += 1
+	if c.count > c.maxCount {
 		c.data = c.data[1:]
 	}
 }

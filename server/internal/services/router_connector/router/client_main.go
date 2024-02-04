@@ -27,6 +27,9 @@ func (c Router) RunClientMain(serverIP string, serverPort int) error {
 }
 
 func (c *Router) StopClientMain() error {
+	if !c.isConnected() {
+		return errors.New("нет подключения, операция StopClientMain невозможна")
+	}
 	if err := c.command("killall client_main"); err != nil {
 		return err
 	}

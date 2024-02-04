@@ -52,6 +52,11 @@ func NewHttpController(
 	// --- Фильтрация данных
 
 	// --- Команды роутерам
+	routers := routGr.Group("/routers")
+	routers.POST("/connect", httpController.connectRouters)
+	routers.POST("/start", httpController.startCsiTransmit)
+	routers.POST("/stop", httpController.stopCsiTransmit)
+	routers.GET("/status", httpController.routersStatus)
 
 	// --- Запрос и регулировка конфигурационных параметров
 

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"os/exec"
 	"strings"
+	"time"
 
 	"github.com/google/uuid"
 	"golang.org/x/crypto/ssh"
@@ -43,14 +44,15 @@ func (c *Router) Connect() error {
 	config := &ssh.ClientConfig{
 		User:            c.Username,
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
+		Timeout:         time.Second * 5,
 	}
+
 	conn, err := ssh.Dial("tcp", c.IpAddr+":22", config)
 	if err != nil {
 		return err
 	}
 
 	c.conn = conn
-
 	return nil
 }
 

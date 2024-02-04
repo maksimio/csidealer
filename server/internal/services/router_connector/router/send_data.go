@@ -35,9 +35,11 @@ func (c *Router) RunSendData(ifName, dstMacAddr string, numOfPacketToSend, pktIn
 }
 
 func (c *Router) StopSendData() error {
+	if !c.isConnected() {
+		return errors.New("нет подключения, операция StopSendData невозможна")
+	}
 	c.IsSendData = false // сначала нужно убрать флаг, иначе после killall запустится следующая итерация sendData
 	if err := c.command("killall sendData"); err != nil {
-		c.IsSendData = true
 		return err
 	}
 	return nil
