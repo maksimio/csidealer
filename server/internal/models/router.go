@@ -10,6 +10,14 @@ type ApiRouterInfo struct {
 }
 
 type RouterInfo struct {
-	Username string
-	IpAddr   string
+	Username string `yaml:"username"`
+	IpAddr   string `yaml:"ipAddr"`
+}
+
+type SendDataInfo struct {
+	IfName            string `yaml:"ifName"`
+	DstMacAddr        string `yaml:"dstMacAddr"`
+	NumOfPacketToSend uint16 `yaml:"numOfPacketToSend"`
+	PktIntervalUs     uint16 `yaml:"pktIntervalUs"`
+	PktLen            uint16 `yaml:"pktLen"`
 }

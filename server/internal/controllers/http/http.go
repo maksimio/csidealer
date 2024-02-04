@@ -3,6 +3,7 @@ package http
 import (
 	"csidealer/internal/services/buffer"
 	"csidealer/internal/services/raw_writer"
+	"csidealer/internal/services/router_connector"
 	"fmt"
 	"log"
 
@@ -16,13 +17,15 @@ type HttpController struct {
 	router *gin.Engine
 	routGr *gin.RouterGroup
 
-	bufferService    *buffer.BufferService
-	rawWriterService *raw_writer.RawWriterService
+	bufferService          *buffer.BufferService
+	rawWriterService       *raw_writer.RawWriterService
+	routerConnectorService *router_connector.RouterConnectorService
 }
 
 func NewHttpController(
 	bufferService *buffer.BufferService,
 	rawWriterService *raw_writer.RawWriterService,
+	routerConnectorService *router_connector.RouterConnectorService,
 	port int, uiPath string) *HttpController {
 	// --- ИНИЦИАЛЦИЗАЦИЯ ---
 	router := gin.Default()
@@ -34,6 +37,10 @@ func NewHttpController(
 		port:   "localhost:" + fmt.Sprint(port),
 		router: router,
 		routGr: routGr,
+
+		bufferService:          bufferService,
+		rawWriterService:       rawWriterService,
+		routerConnectorService: routerConnectorService,
 	}
 	// --- МАРШРУТЫ ---
 	// --- Запись сырых данных CSI
