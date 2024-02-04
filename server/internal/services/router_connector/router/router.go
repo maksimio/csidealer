@@ -23,7 +23,7 @@ type Router struct {
 	conn *ssh.Client
 }
 
-func NewRouter(info models.RouterInfo) *Router {
+func NewRouter(info models.RouterConfigInfo) *Router {
 	return &Router{
 		Username: info.Username,
 		IpAddr:   info.IpAddr,

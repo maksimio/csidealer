@@ -2,9 +2,9 @@ package models
 
 type Config struct {
 	// Роутеры
-	Rx       RouterInfo   `yaml:"rx"`
-	Tx       RouterInfo   `yaml:"tx"`
-	SendData SendDataInfo `yaml:"sendData"`
+	Rx       RouterConfigInfo `yaml:"rx"`
+	Tx       RouterConfigInfo `yaml:"tx"`
+	SendData SendDataInfo     `yaml:"sendData"`
 
 	// IP-адреса и порты
 	HttpStaticPath string `yaml:"httpStaticPath"`

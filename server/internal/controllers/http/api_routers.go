@@ -27,9 +27,6 @@ func (h *HttpController) stopCsiTransmit(c *gin.Context) {
 }
 
 func (h *HttpController) routersStatus(c *gin.Context) {
-	if err := h.routerConnectorService.Stop(); err != nil {
-		c.JSON(500, gin.H{"success": false, "message": err.Error()})
-	} else {
-		c.JSON(200, gin.H{"success": true})
-	}
+	status := h.routerConnectorService.Status()
+	c.JSON(200, gin.H{"success": true, "result": status})
 }

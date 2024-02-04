@@ -13,7 +13,7 @@ type RouterConnectorService struct {
 	SendData   models.SendDataInfo
 }
 
-func NewRouterConnectorService(txInfo, rxInfo models.RouterInfo, ServerIp string, ServerPort int,
+func NewRouterConnectorService(txInfo, rxInfo models.RouterConfigInfo, ServerIp string, ServerPort int,
 	sendData models.SendDataInfo) *RouterConnectorService {
 	connector := &RouterConnectorService{
 		tx: *router.NewRouter(txInfo),
@@ -69,4 +69,29 @@ func (s *RouterConnectorService) Stop() error {
 	}
 
 	return s.rx.StopClientMain()
+}
+
+func (s *RouterConnectorService) Status() models.ApiRoutersStatus {
+	rx := models.ApiRouterInfo{
+		Id:                 s.rx.Uuid,
+		Addr:               s.rx.IpAddr,
+		IsConnected:        s.rx.IsConnected(),
+		IsClientMainActive: s.rx.IsClientMainActive,
+		IsSendDataActive:   s.rx.IsSendData,
+	}
+	tx := models.ApiRouterInfo{
+		Id:                 s.tx.Uuid,
+		Addr:               s.tx.IpAddr,
+		IsConnected:        s.tx.IsConnected(),
+		IsClientMainActive: s.tx.IsClientMainActive,
+		IsSendDataActive:   s.tx.IsSendData,
+	}
+
+	return models.ApiRoutersStatus{
+		Rx:         rx,
+		Tx:         tx,
+		SendData:   s.SendData,
+		ServerIp:   s.ServerIp,
+		ServerPort: s.ServerPort,
+	}
 }
