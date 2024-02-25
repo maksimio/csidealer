@@ -70,7 +70,6 @@ export interface CsiPackage {
 
 export type TcpClientIp = SuccessResponseWithResult<string>
 
-
 const EVENT_WS_DATA = 'ws.data'
 
 export class ApiService {
@@ -129,6 +128,27 @@ export class ApiService {
 
   async getTcpClientIp<T = TcpClientIp>(): Promise<T> {
     const response = await this.instance.get<T>('/devices/tcp_client_ip')
+    return response.data
+  }
+
+  // ------------------------------------------------- ЗАПУСК И ОСТАНОВКА ПОТОКА ДАННЫХ
+  async reconnectRouters(): Promise<StatusResponse> {
+    const response = await this.instance.post<StatusResponse>('/routers/reconnect')
+    return response.data
+  }
+
+  async startCsiTransmit(): Promise<StatusResponse> {
+    const response = await this.instance.post<StatusResponse>('/routers/start')
+    return response.data
+  }
+
+  async stopCsiTransmit(): Promise<StatusResponse> {
+    const response = await this.instance.post<StatusResponse>('/routers/stop')
+    return response.data
+  }
+
+  async getRoutersStatus(): Promise<StatusResponse> {
+    const response = await this.instance.get<StatusResponse>('/routers/status')
     return response.data
   }
 }

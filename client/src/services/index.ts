@@ -1,2 +1,2 @@
 export { ApiService } from './api'
-export { NotificationService } from './notification'
+export { NoticeService } from './notice'
