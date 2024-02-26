@@ -3,6 +3,7 @@ package router_connector
 import (
 	"csidealer/internal/models"
 	"csidealer/internal/services/router_connector/router"
+	"errors"
 )
 
 type RouterConnectorService struct {
@@ -28,11 +29,13 @@ func NewRouterConnectorService(txInfo, rxInfo models.RouterConfigInfo, ServerIp 
 }
 
 func (s *RouterConnectorService) Reconnect() error {
-	if err := s.rx.Reconnect(); err != nil {
-		return err
+	err1 := s.rx.Reconnect()
+	err2 := s.tx.Reconnect()
+	if err1 != nil || err2 != nil {
+		return errors.New("не удалось подключиться к одному из роутеров")
 	}
 
-	return s.tx.Reconnect()
+	return nil
 }
 
 func (s *RouterConnectorService) Start() error {

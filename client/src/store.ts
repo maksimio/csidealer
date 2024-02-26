@@ -1,5 +1,5 @@
 import { action, makeAutoObservable } from 'mobx'
-import { CsiPackage } from 'services/api'
+import { CsiPackage, IRouterStatus } from 'services/api'
 
 const MAX_SERIES_LENGTH = 1000
 
@@ -48,6 +48,15 @@ export class Store {
   recordCount = 0
   recordStartTimestamp = 0
 
+  // роутеры
+  routerStatus: IRouterStatus = {
+    rx: { addr: '?', id: '?', is_clientmain_active: false, is_connected: false, is_sendData_active: false },
+    tx: { addr: '?', id: '?', is_clientmain_active: false, is_connected: false, is_sendData_active: false },
+    sendData: { dstMacAddr: '?', ifName: '?', numOfPacketToSend: 0, pktIntervalUs: 0, pktLen: 0 },
+    serverIp: '?',
+    serverPort: 0,
+  }
+
   get filename() {
     const d = this.date
     const date = this.useDate
@@ -64,8 +73,11 @@ export class Store {
   constructor() {
     makeAutoObservable(this)
 
-    setInterval(action(() => {
-      this.date = new Date()
-    }), 1000)
+    setInterval(
+      action(() => {
+        this.date = new Date()
+      }),
+      1000
+    )
   }
 }

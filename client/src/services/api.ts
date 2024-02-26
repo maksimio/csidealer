@@ -29,16 +29,29 @@ interface ILogState {
 export type WriteStatus = ResponseWithResult<ILogState>
 
 // -------- Устройства
-interface IDeviceInfo {
+export interface RouterInfo {
   id: string
   addr: string
-  is_connected: string
+  is_connected: boolean
   is_clientmain_active: boolean
   is_sendData_active: boolean
-  is_available: boolean
 }
 
-export type DeviceInfo = SuccessResponseWithResult<IDeviceInfo>
+export interface IRouterStatus {
+  rx: RouterInfo
+  tx: RouterInfo
+  sendData: {
+    ifName: string
+    dstMacAddr: string
+    numOfPacketToSend: number
+    pktIntervalUs: number
+    pktLen: number // TODO: переименовать в payloadLen
+  }
+  serverIp: string
+  serverPort: number
+}
+
+export type RouterStatus = SuccessResponseWithResult<IRouterStatus>
 
 // -------- WebSocket
 interface CsiInfo {
@@ -121,34 +134,28 @@ export class ApiService {
   }
 
   async getWriteStatus<T = WriteStatus>(): Promise<T> {
-    console.log('fwefe')
     const response = await this.instance.get<T>('/write/status')
     return response.data
   }
 
-  async getTcpClientIp<T = TcpClientIp>(): Promise<T> {
-    const response = await this.instance.get<T>('/devices/tcp_client_ip')
-    return response.data
-  }
-
   // ------------------------------------------------- ЗАПУСК И ОСТАНОВКА ПОТОКА ДАННЫХ
-  async reconnectRouters(): Promise<StatusResponse> {
+  async reconnectRouters() {
     const response = await this.instance.post<StatusResponse>('/routers/reconnect')
     return response.data
   }
 
-  async startCsiTransmit(): Promise<StatusResponse> {
+  async startCsiTransmit() {
     const response = await this.instance.post<StatusResponse>('/routers/start')
     return response.data
   }
 
-  async stopCsiTransmit(): Promise<StatusResponse> {
+  async stopCsiTransmit() {
     const response = await this.instance.post<StatusResponse>('/routers/stop')
     return response.data
   }
 
-  async getRoutersStatus(): Promise<StatusResponse> {
-    const response = await this.instance.get<StatusResponse>('/routers/status')
+  async getRoutersStatus() {
+    const response = await this.instance.get<RouterStatus>('/routers/status')
     return response.data
   }
 }

@@ -48,11 +48,11 @@ func (c *Router) Reconnect() error {
 	}
 
 	conn, err := ssh.Dial("tcp", c.IpAddr+":22", config)
+	c.conn = conn
 	if err != nil {
 		return err
 	}
 
-	c.conn = conn
 	return nil
 }
 
