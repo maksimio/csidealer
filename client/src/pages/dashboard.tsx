@@ -5,6 +5,8 @@ import { FC, useEffect } from 'react'
 import { RouterInfo } from 'services'
 import { Send, Box as BoxIcon } from 'tabler-icons-react'
 
+const UPDATE_ROUTER_INFO_SLEEP = 15000
+
 interface RouterProps {
   title: string
   info: RouterInfo
@@ -54,8 +56,8 @@ const Connection: FC = observer(() => {
           borderColor={isTransmit ? 'green.400' : undefined}
         />
         <AbsoluteCenter px='4' bg='gray.800'>
-          <Text color={isTransmit ? 'green.400' : 'gray.500'}>
-            {isConnect ? (isTransmit ? 'идет прием CSI' : 'соединение установлено') : 'соединение не установлено'}
+          <Text color={isTransmit ? 'green.400' : isConnect ? 'gray.500' : 'red.400'}>
+            {isConnect ? (isTransmit ? 'идет прием CSI' : 'соединение установлено') : 'нет соединения'}
           </Text>
         </AbsoluteCenter>
       </Box>
@@ -83,6 +85,10 @@ export const Dashboard: FC = () => {
 
   useEffect(() => {
     routerController.getStatus()
+    const interval = setInterval(() => {
+      routerController.getStatus()
+    }, UPDATE_ROUTER_INFO_SLEEP)
+    return () => clearInterval(interval)
   }, [])
 
   return (

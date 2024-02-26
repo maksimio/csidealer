@@ -11,10 +11,11 @@ import (
 	"golang.org/x/crypto/ssh"
 )
 
+const SSH_CONNECT_TIMEOUT = time.Second * 5
+
 type Router struct {
 	IsClientMainActive bool
 	IsSendData         bool
-	IsAvailable        bool
 
 	Uuid     string
 	IpAddr   string
@@ -24,11 +25,13 @@ type Router struct {
 }
 
 func NewRouter(info models.RouterConfigInfo) *Router {
-	return &Router{
+	router := &Router{
 		Username: info.Username,
 		IpAddr:   info.IpAddr,
 		Uuid:     uuid.New().String(),
 	}
+
+	return router
 }
 
 func (c *Router) command(text string) error {
@@ -44,7 +47,11 @@ func (c *Router) Reconnect() error {
 	config := &ssh.ClientConfig{
 		User:            c.Username,
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
-		Timeout:         time.Second * 5,
+		Timeout:         SSH_CONNECT_TIMEOUT,
+	}
+
+	if c.conn != nil {
+		c.conn.Close()
 	}
 
 	conn, err := ssh.Dial("tcp", c.IpAddr+":22", config)
@@ -74,7 +81,8 @@ func (c *Router) Disconnect() error {
 	return nil
 }
 
-func (c *Router) checkAvailable() {
+func (c *Router) CheckAvailable() bool {
 	out, _ := exec.Command("ping", c.IpAddr, "-c 5", "-i 3", "-w 10").Output()
-	c.IsAvailable = !strings.Contains(string(out), "Destination Host Unreachable")
+	isAvailable := !strings.Contains(string(out), "100% packet loss")
+	return isAvailable
 }

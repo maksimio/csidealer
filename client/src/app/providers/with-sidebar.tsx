@@ -62,21 +62,15 @@ const Menu: FC = () => {
   )
 }
 
-const ShortInfo: FC = () => {
-  return <Card h='full'></Card>
-}
 
 const Sidebar: FC = () => {
   return (
-    <Grid pl={1} pb={1} templateRows='100px 1fr 250px' h='100vh'>
+    <Grid pl={1} pb={1} templateRows='100px 1fr' h='100vh'>
       <GridItem>
         <Logo />
       </GridItem>
       <GridItem>
         <Menu />
-      </GridItem>
-      <GridItem>
-        <ShortInfo />
       </GridItem>
     </Grid>
   )

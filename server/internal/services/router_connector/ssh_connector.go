@@ -4,7 +4,11 @@ import (
 	"csidealer/internal/models"
 	"csidealer/internal/services/router_connector/router"
 	"errors"
+	"log"
+	"time"
 )
+
+const RECONNECT_DELAY = time.Second * 15
 
 type RouterConnectorService struct {
 	tx         router.Router
@@ -24,6 +28,23 @@ func NewRouterConnectorService(txInfo, rxInfo models.RouterConfigInfo, ServerIp 
 		ServerPort: ServerPort,
 		SendData:   sendData,
 	}
+
+	connector.tx.Reconnect()
+	connector.rx.Reconnect()
+
+	go func() { // проверка связи
+		for {
+			if !connector.tx.CheckAvailable() {
+				connector.tx.Reconnect()
+				log.Println("TX RECONNECT")
+			}
+			if !connector.rx.CheckAvailable() {
+				connector.rx.Reconnect()
+				log.Println("RX RECONNECT")
+			}
+			time.Sleep(RECONNECT_DELAY)
+		}
+	}()
 
 	return connector
 }
