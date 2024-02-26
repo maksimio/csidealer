@@ -1,11 +1,13 @@
 import { ChartController } from 'controllers/chart'
 import { NavController } from 'controllers/nav'
 import { RecordController } from 'controllers/record'
+import { RouterController } from 'controllers/router'
 import { createContext, useContext } from 'react'
-import ApiService from 'services/api'
+import { NoticeService, ApiService } from 'services'
 import { Store } from 'store'
 
 export class Browser {
+  noticeService = new NoticeService()
   apiService = new ApiService('127.0.0.1', 80, 'api/v1', 8082)
 
   store = new Store()
@@ -13,6 +15,7 @@ export class Browser {
   navController = new NavController(this.store)
   chartController = new ChartController(this.store, this.apiService)
   recordController = new RecordController(this.store, this.apiService)
+  routerController = new RouterController(this.store, this.apiService, this.noticeService)
 }
 
 export function getStore(b: Browser) {
@@ -23,6 +26,7 @@ export function getControllers(b: Browser) {
   return {
     navController: b.navController,
     recordController: b.recordController,
+    routerController: b.routerController,
   }
 }
 

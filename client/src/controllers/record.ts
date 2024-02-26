@@ -1,16 +1,12 @@
 import { action, runInAction } from 'mobx'
-import ApiService from 'services/api'
+import { ApiService } from 'services'
 import { FileType, Store } from 'store'
 
 export class RecordController {
-  constructor(private store: Store, private apiService: ApiService) {
-    setInterval(() => {
-      this.updateLogState()
-    }, 100)
-  }
+  constructor(private store: Store, private apiService: ApiService) {}
 
-  private updateLogState = async () => {
-    const res = await this.apiService.getLogState()
+  updateWriteStatus = async () => {
+    const res = await this.apiService.getWriteStatus()
     if (!res.success) {
       return
     }
@@ -23,25 +19,25 @@ export class RecordController {
     })
 
     if (!this.store.recording) {
-      return 
+      return
     }
 
     if (
       (this.store.limitCount && this.store.recordCount > this.store.countLimitation) ||
       (this.store.limitSize && this.store.recordSize > this.store.sizeLimitation)
     ) {
-      await this.apiService.logStop()
+      await this.apiService.writeStop()
     }
   }
 
   toggleRecording = async () => {
-    await this.updateLogState()
+    await this.updateWriteStatus()
     if (this.store.recording) {
-      await this.apiService.logStop()
+      await this.apiService.writeStop()
     } else {
-      await this.apiService.logStart(this.store.filename)
+      await this.apiService.writeStart(this.store.filename)
     }
-    await this.updateLogState()
+    await this.updateWriteStatus()
   }
 
   toggleUseFileType = action(() => {

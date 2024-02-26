@@ -2,9 +2,9 @@ package http
 
 import "github.com/gin-gonic/gin"
 
-func (a *ApiV1) startLog(c *gin.Context) {
+func (h *HttpController) startLog(c *gin.Context) {
 	filepath := c.Query("filepath")
-	err := a.rawWriterService.Start(filepath)
+	err := h.rawWriterService.Start(filepath)
 	if err != nil {
 		c.JSON(500, gin.H{"success": false, "message": err.Error()})
 	} else {
@@ -12,8 +12,8 @@ func (a *ApiV1) startLog(c *gin.Context) {
 	}
 }
 
-func (a *ApiV1) stopLog(c *gin.Context) {
-	err := a.rawWriterService.Stop()
+func (h *HttpController) stopLog(c *gin.Context) {
+	err := h.rawWriterService.Stop()
 	if err != nil {
 		c.JSON(500, gin.H{"success": false, "message": err.Error()})
 	} else {
@@ -21,14 +21,14 @@ func (a *ApiV1) stopLog(c *gin.Context) {
 	}
 }
 
-func (a *ApiV1) stateLog(c *gin.Context) {
+func (h *HttpController) logStatus(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"success": true,
 		"result": gin.H{
-			"start_ts":         a.rawWriterService.StartTime,
-			"is_open":          a.rawWriterService.IsOpen,
-			"write_byte_count": a.rawWriterService.WriteByteCount,
-			"package_count":    a.rawWriterService.WritePackageCount,
+			"start_ts":         h.rawWriterService.StartTime,
+			"is_open":          h.rawWriterService.IsOpen,
+			"write_byte_count": h.rawWriterService.WriteByteCount,
+			"package_count":    h.rawWriterService.WritePackageCount,
 		},
 	})
 }

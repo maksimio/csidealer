@@ -3,6 +3,7 @@ package http
 import (
 	"csidealer/internal/services/buffer"
 	"csidealer/internal/services/raw_writer"
+	"csidealer/internal/services/router_connector"
 	"fmt"
 	"log"
 
@@ -14,27 +15,52 @@ import (
 type HttpController struct {
 	port   string
 	router *gin.Engine
-	api    *ApiV1
+	routGr *gin.RouterGroup
+
+	bufferService          *buffer.BufferService
+	rawWriterService       *raw_writer.RawWriterService
+	routerConnectorService *router_connector.RouterConnectorService
 }
 
 func NewHttpController(
 	bufferService *buffer.BufferService,
 	rawWriterService *raw_writer.RawWriterService,
+	routerConnectorService *router_connector.RouterConnectorService,
 	port int, uiPath string) *HttpController {
+	// --- ИНИЦИАЛЦИЗАЦИЯ ---
 	router := gin.Default()
-
 	router.Use(static.Serve("/", static.LocalFile(uiPath, true)))
 	router.Use(cors.Default())
-
 	routGr := router.Group("/api/v1")
-	api := NewApiV1(bufferService, rawWriterService, routGr) // TODO: сервисы передать сюда
-	api.Register()
 
-	return &HttpController{
+	httpController := &HttpController{
 		port:   "localhost:" + fmt.Sprint(port),
 		router: router,
-		api:    api,
+		routGr: routGr,
+
+		bufferService:          bufferService,
+		rawWriterService:       rawWriterService,
+		routerConnectorService: routerConnectorService,
 	}
+	// --- МАРШРУТЫ ---
+	// --- Запись сырых данных CSI
+	log := routGr.Group("/write")
+	log.GET("/start", httpController.startLog)
+	log.GET("/stop", httpController.stopLog)
+	log.GET("/status", httpController.logStatus)
+
+	// --- Фильтрация данных
+
+	// --- Команды роутерам
+	routers := routGr.Group("/routers")
+	routers.POST("/reconnect", httpController.reconnectRouters)
+	routers.POST("/start", httpController.startCsiTransmit)
+	routers.POST("/stop", httpController.stopCsiTransmit)
+	routers.GET("/status", httpController.routersStatus)
+
+	// --- Запрос и регулировка конфигурационных параметров
+
+	return httpController
 }
 
 func (s HttpController) Run() {

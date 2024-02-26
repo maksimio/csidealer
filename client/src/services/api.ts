@@ -26,19 +26,32 @@ interface ILogState {
   package_count: number
 }
 
-export type LogState = ResponseWithResult<ILogState>
+export type WriteStatus = ResponseWithResult<ILogState>
 
 // -------- Устройства
-interface IDeviceInfo {
+export interface RouterInfo {
   id: string
   addr: string
-  is_connected: string
+  is_connected: boolean
   is_clientmain_active: boolean
   is_sendData_active: boolean
-  is_available: boolean
 }
 
-export type DeviceInfo = SuccessResponseWithResult<IDeviceInfo>
+export interface IRouterStatus {
+  rx: RouterInfo
+  tx: RouterInfo
+  sendData: {
+    ifName: string
+    dstMacAddr: string
+    numOfPacketToSend: number
+    pktIntervalUs: number
+    pktLen: number // TODO: переименовать в payloadLen
+  }
+  serverIp: string
+  serverPort: number
+}
+
+export type RouterStatus = SuccessResponseWithResult<IRouterStatus>
 
 // -------- WebSocket
 interface CsiInfo {
@@ -70,10 +83,9 @@ export interface CsiPackage {
 
 export type TcpClientIp = SuccessResponseWithResult<string>
 
-
 const EVENT_WS_DATA = 'ws.data'
 
-export default class ApiService {
+export class ApiService {
   private readonly baseUrl: string
   private instance: AxiosInstance
   private ws: WebSocket
@@ -103,31 +115,47 @@ export default class ApiService {
     this.eventEmitter.on(EVENT_WS_DATA, cl)
   }
 
-  async logStart(filename: string): Promise<StatusResponse> {
+  async writeStart(filename: string): Promise<StatusResponse> {
     try {
-      const response = await this.instance.get<StatusResponse>('/log/start', { params: { filepath: filename } })
+      const response = await this.instance.get<StatusResponse>('/write/start', { params: { filepath: filename } })
       return response.data
     } catch (e) {
       return { success: false, message: 'неизвестная ошибка' } // TODO научиться работать с AXIOS
     }
   }
 
-  async logStop(): Promise<StatusResponse> {
+  async writeStop(): Promise<StatusResponse> {
     try {
-      const response = await this.instance.get<StatusResponse>('/log/stop')
+      const response = await this.instance.get<StatusResponse>('/write/stop')
       return response.data
     } catch (e) {
       return { success: false, message: 'неизвестная ошибка' }
     }
   }
 
-  async getLogState<T = LogState>(): Promise<T> {
-    const response = await this.instance.get<T>('/log/state')
+  async getWriteStatus<T = WriteStatus>(): Promise<T> {
+    const response = await this.instance.get<T>('/write/status')
     return response.data
   }
 
-  async getTcpClientIp<T = TcpClientIp>(): Promise<T> {
-    const response = await this.instance.get<T>('/devices/tcp_client_ip')
+  // ------------------------------------------------- ЗАПУСК И ОСТАНОВКА ПОТОКА ДАННЫХ
+  async reconnectRouters() {
+    const response = await this.instance.post<StatusResponse>('/routers/reconnect')
+    return response.data
+  }
+
+  async startCsiTransmit() {
+    const response = await this.instance.post<StatusResponse>('/routers/start')
+    return response.data
+  }
+
+  async stopCsiTransmit() {
+    const response = await this.instance.post<StatusResponse>('/routers/stop')
+    return response.data
+  }
+
+  async getRoutersStatus() {
+    const response = await this.instance.get<RouterStatus>('/routers/status')
     return response.data
   }
 }

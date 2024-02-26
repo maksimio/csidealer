@@ -1,16 +1,21 @@
-httpStaticPath: './build'
+rx:
+  username: root
+  ipAddr: 192.168.1.1
+tx:
+  username: root
+  ipAddr: 192.168.1.100
+sendData:
+  ifName: wlan0
+  dstMacAddr: FF:FF:FF:FF:FF:FF # адрес может быть любым, если Rx является AP
+  numOfPacketToSend: 400
+  pktIntervalUs: 60000
+  pktLen: 512
+
+ttpStaticPath: './build'
 tcpPort: 8081
 httpPort: 80
 websocketPort: 8082
-rxIp: 192.168.1.1
-txIp: 192.168.1.100
 targetIp: 192.168.1.231
-
-ifName: wlan0
-dstMacAddr: FF:FF:FF:FF:FF:FF # адрес может быть любым, если Rx является AP
-numOfPacketToSend: 400
-pktIntervalUs: 60000
-pktLen: 512
 
 smoothOrder: 10 # сглаживание амплитудных значений
 csiLocalRepoMaxCount: 1000

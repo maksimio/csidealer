@@ -5,6 +5,8 @@ import (
 	"log"
 	"os"
 
+	"csidealer/internal/models"
+
 	"gopkg.in/yaml.v3"
 )
 
@@ -12,8 +14,8 @@ import (
 const configPath = "/home/m/dev/csidealer/server/config.yml"
 const defaultConfigPath = "/home/m/dev/csidealer/server/config/defaultConfig.yml"
 
-func ReadConfig() (Config, error) {
-	config := Config{}
+func ReadConfig() (models.Config, error) {
+	config := models.Config{}
 
 	if _, err := os.Stat(configPath); errors.Is(err, os.ErrNotExist) {
 		log.Print("конфигурационный файл не найден")

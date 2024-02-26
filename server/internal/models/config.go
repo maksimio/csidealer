@@ -1,7 +1,11 @@
-package config
+package models
 
-// Конфиг сделано одноуровневым для метода Update
 type Config struct {
+	// Роутеры
+	Rx       RouterConfigInfo `yaml:"rx"`
+	Tx       RouterConfigInfo `yaml:"tx"`
+	SendData SendDataInfo     `yaml:"sendData"`
+
 	// IP-адреса и порты
 	HttpStaticPath string `yaml:"httpStaticPath"`
 	HttpPort       int    `yaml:"httpPort"`
@@ -12,11 +16,6 @@ type Config struct {
 	TargetIp       string `yaml:"targetIp"` // Данный сервер, на который будет отправлена CSI
 
 	// для функции передачи CSI
-	IfName            string `yaml:"ifName"`
-	DstMacAddr        string `yaml:"dstMacAddr"`
-	NumOfPacketToSend uint16 `yaml:"numOfPacketToSend"`
-	PktIntervalUs     uint16 `yaml:"pktIntervalUs"`
-	PktLen            uint16 `yaml:"pktLen"`
 
 	// различные параметры
 	SmoothOrder          int    `yaml:"smoothOrder"`

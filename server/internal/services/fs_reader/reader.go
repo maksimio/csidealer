@@ -5,7 +5,6 @@ import (
 	"encoding/binary"
 	"errors"
 	"io"
-	"io/ioutil"
 	"os"
 )
 
@@ -31,13 +30,13 @@ func NewFSReader(logPath string) *FSReader {
 
 func (f *FSReader) List() ([]string, error) {
 	list := []string{}
-	files, err := ioutil.ReadDir(f.logPath)
+	files, err := os.ReadDir(f.logPath)
 	if err != nil {
 		return list, err
 	}
-	for _, fInfo := range files {
-		if !fInfo.IsDir() {
-			list = append(list, fInfo.Name())
+	for _, entry := range files {
+		if !entry.IsDir() {
+			list = append(list, entry.Name())
 		}
 	}
 

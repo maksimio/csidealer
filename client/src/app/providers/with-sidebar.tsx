@@ -1,6 +1,6 @@
 import { FC, PropsWithChildren } from 'react'
 import { Grid, GridItem, Button, VStack, Flex, Heading } from '@chakra-ui/react'
-import { AccessPoint, ChartLine, FilePencil, FocusCentered, Help, Icon, LayoutDashboard, Settings } from 'tabler-icons-react'
+import { AccessPoint, ChartLine, FilePencil, FocusCentered, Help, Icon, Settings } from 'tabler-icons-react'
 import { useNavigate } from 'react-router-dom'
 import { Card } from 'shared/card'
 import { observer } from 'mobx-react-lite'
@@ -52,10 +52,9 @@ const MenuItem: FC<MenuItemProps> = observer(({ LeftIcon, text, path, isDisabled
 const Menu: FC = () => {
   return (
     <VStack gap={2} alignItems='left'>
-      <MenuItem isDisabled path='dashboard' text='Главная' LeftIcon={LayoutDashboard} />
+      <MenuItem path='dashboard' text='Главная' LeftIcon={AccessPoint} />
       <MenuItem path='data' text='Данные' LeftIcon={ChartLine} />
-      <MenuItem path='files' text='Файлы' LeftIcon={FilePencil} />
-      <MenuItem isDisabled path='devices' text='Устройства' LeftIcon={AccessPoint} />
+      <MenuItem path='files' text='Запись' LeftIcon={FilePencil} />
       <MenuItem isDisabled path='recognition' text='Распознавание' LeftIcon={FocusCentered} />
       <MenuItem path='params' text='Параметры' LeftIcon={Settings} />
       <MenuItem isDisabled path='help' text='Помощь' LeftIcon={Help} />
@@ -63,21 +62,15 @@ const Menu: FC = () => {
   )
 }
 
-const ShortInfo: FC = () => {
-  return <Card h='full'></Card>
-}
 
 const Sidebar: FC = () => {
   return (
-    <Grid pl={1} pb={1} templateRows='100px 1fr 250px' h='100vh'>
+    <Grid pl={1} pb={1} templateRows='100px 1fr' h='100vh'>
       <GridItem>
         <Logo />
       </GridItem>
       <GridItem>
         <Menu />
-      </GridItem>
-      <GridItem>
-        <ShortInfo />
       </GridItem>
     </Grid>
   )
