@@ -1,6 +1,7 @@
 import { action, runInAction } from 'mobx'
 import { ApiService } from 'services'
 import { FileType, Store } from 'store'
+import { v4 } from 'uuid'
 
 export class RecordController {
   constructor(private store: Store, private apiService: ApiService) {}
@@ -94,5 +95,34 @@ export class RecordController {
     if (this.store.name.length) {
       this.store.names.add(this.store.name)
     }
+  })
+
+  // разметка
+  toggleActiveMark = action((id: string) => {
+    const mark = this.store.marks.get(id)
+    if (!mark) {
+      return
+    }
+
+    mark.isActive = !mark.isActive
+  })
+
+  unactiveMarks = action(() => {
+    for (let v of this.store.marks.values()) {
+      v.isActive = false
+    }
+  })
+
+  addMark = action(() => {
+    const id = v4()
+    this.store.marks.set(id, { id, isActive: false, text: new Date().toLocaleTimeString() })
+  })
+
+  clearMarks = action(() => {
+    this.store.marks.clear()
+  })
+
+  deleteMark = action((id: string) => {
+    this.store.marks.delete(id)
   })
 }

@@ -26,10 +26,12 @@
     "react-router-dom": "^6.13.0",
     "react-toastify": "^10.0.4",
     "tabler-icons-react": "^1.56.0",
+    "uuid": "^9.0.1",
     "vite-tsconfig-paths": "^4.2.0",
     "webgl-plot": "^0.7.0"
   },
   "devDependencies": {
+    "@types/uuid": "^9.0.8",
     "@types/events": "^3.0.0",
     "@types/node": "^20.3.2",
     "@types/react": "^18.0.37",
