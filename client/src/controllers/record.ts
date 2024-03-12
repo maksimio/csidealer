@@ -113,9 +113,9 @@ export class RecordController {
     }
   })
 
-  addMark = action(() => {
+  addMark = action((text: string) => {
     const id = v4()
-    this.store.marks.set(id, { id, isActive: false, text: new Date().toLocaleTimeString() })
+    this.store.marks.set(id, { id, isActive: false, text })
   })
 
   clearMarks = action(() => {

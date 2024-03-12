@@ -9,6 +9,11 @@ export interface Mark {
   isActive: boolean
 }
 
+export interface MarkHistory {
+  mark: Mark
+  time: Date
+}
+
 export enum FileType {
   Train = 'train',
   Test = 'test',
@@ -65,6 +70,7 @@ export class Store {
 
   // разметка данных
   marks = new Map<string, Mark>()
+  marksHistory: MarkHistory[] = []
 
   get filename() {
     const d = this.date

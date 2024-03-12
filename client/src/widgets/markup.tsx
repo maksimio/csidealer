@@ -1,7 +1,28 @@
-import { Button, HStack, Box, Tag, TagLabel, TagCloseButton, VStack, Text, Heading, Code } from '@chakra-ui/react'
+import {
+  Button,
+  HStack,
+  Box,
+  Tag,
+  TagLabel,
+  TagCloseButton,
+  VStack,
+  Text,
+  Heading,
+  Code,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  useDisclosure,
+  FormControl,
+  Input,
+} from '@chakra-ui/react'
 import { useControllers, useStore } from 'browser'
 import { observer } from 'mobx-react-lite'
-import { FC } from 'react'
+import { ChangeEvent, FC, useRef, useState, KeyboardEvent } from 'react'
 import { Card } from 'shared/card'
 import { Mark } from 'store'
 
@@ -48,9 +69,59 @@ const Marks: FC = observer(() => {
   )
 })
 
+interface TagNameModalProps {
+  isOpen: boolean
+  onClose: () => void
+}
+
+const TagNameModal: FC<TagNameModalProps> = ({ isOpen, onClose }) => {
+  const { recordController } = useControllers()
+  const [name, setName] = useState('')
+  const ref = useRef<HTMLInputElement>(null)
+
+  function handleAddMark() {
+    recordController.addMark(name)
+    setName('')
+    onClose()
+  }
+
+  function onEnter(e: KeyboardEvent<HTMLInputElement>) {
+    if (e.key === 'Enter' && name.length) {
+      handleAddMark()
+    }
+  }
+
+  function handleInput(e: ChangeEvent<HTMLInputElement>) {
+    setName(e.target.value)
+  }
+
+  return (
+    <Modal initialFocusRef={ref} isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Назовите метку</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody pb={6}>
+          <FormControl>
+            <Input value={name} onKeyDown={onEnter} onChange={handleInput} ref={ref} placeholder='например, "стальной термос"' />
+          </FormControl>
+        </ModalBody>
+
+        <ModalFooter>
+          <Button isDisabled={!name.length} onClick={handleAddMark} colorScheme='green' mr={3}>
+            Сохранить
+          </Button>
+          <Button onClick={onClose}>Отмена</Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  )
+}
+
 export const Markup: FC = observer(() => {
   const store = useStore()
   const { recordController } = useControllers()
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
     <Card maxW='650px' h='450px'>
@@ -70,7 +141,7 @@ export const Markup: FC = observer(() => {
             Очистить выбор
           </Button>
           <HStack w='full' justifyContent='flex-end'>
-            <Button onClick={recordController.addMark} colorScheme='green'>
+            <Button onClick={onOpen} colorScheme='green'>
               Добавить
             </Button>
             <Button onClick={recordController.clearMarks} colorScheme='red'>
@@ -79,6 +150,7 @@ export const Markup: FC = observer(() => {
           </HStack>
         </HStack>
       </VStack>
+      <TagNameModal isOpen={isOpen} onClose={onClose} />
     </Card>
   )
 })
