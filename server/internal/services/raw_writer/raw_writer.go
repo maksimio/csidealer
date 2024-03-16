@@ -5,7 +5,6 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"log"
 	"os"
@@ -88,9 +87,9 @@ func (r *RawWriterService) SetMark(id string, text string, isActive bool) error 
 		return errors.New("невозможно установить метку, так как запись в файл не происходит")
 	}
 
-	markFileName := r.filename + ".json"
+	filenameWithoutExtention := r.filename[:len(r.filename)-len(filepath.Ext(r.filename))]
+	markFileName := filenameWithoutExtention + ".json"
 	pathToFile := filepath.Join(r.path, markFileName)
-	fmt.Println(pathToFile)
 
 	file, err := os.OpenFile(pathToFile, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0644)
 	if err != nil {
@@ -107,7 +106,15 @@ func (r *RawWriterService) SetMark(id string, text string, isActive bool) error 
 
 	var marks []models.Mark
 	json.Unmarshal(byteValue, &marks) // TODO: будет ошибка, если файл новый
-	marks = append(marks, models.Mark{Id: id, Text: text, IsActive: isActive, Timestamp: time.Now().UnixMilli()})
+	ts := time.Now().UnixMilli()
+	marks = append(marks, models.Mark{
+		Id:             id,
+		Text:           text,
+		IsActive:       isActive,
+		Timestamp:      ts,
+		CsiPackageNum:  r.WritePackageCount,
+		DeltaTimestamp: ts - r.StartTime,
+	})
 	result, err := json.MarshalIndent(marks, "", "  ")
 	if err != nil {
 		return err

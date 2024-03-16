@@ -44,6 +44,7 @@ func (h *HttpController) setMark(c *gin.Context) {
 	if err != nil {
 		c.JSON(500, gin.H{"success": false, "message": err.Error()})
 	}
+
 	err = h.rawWriterService.SetMark(id, text, isActive)
 	if err != nil {
 		c.JSON(500, gin.H{"success": false, "message": err.Error()})
