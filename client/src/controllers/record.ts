@@ -98,20 +98,27 @@ export class RecordController {
   })
 
   // разметка
-  toggleActiveMark = action((id: string) => {
+  toggleActiveMark = async (id: string) => {
     const mark = this.store.marks.get(id)
     if (!mark) {
       return
     }
 
-    mark.isActive = !mark.isActive
-  })
+    runInAction(() => (mark.isActive = !mark.isActive))
 
-  unactiveMarks = action(() => {
-    for (let v of this.store.marks.values()) {
-      v.isActive = false
+    if (this.store.recording) {
+      await this.apiService.setMark(mark)
     }
-  })
+  }
+
+  unactiveMarks = async () => {
+    for (let m of this.store.marks.values()) {
+      if (m.isActive) {
+        runInAction(() => (m.isActive = false))
+        await this.apiService.setMark(m)
+      }
+    }
+  }
 
   addMark = action((text: string) => {
     const id = v4()

@@ -147,7 +147,9 @@ export class ApiService {
   }
 
   async setMark(mark: Mark) {
-    const response = await this.instance.put<MarkStatus>('/write/status', null, { params: {...mark} }) // разворачиваем observable-объект
+    const response = await this.instance.get<MarkStatus>('/write/mark', {
+      params: { id: mark.id, text: mark.text, is_active: mark.isActive },
+    }) // разворачиваем observable-объект
     return response.data
   }
 
