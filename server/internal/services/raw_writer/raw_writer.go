@@ -18,6 +18,8 @@ type RawWriterService struct {
 	IsWriting         bool
 	StartTime         int64
 
+	lastTimeStamp uint64
+
 	filename string
 	file     *os.File
 	path     string
@@ -105,15 +107,16 @@ func (r *RawWriterService) SetMark(id string, text string, isActive bool) error 
 	}
 
 	var marks []models.Mark
-	json.Unmarshal(byteValue, &marks) // TODO: будет ошибка, если файл новый
+	json.Unmarshal(byteValue, &marks) // TODO: будет ошибка, если файл новый. Это некрасивое решение
 	ts := time.Now().UnixMilli()
 	marks = append(marks, models.Mark{
-		Id:             id,
-		Text:           text,
-		IsActive:       isActive,
-		Timestamp:      ts,
-		CsiPackageNum:  r.WritePackageCount,
-		DeltaTimestamp: ts - r.StartTime,
+		Id:                  id,
+		Text:                text,
+		IsActive:            isActive,
+		Timestamp:           ts,
+		CsiPackageNum:       r.WritePackageCount,
+		DeltaTimestamp:      ts - r.StartTime,
+		CsiPackageTimestamp: r.lastTimeStamp,
 	})
 	result, err := json.MarshalIndent(marks, "", "  ")
 	if err != nil {
@@ -139,5 +142,6 @@ func (r *RawWriterService) Run() {
 		r.write(bufSize16)
 		r.write(rawPackage.Data)
 		r.WritePackageCount += 1
+		r.lastTimeStamp = binary.BigEndian.Uint64(rawPackage.Data)
 	}
 }
