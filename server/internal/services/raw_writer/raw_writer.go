@@ -69,7 +69,7 @@ func (r *RawWriterService) Stop() error {
 	}
 
 	r.IsWriting = false
-	log.Print("остановлена запись в файл", r.filename)
+	log.Println("остановлена запись в файл", r.filename)
 	return nil
 }
 

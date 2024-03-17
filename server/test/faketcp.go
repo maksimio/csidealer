@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	RunTcpWriter(8081, "./test/data/1.dat")
+	RunTcpWriter(8081, "./test/example.dat")
 }
 
 func RunTcpWriter(port int, filepath string) {
@@ -22,7 +22,7 @@ func RunTcpWriter(port int, filepath string) {
 		return
 	}
 	defer conn.Close()
-	log.Print("успешное подключение к серверу на порту", port)
+	log.Println("успешное подключение к серверу на порту", port)
 
 	bufSize := make([]byte, 2)
 	bufSize32 := make([]byte, 4)
@@ -53,10 +53,11 @@ func RunTcpWriter(port int, filepath string) {
 
 			conn.Write(bufSize32)
 			conn.Write(buf)
-			time.Sleep(100 * time.Millisecond)
 			log.Print(i)
+			time.Sleep(100 * time.Millisecond)
 			i += 1
 		}
 		log.Print("файл закончился. Повторное чтение")
+		time.Sleep(3 * time.Second)
 	}
 }
