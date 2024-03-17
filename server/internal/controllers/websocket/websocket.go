@@ -54,7 +54,7 @@ func (s *WebsocketController) Run() {
 	go s.send()
 
 	http.HandleFunc("/", s.startConn)
-	log.Print("WebSocket-сервер ожидает подключение на", s.port, "порту")
+	log.Println("WebSocket-сервер ожидает подключение на", s.port, "порту")
 	http.ListenAndServe(s.port, nil)
 }
 

@@ -62,7 +62,6 @@ const Menu: FC = () => {
   )
 }
 
-
 const Sidebar: FC = () => {
   return (
     <Grid pl={1} pb={1} templateRows='100px 1fr' h='100vh'>

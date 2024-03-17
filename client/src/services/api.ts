@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from 'axios'
 import { EventEmitter } from 'events'
+import { Mark } from 'store'
 
 export interface ErrorResponse {
   success: false
@@ -27,6 +28,13 @@ interface ILogState {
 }
 
 export type WriteStatus = ResponseWithResult<ILogState>
+
+interface IMarkState {
+  timestamp: number
+  packet_num: number
+}
+
+export type MarkStatus = ResponseWithResult<IMarkState>
 
 // -------- Устройства
 export interface RouterInfo {
@@ -133,8 +141,15 @@ export class ApiService {
     }
   }
 
-  async getWriteStatus<T = WriteStatus>(): Promise<T> {
-    const response = await this.instance.get<T>('/write/status')
+  async getWriteStatus() {
+    const response = await this.instance.get<WriteStatus>('/write/status')
+    return response.data
+  }
+
+  async setMark(mark: Mark) {
+    const response = await this.instance.get<MarkStatus>('/write/mark', {
+      params: { id: mark.id, text: mark.text, is_active: mark.isActive },
+    }) // разворачиваем observable-объект
     return response.data
   }
 

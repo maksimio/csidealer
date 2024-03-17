@@ -26,8 +26,8 @@ const (
 func decodePackageInfo(data []byte) *entity.PackageInfo {
 	return &entity.PackageInfo{
 		Timestamp:     binary.BigEndian.Uint64(data),
-		CsiLength:     binary.BigEndian.Uint16(data[SHIFT_CsiLength:]), //TODO: Может после : дописать, до какого делать срез для ускорения
-		TxChannel:     binary.BigEndian.Uint16(data[SHIFT_TxChannel:]),
+		CsiLength:     binary.BigEndian.Uint16(data[SHIFT_CsiLength : SHIFT_CsiLength+2]),
+		TxChannel:     binary.BigEndian.Uint16(data[SHIFT_TxChannel : SHIFT_TxChannel+2]),
 		ErrInfo:       uint8(data[SHIFT_ErrInfo]),
 		NoiseFloor:    uint8(data[SHIFT_NoiseFloor]),
 		Rate:          uint8(data[SHIFT_Rate]),
@@ -39,6 +39,6 @@ func decodePackageInfo(data []byte) *entity.PackageInfo {
 		Rssi1:         uint8(data[SHIFT_Rssi1]),
 		Rssi2:         uint8(data[SHIFT_Rssi2]),
 		Rssi3:         uint8(data[SHIFT_Rssi3]),
-		PayloadLength: binary.BigEndian.Uint16(data[SHIFT_Payloadlength:]),
+		PayloadLength: binary.BigEndian.Uint16(data[SHIFT_Payloadlength : SHIFT_Payloadlength+2]),
 	}
 }

@@ -3,6 +3,17 @@ import { CsiPackage, IRouterStatus } from 'services/api'
 
 const MAX_SERIES_LENGTH = 1000
 
+export interface Mark {
+  id: string
+  text: string
+  isActive: boolean
+}
+
+export interface MarkHistory {
+  mark: Mark
+  time: Date
+}
+
 export enum FileType {
   Train = 'train',
   Test = 'test',
@@ -56,6 +67,10 @@ export class Store {
     serverIp: '?',
     serverPort: 0,
   }
+
+  // разметка данных
+  marks = new Map<string, Mark>()
+  marksHistory: MarkHistory[] = []
 
   get filename() {
     const d = this.date

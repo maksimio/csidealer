@@ -45,11 +45,10 @@ func (s *TcpController) listenConnection(conn net.Conn) {
 	for {
 		readCount, err := conn.Read(data)
 		if err != nil {
-			log.Print("ошибка чтения из сокета:", err)
+			log.Print("соединение разорвано:", err)
 			s.bufferService.TcpRemoteAddr = ""
 			break
 		}
-
 		s.bufferService.Push(data[:readCount])
 	}
 }
