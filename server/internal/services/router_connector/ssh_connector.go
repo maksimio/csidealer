@@ -71,6 +71,10 @@ func (s *RouterConnectorService) Start() error {
 		return err
 	}
 
+	// RunClientMain не ждет старта, а просто запускает отдельную горутину. Это может привести к тому, что SendData будет запущен раньше
+	// поэтому возникнет ошибка отправки пакетов. Чтобы этого избежать, используется простая задержка
+	time.Sleep(time.Second)
+
 	return s.tx.RunSendData(
 		s.SendData.IfName,
 		s.SendData.DstMacAddr,

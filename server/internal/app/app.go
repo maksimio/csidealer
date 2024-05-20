@@ -63,23 +63,5 @@ func Run(conf models.Config) {
 
 	go tcpController.Run()
 	go httpController.Run()
-
-	// -------------------------------------
-	// log.Print("запуск передачи пакетов")
-	// rx := *routers[0]
-	// tx := *routers[1]
-	// rx.Connect(config.RxIp)
-	// tx.Connect(config.TxIp)
-	// rx.ClientMainRun(config.TargetIp, config.TcpPort)
-	// tx.SendDataRun(
-	// 	config.IfName,
-	// 	config.DstMacAddr,
-	// 	config.NumOfPacketToSend,
-	// 	config.PktIntervalUs,
-	// 	config.PktLen,
-	// )
-	// -------------------------------------
-
 	websocketController.Run()
-
 }
