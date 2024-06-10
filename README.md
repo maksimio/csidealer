@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/maksimio/smartwifi">smart Wi-Fi</a>
+  Главный проект - <a href="https://github.com/maksimio/smartwifi">smart Wi-Fi</a>
 </p>
 
 Клиент-серверное программное обеспечение на Go / React (TypeScript) для обработки данных Channel State Information (CSI). Предназначено для трех задач:
