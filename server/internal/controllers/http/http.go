@@ -48,6 +48,7 @@ func NewHttpController(
 	log.GET("/start", httpController.startLog)
 	log.GET("/stop", httpController.stopLog)
 	log.GET("/status", httpController.logStatus)
+	log.GET("/mark", httpController.setMark)
 
 	// --- Фильтрация данных
 

@@ -1,8 +1,7 @@
 import { FC, PropsWithChildren } from 'react'
 import { Grid, GridItem, Button, VStack, Flex, Heading } from '@chakra-ui/react'
-import { AccessPoint, ChartLine, FilePencil, FocusCentered, Help, Icon, Settings } from 'tabler-icons-react'
+import { AccessPoint, ChartLine, FilePencil, Icon } from 'tabler-icons-react'
 import { useNavigate } from 'react-router-dom'
-import { Card } from 'shared/card'
 import { observer } from 'mobx-react-lite'
 import { useControllers, useStore } from 'browser'
 
@@ -10,7 +9,7 @@ const Logo: FC = () => {
   return (
     <Flex h='full' justifyContent='center' alignItems='center'>
       <Heading size='md' color='blue.400'>
-        Smart Wi-Fi
+        CSIDealer
       </Heading>
     </Flex>
   )
@@ -55,13 +54,12 @@ const Menu: FC = () => {
       <MenuItem path='dashboard' text='Главная' LeftIcon={AccessPoint} />
       <MenuItem path='data' text='Данные' LeftIcon={ChartLine} />
       <MenuItem path='files' text='Запись' LeftIcon={FilePencil} />
-      <MenuItem isDisabled path='recognition' text='Распознавание' LeftIcon={FocusCentered} />
-      <MenuItem path='params' text='Параметры' LeftIcon={Settings} />
-      <MenuItem isDisabled path='help' text='Помощь' LeftIcon={Help} />
+      {/* <MenuItem isDisabled path='recognition' text='Распознавание' LeftIcon={FocusCentered} /> */}
+      {/* <MenuItem path='params' text='О приложении' LeftIcon={Settings} /> */}
+      {/* <MenuItem isDisabled path='help' text='Помощь' LeftIcon={Help} /> */}
     </VStack>
   )
 }
-
 
 const Sidebar: FC = () => {
   return (

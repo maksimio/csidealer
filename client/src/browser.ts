@@ -8,7 +8,7 @@ import { Store } from 'store'
 
 export class Browser {
   noticeService = new NoticeService()
-  apiService = new ApiService('127.0.0.1', 80, 'api/v1', 8082)
+  apiService = new ApiService('127.0.0.1', 3000, 'api/v1', 8082)
 
   store = new Store()
 
